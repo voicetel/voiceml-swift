@@ -1,0 +1,15 @@
+# SwiftPM build
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+*.xcodeproj/
+
+# Carthage / CocoaPods (if used later)
+Carthage/Build/
+Pods/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
