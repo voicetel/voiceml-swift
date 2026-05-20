@@ -1,6 +1,6 @@
 # VoiceML Swift SDK
 
-Official Swift SDK for the [VoiceML](https://voiceml.voicetel.com) REST API — VoiceTel's
+Official Swift SDK for the [VoiceML](https://voicetel.com/docs/api/v0.6/voiceml/) REST API — VoiceTel's
 outbound voice + AMD service. The wire surface is Twilio-shaped (`AccountSid` + API key
 Basic auth, form-urlencoded bodies, `/2010-04-01/Accounts/{Sid}/…` paths), so existing
 Twilio integration patterns translate directly.
