@@ -1,6 +1,7 @@
 import Foundation
 
 public enum ConferenceStatus: String, Codable, Sendable {
+    case `init`
     case inProgress = "in-progress"
     case completed
 }
