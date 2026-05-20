@@ -35,6 +35,9 @@ public struct Recording: Codable, Sendable {
     public var startTime: String?
     public var price: String?
     public var priceUnit: String?
+    /// Pre-signed download URL for the recording audio (spec v0.6.2 / D5).
+    /// Optional: older payloads and not-yet-finalised recordings may omit it.
+    public var mediaUrl: String?
 }
 
 /// Recordings list response.

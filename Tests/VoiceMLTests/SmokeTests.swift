@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.5.0")
+        XCTAssertEqual(voiceMLVersion, "0.6.2")
     }
 
     func testRequiresAccountSidAndApiKey() {
@@ -702,5 +702,67 @@ final class VoiceMLSmokeTests: XCTestCase {
         } catch {
             XCTFail("wrong error type: \(error)")
         }
+    }
+
+    // MARK: - Spec v0.6.2 schema additions (D5/D6)
+
+    /// D5 — `Recording.media_url` (spec v0.6.2). Verifies the new optional field
+    /// decodes from a snake_case payload into the camelCase `mediaUrl` property.
+    func testRecordingDecodesMediaUrl() throws {
+        let json = """
+        {
+          "sid": "RE\(String(repeating: "0", count: 32))",
+          "account_sid": "\(Self.accountSid)",
+          "call_sid": "CA\(String(repeating: "0", count: 32))",
+          "status": "completed",
+          "channels": 1,
+          "duration": "12",
+          "api_version": "2010-04-01",
+          "uri": "/x",
+          "date_created": "Mon, 19 May 2026 12:00:00 +0000",
+          "date_updated": "Mon, 19 May 2026 12:00:00 +0000",
+          "media_url": "https://recordings.voiceml.voicetel.com/RE0.wav?sig=abc"
+        }
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let r = try decoder.decode(Recording.self, from: json)
+        XCTAssertEqual(r.mediaUrl, "https://recordings.voiceml.voicetel.com/RE0.wav?sig=abc")
+    }
+
+    /// D5 — backward compatibility: payloads without `media_url` must still decode,
+    /// with `mediaUrl == nil`.
+    func testRecordingDecodesWithoutMediaUrl() throws {
+        let json = """
+        {
+          "sid": "RE\(String(repeating: "1", count: 32))",
+          "account_sid": "\(Self.accountSid)",
+          "call_sid": "CA\(String(repeating: "0", count: 32))",
+          "status": "in-progress",
+          "api_version": "2010-04-01",
+          "uri": "/x",
+          "date_created": "Mon, 19 May 2026 12:00:00 +0000",
+          "date_updated": "Mon, 19 May 2026 12:00:00 +0000"
+        }
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let r = try decoder.decode(Recording.self, from: json)
+        XCTAssertNil(r.mediaUrl)
+    }
+
+    /// D6 — `IncomingPhoneNumber.type` (spec v0.6.2). Verifies the new optional
+    /// classification field decodes through the existing snake_case strategy.
+    func testIncomingPhoneNumberDecodesType() throws {
+        var payload = ipnPayload()
+        payload["type"] = "toll-free"
+        let data = try JSONSerialization.data(withJSONObject: payload)
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let ipn = try decoder.decode(IncomingPhoneNumber.self, from: data)
+        XCTAssertEqual(ipn.type, "toll-free")
     }
 }

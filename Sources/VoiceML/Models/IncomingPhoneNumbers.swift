@@ -59,6 +59,9 @@ public struct IncomingPhoneNumber: Codable, Sendable {
     public var emergencyAddressSid: String?
     public var emergencyAddressStatus: String?
     public var status: String?
+    /// DID classification — e.g. `local`, `toll-free`, `mobile` (spec v0.6.2 / D6).
+    /// Optional for forward/backward compatibility.
+    public var type: String?
     public var dateCreated: String
     public var dateUpdated: String
 }

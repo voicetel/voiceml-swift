@@ -1,4 +1,4 @@
 import Foundation
 
 /// Semantic version of the VoiceML Swift SDK — kept in lockstep with the OpenAPI spec.
-public let voiceMLVersion = "0.6.1"
+public let voiceMLVersion = "0.6.2"
