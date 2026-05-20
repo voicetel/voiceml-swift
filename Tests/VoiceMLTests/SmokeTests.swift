@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.4.0")
+        XCTAssertEqual(voiceMLVersion, "0.5.0")
     }
 
     func testRequiresAccountSidAndApiKey() {
@@ -195,6 +195,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         _ = c.queues
         _ = c.applications
         _ = c.recordings
+        _ = c.incomingPhoneNumbers
         _ = c.diagnostics
     }
 
@@ -215,7 +216,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(captured.count, 1)
         let r = captured[0]
         XCTAssertEqual(r.method, "POST")
-        XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Calls")
+        XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Calls.json")
 
         let expectedAuth = "Basic " + Data("\(Self.accountSid):\(Self.apiKey)".utf8).base64EncodedString()
         XCTAssertEqual(r.headers["Authorization"], expectedAuth)
@@ -253,6 +254,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertTrue(url.contains("starttime%3e%3d=2026-01-01"))
         XCTAssertTrue(url.contains("starttime%3c%3d=2026-12-31"))
         XCTAssertTrue(url.contains("pagesize=10"))
+        // `.json` suffix sits between path and query string.
+        XCTAssertTrue(url.contains("/calls.json?"))
     }
 
     func testCallsUpdateStatusCompleted() async throws {
@@ -423,5 +426,281 @@ final class VoiceMLSmokeTests: XCTestCase {
     func testDefaultBaseURL() throws {
         let c = try VoiceMLClient(accountSid: Self.accountSid, apiKey: Self.apiKey)
         XCTAssertEqual(c.baseURL.absoluteString, "https://voiceml.voicetel.com")
+    }
+
+    // MARK: - authToken alias
+
+    func testAuthTokenAliasUsedAsApiKey() async throws {
+        enqueueJSON(callPayload(), status: 201)
+        let cfg = URLSessionConfiguration.ephemeral
+        cfg.protocolClasses = [MockURLProtocol.self]
+        let session = URLSession(configuration: cfg)
+
+        let c = try VoiceMLClient(
+            accountSid: Self.accountSid,
+            authToken: Self.apiKey,
+            session: session
+        )
+        _ = try await c.calls.create(.init(
+            to: "+18005551234",
+            from: "+18005550000",
+            url: "https://example.com/twiml"
+        ))
+
+        let r = MockResponses.shared.captured[0]
+        let expectedAuth = "Basic " + Data("\(Self.accountSid):\(Self.apiKey)".utf8).base64EncodedString()
+        XCTAssertEqual(r.headers["Authorization"], expectedAuth)
+    }
+
+    func testApiKeyAndAuthTokenBothSetThrows() {
+        XCTAssertThrowsError(try VoiceMLClient(
+            accountSid: Self.accountSid,
+            apiKey: "k1",
+            authToken: "k2"
+        )) { err in
+            XCTAssertTrue(err is ConfigurationError)
+        }
+    }
+
+    func testNeitherApiKeyNorAuthTokenThrows() {
+        XCTAssertThrowsError(try VoiceMLClient(accountSid: Self.accountSid)) { err in
+            XCTAssertTrue(err is ConfigurationError)
+        }
+    }
+
+    // MARK: - moreInfo
+
+    func testApiErrorCarriesMoreInfo() async throws {
+        let sid = "CA" + String(repeating: "e", count: 32)
+        enqueueJSON([
+            "code": 20404,
+            "message": "Not Found",
+            "more_info": "https://voicetel.com/docs/api/v0.5/errors/20404",
+            "status": 404,
+        ], status: 404)
+        let c = try makeClient(maxRetries: 0)
+
+        do {
+            _ = try await c.calls.get(sid)
+            XCTFail("expected throw")
+        } catch let err as NotFoundError {
+            XCTAssertEqual(err.moreInfo, "https://voicetel.com/docs/api/v0.5/errors/20404")
+        } catch {
+            XCTFail("wrong error type: \(error)")
+        }
+    }
+
+    func testApiErrorMoreInfoNilWhenAbsent() async throws {
+        let sid = "CA" + String(repeating: "f", count: 32)
+        enqueueJSON(["code": 20404, "message": "Not Found", "status": 404], status: 404)
+        let c = try makeClient(maxRetries: 0)
+
+        do {
+            _ = try await c.calls.get(sid)
+            XCTFail("expected throw")
+        } catch let err as NotFoundError {
+            XCTAssertNil(err.moreInfo)
+        } catch {
+            XCTFail("wrong error type: \(error)")
+        }
+    }
+
+    // MARK: - .json suffix machinery
+
+    func testApplyJSONSuffixAppendsToBarePath() {
+        let p = Transport.applyJSONSuffix(
+            "/2010-04-01/Accounts/AC0/Calls"
+        )
+        XCTAssertEqual(p, "/2010-04-01/Accounts/AC0/Calls.json")
+    }
+
+    func testApplyJSONSuffixIdempotent() {
+        let p = Transport.applyJSONSuffix(
+            "/2010-04-01/Accounts/AC0/Calls.json"
+        )
+        XCTAssertEqual(p, "/2010-04-01/Accounts/AC0/Calls.json")
+    }
+
+    func testApplyJSONSuffixSkipsWav() {
+        let p = Transport.applyJSONSuffix(
+            "/2010-04-01/Accounts/AC0/Recordings/RE0.wav"
+        )
+        XCTAssertEqual(p, "/2010-04-01/Accounts/AC0/Recordings/RE0.wav")
+    }
+
+    func testApplyJSONSuffixSkipsHealthAndDocs() {
+        XCTAssertEqual(Transport.applyJSONSuffix("/health"), "/health")
+        XCTAssertEqual(Transport.applyJSONSuffix("/openapi.yaml"), "/openapi.yaml")
+        XCTAssertEqual(Transport.applyJSONSuffix("/openapi.yml"), "/openapi.yml")
+        XCTAssertEqual(Transport.applyJSONSuffix("/openapi.json"), "/openapi.json")
+    }
+
+    func testApplyJSONSuffixPreservesQueryString() {
+        let p = Transport.applyJSONSuffix(
+            "/2010-04-01/Accounts/AC0/Calls?Status=completed"
+        )
+        XCTAssertEqual(p, "/2010-04-01/Accounts/AC0/Calls.json?Status=completed")
+    }
+
+    // MARK: - IncomingPhoneNumbers
+
+    private func ipnPayload(
+        sid: String = "PN" + String(repeating: "0", count: 32),
+        phoneNumber: String = "+18005551234"
+    ) -> [String: Any] {
+        [
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "phone_number": phoneNumber,
+            "friendly_name": "",
+            "api_version": "2010-04-01",
+            "uri": "/2010-04-01/Accounts/\(Self.accountSid)/IncomingPhoneNumbers/\(sid).json",
+            "capabilities": [
+                "voice": true,
+                "sms": false,
+                "mms": false,
+                "fax": false,
+            ],
+            "voice_url": "https://example.com/twiml",
+            "voice_method": "POST",
+            "voice_fallback_url": "",
+            "voice_fallback_method": "POST",
+            "beta": false,
+            "origin": "",
+            "voice_application_sid": "",
+            "voice_caller_id_lookup": false,
+            "voice_receive_mode": "voice",
+            "sms_url": "",
+            "sms_method": "",
+            "sms_fallback_url": "",
+            "sms_fallback_method": "",
+            "sms_application_sid": "",
+            "status_callback": "",
+            "status_callback_method": "",
+            "trunk_sid": "",
+            "address_sid": "",
+            "address_requirements": "none",
+            "identity_sid": "",
+            "bundle_sid": "",
+            "emergency_status": "",
+            "emergency_address_sid": "",
+            "emergency_address_status": "",
+            "status": "",
+            "date_created": "Mon, 19 May 2026 12:00:00 +0000",
+            "date_updated": "Mon, 19 May 2026 12:00:00 +0000",
+        ]
+    }
+
+    func testIncomingPhoneNumbersList() async throws {
+        enqueueJSON([
+            "incoming_phone_numbers": [ipnPayload()],
+            "page": 0,
+            "page_size": 50,
+            "total": 1,
+            "uri": "/IncomingPhoneNumbers.json",
+        ])
+        let c = try makeClient()
+
+        let result = try await c.incomingPhoneNumbers.list(.init(
+            page: 0, pageSize: 50, phoneNumber: "+18005551234"
+        ))
+        XCTAssertEqual(result.incomingPhoneNumbers.count, 1)
+        XCTAssertEqual(result.incomingPhoneNumbers[0].phoneNumber, "+18005551234")
+        XCTAssertEqual(result.incomingPhoneNumbers[0].capabilities?.voice, true)
+        XCTAssertEqual(result.incomingPhoneNumbers[0].capabilities?.sms, false)
+
+        let captured = MockResponses.shared.captured[0]
+        XCTAssertEqual(captured.method, "GET")
+        let url = captured.url.absoluteString
+        XCTAssertTrue(url.contains("/IncomingPhoneNumbers.json?"))
+        XCTAssertTrue(url.contains("Page=0"))
+        XCTAssertTrue(url.contains("PageSize=50"))
+        XCTAssertTrue(url.contains("PhoneNumber=%2B18005551234"))
+    }
+
+    func testIncomingPhoneNumbersCreate() async throws {
+        enqueueJSON(ipnPayload(), status: 201)
+        let c = try makeClient()
+
+        let result = try await c.incomingPhoneNumbers.create(.init(
+            phoneNumber: "+18005551234",
+            voiceUrl: "https://example.com/twiml",
+            voiceMethod: .post
+        ))
+        XCTAssertTrue(result.sid.hasPrefix("PN"))
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/IncomingPhoneNumbers.json")
+        let form = parseForm(r.body)
+        XCTAssertEqual(form["PhoneNumber"]?.first, "+18005551234")
+        XCTAssertEqual(form["VoiceUrl"]?.first, "https://example.com/twiml")
+        XCTAssertEqual(form["VoiceMethod"]?.first, "POST")
+    }
+
+    func testIncomingPhoneNumbersGet() async throws {
+        let sid = "PN" + String(repeating: "1", count: 32)
+        enqueueJSON(ipnPayload(sid: sid))
+        let c = try makeClient()
+
+        let result = try await c.incomingPhoneNumbers.get(sid)
+        XCTAssertEqual(result.sid, sid)
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "GET")
+        XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/IncomingPhoneNumbers/\(sid).json")
+    }
+
+    func testIncomingPhoneNumbersUpdate() async throws {
+        let sid = "PN" + String(repeating: "2", count: 32)
+        enqueueJSON(ipnPayload(sid: sid))
+        let c = try makeClient()
+
+        _ = try await c.incomingPhoneNumbers.update(sid, .init(
+            voiceUrl: "https://example.com/new-twiml",
+            voiceMethod: .get
+        ))
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/IncomingPhoneNumbers/\(sid).json")
+        let form = parseForm(r.body)
+        XCTAssertEqual(form["VoiceUrl"]?.first, "https://example.com/new-twiml")
+        XCTAssertEqual(form["VoiceMethod"]?.first, "GET")
+        // PhoneNumber must NOT appear in update body (update-only fields).
+        XCTAssertNil(form["PhoneNumber"])
+    }
+
+    func testIncomingPhoneNumbersDelete() async throws {
+        enqueueRaw(Data(), status: 204)
+        let c = try makeClient()
+        let sid = "PN" + String(repeating: "3", count: 32)
+
+        try await c.incomingPhoneNumbers.delete(sid)
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "DELETE")
+        XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/IncomingPhoneNumbers/\(sid).json")
+    }
+
+    func testIncomingPhoneNumbersCreateConflict() async throws {
+        enqueueJSON([
+            "code": 21452,
+            "message": "PhoneNumber already assigned",
+            "more_info": "https://voicetel.com/docs/api/v0.5/errors/21452",
+            "status": 409,
+        ], status: 409)
+        let c = try makeClient(maxRetries: 0)
+
+        do {
+            _ = try await c.incomingPhoneNumbers.create(.init(phoneNumber: "+18005551234"))
+            XCTFail("expected throw")
+        } catch let err as ConflictError {
+            XCTAssertEqual(err.statusCode, 409)
+            XCTAssertEqual(err.code, "21452")
+            XCTAssertEqual(err.moreInfo, "https://voicetel.com/docs/api/v0.5/errors/21452")
+        } catch {
+            XCTFail("wrong error type: \(error)")
+        }
     }
 }

@@ -23,6 +23,7 @@ public final class VoiceMLClient: Sendable {
     public let queues: QueuesResource
     public let applications: ApplicationsResource
     public let recordings: RecordingsResource
+    public let incomingPhoneNumbers: IncomingPhoneNumbersResource
     public let diagnostics: DiagnosticsResource
 
     public let accountSid: String
@@ -42,22 +43,34 @@ public final class VoiceMLClient: Sendable {
         self.queues = QueuesResource(transport: transport)
         self.applications = ApplicationsResource(transport: transport)
         self.recordings = RecordingsResource(transport: transport)
+        self.incomingPhoneNumbers = IncomingPhoneNumbersResource(transport: transport)
         self.diagnostics = DiagnosticsResource(transport: transport)
     }
 
     /// Convenience initializer matching the Python/TS SDK constructor shape.
+    ///
+    /// Pass either `apiKey:` or `authToken:` — they're aliases (Twilio's terminology
+    /// for the same Basic-auth password). Supplying both throws ``ConfigurationError``
+    /// rather than silently picking one; supplying neither also throws.
     public convenience init(
         accountSid: String,
-        apiKey: String,
+        apiKey: String? = nil,
+        authToken: String? = nil,
         baseURL: URL = URL(string: "https://voiceml.voicetel.com")!,
         timeout: TimeInterval = 30,
         maxRetries: Int = 2,
         userAgent: String? = nil,
         session: URLSession? = nil
     ) throws {
+        if apiKey != nil && authToken != nil {
+            throw ConfigurationError("specify either apiKey or authToken, not both")
+        }
+        guard let secret = apiKey ?? authToken else {
+            throw ConfigurationError("apiKey (or authToken) is required")
+        }
         try self.init(options: ClientOptions(
             accountSid: accountSid,
-            apiKey: apiKey,
+            apiKey: secret,
             baseURL: baseURL,
             timeout: timeout,
             maxRetries: maxRetries,

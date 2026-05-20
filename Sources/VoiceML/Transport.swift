@@ -231,12 +231,18 @@ public final class Transport: @unchecked Sendable {
     }
 
     func buildURL(path: String, query: [QueryItem]) -> URL {
+        // Append `.json` suffix to REST paths to match Twilio's canonical URL shape
+        // (the v0.5.x server accepts both forms; this future-proofs us against the
+        // bare-path form being deprecated). Skip if the path already carries a known
+        // suffix (`.json`, `.yaml`, `.yml`, `.wav`) or is `/health`.
+        let effectivePath = Self.applyJSONSuffix(path)
+
         // Absolute URL passthrough (rare — currently unused, kept for future flexibility).
         let absolute: URL
-        if let u = URL(string: path), let scheme = u.scheme, !scheme.isEmpty {
+        if let u = URL(string: effectivePath), let scheme = u.scheme, !scheme.isEmpty {
             absolute = u
         } else {
-            absolute = URL(string: baseURL.absoluteString + path)!
+            absolute = URL(string: baseURL.absoluteString + effectivePath)!
         }
 
         // Filter out items whose value is nil, then construct the query string manually.
@@ -272,6 +278,7 @@ public final class Transport: @unchecked Sendable {
     private func decodeError(status: Int, data: Data) -> ApiError {
         var code: String?
         var message = "HTTP \(status)"
+        var moreInfo: String?
         if !data.isEmpty,
            let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
             if let c = obj["code"] {
@@ -280,8 +287,17 @@ public final class Transport: @unchecked Sendable {
             if let m = obj["message"] as? String, !m.isEmpty {
                 message = m
             }
+            if let mi = obj["more_info"] as? String, !mi.isEmpty {
+                moreInfo = mi
+            }
         }
-        return errorFromResponse(statusCode: status, code: code, body: data, message: message)
+        return errorFromResponse(
+            statusCode: status,
+            code: code,
+            body: data,
+            message: message,
+            moreInfo: moreInfo
+        )
     }
 
     // MARK: - Backoff
@@ -338,6 +354,25 @@ public final class Transport: @unchecked Sendable {
         let d = JSONDecoder()
         d.keyDecodingStrategy = .convertFromSnakeCase
         return d
+    }
+
+    /// Append `.json` to a REST path if it doesn't already carry one of the recognized
+    /// content-type suffixes. The exclusions are: `.json`, `.yaml`, `.yml` (already-typed
+    /// document fetches such as `/openapi.json`), `.wav` (binary recording audio), and
+    /// the literal `/health` liveness probe.
+    static func applyJSONSuffix(_ path: String) -> String {
+        // Strip a query fragment if present so we operate on just the path portion. We'll
+        // splice the query back on at the end.
+        let queryStart = path.firstIndex(of: "?")
+        let basePath = queryStart.map { String(path[..<$0]) } ?? path
+        let suffix = queryStart.map { String(path[$0...]) } ?? ""
+
+        if basePath == "/health" { return path }
+        let known = [".json", ".yaml", ".yml", ".wav"]
+        for ext in known where basePath.hasSuffix(ext) {
+            return path
+        }
+        return basePath + ".json" + suffix
     }
 }
 

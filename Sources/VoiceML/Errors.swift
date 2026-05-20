@@ -32,11 +32,22 @@ public class ApiError: VoiceMLError, @unchecked Sendable {
     public let statusCode: Int
     public let code: String?
     public let body: Data?
+    /// Twilio-shape `more_info` URL pointing to human docs for this error code, when the
+    /// server included one in the response body. `nil` for transport errors, decoding
+    /// failures, or 5xx responses without a structured body.
+    public let moreInfo: String?
 
-    public init(message: String, statusCode: Int, code: String? = nil, body: Data? = nil) {
+    public init(
+        message: String,
+        statusCode: Int,
+        code: String? = nil,
+        body: Data? = nil,
+        moreInfo: String? = nil
+    ) {
         self.statusCode = statusCode
         self.code = code
         self.body = body
+        self.moreInfo = moreInfo
         super.init(message)
     }
 
@@ -79,28 +90,29 @@ public func errorFromResponse(
     statusCode: Int,
     code: String?,
     body: Data?,
-    message: String
+    message: String,
+    moreInfo: String? = nil
 ) -> ApiError {
     switch statusCode {
     case 400:
-        return BadRequestError(message: message, statusCode: statusCode, code: code, body: body)
+        return BadRequestError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 401:
-        return AuthenticationError(message: message, statusCode: statusCode, code: code, body: body)
+        return AuthenticationError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 403:
-        return PermissionDeniedError(message: message, statusCode: statusCode, code: code, body: body)
+        return PermissionDeniedError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 404:
-        return NotFoundError(message: message, statusCode: statusCode, code: code, body: body)
+        return NotFoundError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 409:
-        return ConflictError(message: message, statusCode: statusCode, code: code, body: body)
+        return ConflictError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 410:
-        return GoneError(message: message, statusCode: statusCode, code: code, body: body)
+        return GoneError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 429:
-        return RateLimitError(message: message, statusCode: statusCode, code: code, body: body)
+        return RateLimitError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 501:
-        return NotImplementedAPIError(message: message, statusCode: statusCode, code: code, body: body)
+        return NotImplementedAPIError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     case 500...599:
-        return ServerError(message: message, statusCode: statusCode, code: code, body: body)
+        return ServerError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     default:
-        return ApiError(message: message, statusCode: statusCode, code: code, body: body)
+        return ApiError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
     }
 }
