@@ -50,10 +50,14 @@ public final class CallsResource: Sendable {
 
     // MARK: - Recordings (call-scoped)
 
-    public func listRecordings(callSid: String) async throws -> RecordingList {
+    public func listRecordings(
+        callSid: String,
+        params: ListRecordingsParams = .init()
+    ) async throws -> RecordingList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Calls", callSid, "Recordings")
+            path: path("Calls", callSid, "Recordings"),
+            query: params.queryItems()
         ))
     }
 
@@ -213,17 +217,25 @@ public final class CallsResource: Sendable {
 
     // MARK: - Notifications / Events (compat stubs)
 
-    public func listNotifications(callSid: String) async throws -> NotificationsList {
+    public func listNotifications(
+        callSid: String,
+        params: ListPageParams = .init()
+    ) async throws -> NotificationsList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Calls", callSid, "Notifications")
+            path: path("Calls", callSid, "Notifications"),
+            query: params.queryItems()
         ))
     }
 
-    public func listEvents(callSid: String) async throws -> EventsList {
+    public func listEvents(
+        callSid: String,
+        params: ListPageParams = .init()
+    ) async throws -> EventsList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Calls", callSid, "Events")
+            path: path("Calls", callSid, "Events"),
+            query: params.queryItems()
         ))
     }
 

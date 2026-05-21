@@ -11,15 +11,11 @@ public final class RecordingsResource: Sendable {
         "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.joined(separator: "/")
     }
 
-    public func list(page: Int? = nil, pageSize: Int? = nil) async throws -> RecordingList {
-        let query = [
-            QueryItem("Page", page.map(String.init)),
-            QueryItem("PageSize", pageSize.map(String.init)),
-        ]
+    public func list(_ params: ListRecordingsParams = .init()) async throws -> RecordingList {
         return try await transport.request(VoiceMLRequest(
             method: .get,
             path: path("Recordings"),
-            query: query
+            query: params.queryItems()
         ))
     }
 

@@ -26,6 +26,27 @@ public struct ApplicationList: Codable, Sendable {
     public var uri: String?
 }
 
+/// Filter parameters for `GET /Applications`.
+public struct ListApplicationsParams: Sendable {
+    public var friendlyName: String?
+    public var page: Int?
+    public var pageSize: Int?
+
+    public init(friendlyName: String? = nil, page: Int? = nil, pageSize: Int? = nil) {
+        self.friendlyName = friendlyName
+        self.page = page
+        self.pageSize = pageSize
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("FriendlyName", friendlyName),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
+        ]
+    }
+}
+
 /// Shared form-body shape for create + update. All fields optional per spec.
 public struct ApplicationRequest: Sendable {
     public var friendlyName: String?

@@ -19,8 +19,12 @@ public final class ApplicationsResource: Sendable {
         ))
     }
 
-    public func list() async throws -> ApplicationList {
-        try await transport.request(VoiceMLRequest(method: .get, path: path("Applications")))
+    public func list(_ params: ListApplicationsParams = .init()) async throws -> ApplicationList {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path("Applications"),
+            query: params.queryItems()
+        ))
     }
 
     public func get(_ applicationSid: String) async throws -> Application {

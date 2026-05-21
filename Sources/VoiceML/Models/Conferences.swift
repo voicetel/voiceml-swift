@@ -9,7 +9,7 @@ public enum ConferenceStatus: String, Codable, Sendable {
 public enum ParticipantStatus: String, Codable, Sendable {
     case queued, connecting, ringing, connected
     case onHold = "on-hold"
-    case completed
+    case complete, failed, completed
 }
 
 public struct Conference: Codable, Sendable {
@@ -44,6 +44,9 @@ public struct Participant: Codable, Sendable {
     public var accountSid: String
     public var muted: Bool
     public var hold: Bool
+    public var coaching: Bool
+    public var callSidToCoach: String?
+    public var queueTime: String
     public var startConferenceOnEnter: Bool
     public var endConferenceOnExit: Bool
     public var status: ParticipantStatus
@@ -89,6 +92,68 @@ public struct UpdateParticipantRequest: Sendable {
         [
             FormField("Muted", muted),
             FormField("Hold", hold),
+        ]
+    }
+}
+
+/// Filter parameters for `GET /Conferences`.
+public struct ListConferencesParams: Sendable {
+    public var friendlyName: String?
+    public var status: ConferenceStatus?
+    public var page: Int?
+    public var pageSize: Int?
+
+    public init(
+        friendlyName: String? = nil,
+        status: ConferenceStatus? = nil,
+        page: Int? = nil,
+        pageSize: Int? = nil
+    ) {
+        self.friendlyName = friendlyName
+        self.status = status
+        self.page = page
+        self.pageSize = pageSize
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("FriendlyName", friendlyName),
+            QueryItem("Status", status?.rawValue),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
+        ]
+    }
+}
+
+/// Filter parameters for `GET /Conferences/{sid}/Participants`.
+public struct ListParticipantsParams: Sendable {
+    public var muted: Bool?
+    public var hold: Bool?
+    public var coaching: Bool?
+    public var page: Int?
+    public var pageSize: Int?
+
+    public init(
+        muted: Bool? = nil,
+        hold: Bool? = nil,
+        coaching: Bool? = nil,
+        page: Int? = nil,
+        pageSize: Int? = nil
+    ) {
+        self.muted = muted
+        self.hold = hold
+        self.coaching = coaching
+        self.page = page
+        self.pageSize = pageSize
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("Muted", muted),
+            QueryItem("Hold", hold),
+            QueryItem("Coaching", coaching),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
         ]
     }
 }

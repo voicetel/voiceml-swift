@@ -41,10 +41,14 @@ public final class QueuesResource: Sendable {
 
     // MARK: - Members
 
-    public func listMembers(queueSid: String) async throws -> QueueMemberList {
+    public func listMembers(
+        queueSid: String,
+        params: ListPageParams = .init()
+    ) async throws -> QueueMemberList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Queues", queueSid, "Members")
+            path: path("Queues", queueSid, "Members"),
+            query: params.queryItems()
         ))
     }
 

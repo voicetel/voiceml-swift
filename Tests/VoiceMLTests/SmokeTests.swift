@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.6.2")
+        XCTAssertEqual(voiceMLVersion, "0.6.3")
     }
 
     func testRequiresAccountSidAndApiKey() {
@@ -283,6 +283,8 @@ final class VoiceMLSmokeTests: XCTestCase {
             "account_sid": Self.accountSid,
             "muted": true,
             "hold": false,
+            "coaching": false,
+            "queue_time": "0",
             "start_conference_on_enter": true,
             "end_conference_on_exit": false,
             "status": "connected",
@@ -764,5 +766,54 @@ final class VoiceMLSmokeTests: XCTestCase {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let ipn = try decoder.decode(IncomingPhoneNumber.self, from: data)
         XCTAssertEqual(ipn.type, "toll-free")
+    }
+
+    // MARK: - Spec v0.6.3 schema additions
+
+    func testParticipantDecodesCoachingFields() throws {
+        let json = """
+        {"call_sid":"CA1","conference_sid":"CF1","account_sid":"AC0","muted":false,"hold":false,\
+        "coaching":true,"call_sid_to_coach":"CA2","queue_time":"8","start_conference_on_enter":true,\
+        "end_conference_on_exit":false,"status":"complete","api_version":"2010-04-01","uri":"/x"}
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let p = try decoder.decode(Participant.self, from: json)
+        XCTAssertTrue(p.coaching)
+        XCTAssertEqual(p.callSidToCoach, "CA2")
+        XCTAssertEqual(p.queueTime, "8")
+        XCTAssertEqual(p.status, .complete)
+    }
+
+    func testRecordingDecodesErrorCodeAndConferenceSource() throws {
+        let json = """
+        {"sid":"RE1","account_sid":"AC0","call_sid":"CA1","status":"completed",\
+        "source":"StartConferenceRecordingAPI","error_code":13227}
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let r = try decoder.decode(Recording.self, from: json)
+        XCTAssertEqual(r.source, .startConferenceRecordingAPI)
+        XCTAssertEqual(r.errorCode, 13227)
+    }
+
+    func testListCallsParamsEmitsStartAndEndTimeWireNames() {
+        let items = ListCallsParams(
+            startTime: "2025-06-01",
+            startTimeLt: "2025-06-15",
+            startTimeGt: "2025-05-01",
+            endTime: "2025-06-30",
+            endTimeLt: "2025-07-01",
+            endTimeGt: "2025-06-01"
+        ).queryItems()
+        let names = Dictionary(uniqueKeysWithValues: items.compactMap { item in
+            item.value.map { (item.name, $0) }
+        })
+        XCTAssertEqual(names["StartTime"], "2025-06-01")
+        XCTAssertEqual(names["StartTime<"], "2025-06-15")
+        XCTAssertEqual(names["StartTime>"], "2025-05-01")
+        XCTAssertEqual(names["EndTime"], "2025-06-30")
+        XCTAssertEqual(names["EndTime<"], "2025-07-01")
+        XCTAssertEqual(names["EndTime>"], "2025-06-01")
     }
 }

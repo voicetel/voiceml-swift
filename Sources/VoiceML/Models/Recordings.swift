@@ -12,6 +12,7 @@ public enum RecordingSource: String, Codable, Sendable {
     case conference = "Conference"
     case trunking = "Trunking"
     case startCallRecordingAPI = "StartCallRecordingAPI"
+    case startConferenceRecordingAPI = "StartConferenceRecordingAPI"
 }
 
 public enum RecordingUpdateStatus: String, Codable, Sendable {
@@ -38,6 +39,8 @@ public struct Recording: Codable, Sendable {
     /// Pre-signed download URL for the recording audio (spec v0.6.2 / D5).
     /// Optional: older payloads and not-yet-finalised recordings may omit it.
     public var mediaUrl: String?
+    /// Twilio-canonical error code for failed recordings; nil when no error.
+    public var errorCode: Int?
 }
 
 /// Recordings list response.
@@ -56,6 +59,47 @@ public struct RecordingList: Codable, Sendable {
     public var nextPageUri: String?
     public var previousPageUri: String?
     public var uri: String?
+}
+
+/// Filter parameters for recording list endpoints.
+public struct ListRecordingsParams: Sendable {
+    public var dateCreated: String?
+    public var dateCreatedLt: String?
+    public var dateCreatedGt: String?
+    public var callSid: String?
+    public var conferenceSid: String?
+    public var page: Int?
+    public var pageSize: Int?
+
+    public init(
+        dateCreated: String? = nil,
+        dateCreatedLt: String? = nil,
+        dateCreatedGt: String? = nil,
+        callSid: String? = nil,
+        conferenceSid: String? = nil,
+        page: Int? = nil,
+        pageSize: Int? = nil
+    ) {
+        self.dateCreated = dateCreated
+        self.dateCreatedLt = dateCreatedLt
+        self.dateCreatedGt = dateCreatedGt
+        self.callSid = callSid
+        self.conferenceSid = conferenceSid
+        self.page = page
+        self.pageSize = pageSize
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("DateCreated", dateCreated),
+            QueryItem("DateCreated<", dateCreatedLt),
+            QueryItem("DateCreated>", dateCreatedGt),
+            QueryItem("CallSid", callSid),
+            QueryItem("ConferenceSid", conferenceSid),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
+        ]
+    }
 }
 
 public struct StartRecordingRequest: Sendable {

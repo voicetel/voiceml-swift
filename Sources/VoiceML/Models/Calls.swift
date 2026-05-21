@@ -322,6 +322,18 @@ public struct ListCallsParams: Sendable {
     public var startTimeGte: String?
     /// Twilio wire name `StartTime<=`. Inclusive upper bound.
     public var startTimeLte: String?
+    /// Twilio wire name `StartTime`. Calls started on this UTC date.
+    public var startTime: String?
+    /// Twilio wire name `StartTime<`.
+    public var startTimeLt: String?
+    /// Twilio wire name `StartTime>`.
+    public var startTimeGt: String?
+    /// Twilio wire name `EndTime`. Calls ended on this UTC date.
+    public var endTime: String?
+    /// Twilio wire name `EndTime<`.
+    public var endTimeLt: String?
+    /// Twilio wire name `EndTime>`.
+    public var endTimeGt: String?
     public var page: Int?
     public var pageSize: Int?
 
@@ -332,6 +344,12 @@ public struct ListCallsParams: Sendable {
         parentCallSid: String? = nil,
         startTimeGte: String? = nil,
         startTimeLte: String? = nil,
+        startTime: String? = nil,
+        startTimeLt: String? = nil,
+        startTimeGt: String? = nil,
+        endTime: String? = nil,
+        endTimeLt: String? = nil,
+        endTimeGt: String? = nil,
         page: Int? = nil,
         pageSize: Int? = nil
     ) {
@@ -341,6 +359,12 @@ public struct ListCallsParams: Sendable {
         self.parentCallSid = parentCallSid
         self.startTimeGte = startTimeGte
         self.startTimeLte = startTimeLte
+        self.startTime = startTime
+        self.startTimeLt = startTimeLt
+        self.startTimeGt = startTimeGt
+        self.endTime = endTime
+        self.endTimeLt = endTimeLt
+        self.endTimeGt = endTimeGt
         self.page = page
         self.pageSize = pageSize
     }
@@ -351,8 +375,32 @@ public struct ListCallsParams: Sendable {
             QueryItem("From", from),
             QueryItem("Status", status?.rawValue),
             QueryItem("ParentCallSid", parentCallSid),
+            QueryItem("StartTime", startTime),
+            QueryItem("StartTime<", startTimeLt),
+            QueryItem("StartTime>", startTimeGt),
             QueryItem("StartTime>=", startTimeGte),
             QueryItem("StartTime<=", startTimeLte),
+            QueryItem("EndTime", endTime),
+            QueryItem("EndTime<", endTimeLt),
+            QueryItem("EndTime>", endTimeGt),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
+        ]
+    }
+}
+
+/// Pagination params for compat-stub list endpoints (Notifications, Events).
+public struct ListPageParams: Sendable {
+    public var page: Int?
+    public var pageSize: Int?
+
+    public init(page: Int? = nil, pageSize: Int? = nil) {
+        self.page = page
+        self.pageSize = pageSize
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
         ]

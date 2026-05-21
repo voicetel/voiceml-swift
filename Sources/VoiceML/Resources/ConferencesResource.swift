@@ -11,8 +11,12 @@ public final class ConferencesResource: Sendable {
         "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.joined(separator: "/")
     }
 
-    public func list() async throws -> ConferenceList {
-        try await transport.request(VoiceMLRequest(method: .get, path: path("Conferences")))
+    public func list(_ params: ListConferencesParams = .init()) async throws -> ConferenceList {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path("Conferences"),
+            query: params.queryItems()
+        ))
     }
 
     public func get(_ conferenceSid: String) async throws -> Conference {
@@ -35,10 +39,14 @@ public final class ConferencesResource: Sendable {
 
     // MARK: - Participants
 
-    public func listParticipants(conferenceSid: String) async throws -> ParticipantList {
+    public func listParticipants(
+        conferenceSid: String,
+        params: ListParticipantsParams = .init()
+    ) async throws -> ParticipantList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Conferences", conferenceSid, "Participants")
+            path: path("Conferences", conferenceSid, "Participants"),
+            query: params.queryItems()
         ))
     }
 
