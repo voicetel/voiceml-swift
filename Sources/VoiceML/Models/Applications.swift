@@ -31,11 +31,13 @@ public struct ListApplicationsParams: Sendable {
     public var friendlyName: String?
     public var page: Int?
     public var pageSize: Int?
+    public var pageToken: String?
 
-    public init(friendlyName: String? = nil, page: Int? = nil, pageSize: Int? = nil) {
+    public init(friendlyName: String? = nil, page: Int? = nil, pageSize: Int? = nil, pageToken: String? = nil) {
         self.friendlyName = friendlyName
         self.page = page
         self.pageSize = pageSize
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
@@ -43,6 +45,7 @@ public struct ListApplicationsParams: Sendable {
             QueryItem("FriendlyName", friendlyName),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }

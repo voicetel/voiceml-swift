@@ -102,17 +102,20 @@ public struct ListConferencesParams: Sendable {
     public var status: ConferenceStatus?
     public var page: Int?
     public var pageSize: Int?
+    public var pageToken: String?
 
     public init(
         friendlyName: String? = nil,
         status: ConferenceStatus? = nil,
         page: Int? = nil,
-        pageSize: Int? = nil
+        pageSize: Int? = nil,
+        pageToken: String? = nil
     ) {
         self.friendlyName = friendlyName
         self.status = status
         self.page = page
         self.pageSize = pageSize
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
@@ -121,6 +124,7 @@ public struct ListConferencesParams: Sendable {
             QueryItem("Status", status?.rawValue),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }
@@ -132,19 +136,22 @@ public struct ListParticipantsParams: Sendable {
     public var coaching: Bool?
     public var page: Int?
     public var pageSize: Int?
+    public var pageToken: String?
 
     public init(
         muted: Bool? = nil,
         hold: Bool? = nil,
         coaching: Bool? = nil,
         page: Int? = nil,
-        pageSize: Int? = nil
+        pageSize: Int? = nil,
+        pageToken: String? = nil
     ) {
         self.muted = muted
         self.hold = hold
         self.coaching = coaching
         self.page = page
         self.pageSize = pageSize
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
@@ -154,6 +161,7 @@ public struct ListParticipantsParams: Sendable {
             QueryItem("Coaching", coaching),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }

@@ -87,14 +87,14 @@ public struct IncomingPhoneNumberList: Codable, Sendable {
 public struct ListIncomingPhoneNumbersParams: Sendable {
     public var page: Int?
     public var pageSize: Int?
-    /// Exact-match E.164 filter. Matches Twilio's
-    /// `client.incoming_phone_numbers.list(phone_number=...)` lookup pattern.
     public var phoneNumber: String?
+    public var pageToken: String?
 
-    public init(page: Int? = nil, pageSize: Int? = nil, phoneNumber: String? = nil) {
+    public init(page: Int? = nil, pageSize: Int? = nil, phoneNumber: String? = nil, pageToken: String? = nil) {
         self.page = page
         self.pageSize = pageSize
         self.phoneNumber = phoneNumber
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
@@ -102,6 +102,7 @@ public struct ListIncomingPhoneNumbersParams: Sendable {
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PhoneNumber", phoneNumber),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }

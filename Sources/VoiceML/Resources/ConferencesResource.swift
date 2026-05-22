@@ -78,10 +78,14 @@ public final class ConferencesResource: Sendable {
 
     // MARK: - Recordings
 
-    public func listRecordings(conferenceSid: String) async throws -> RecordingList {
+    public func listRecordings(
+        conferenceSid: String,
+        params: ListCallRecordingsParams = .init()
+    ) async throws -> RecordingList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Conferences", conferenceSid, "Recordings")
+            path: path("Conferences", conferenceSid, "Recordings"),
+            query: params.queryItems()
         ))
     }
 }

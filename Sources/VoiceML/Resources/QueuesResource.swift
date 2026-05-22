@@ -19,8 +19,12 @@ public final class QueuesResource: Sendable {
         ))
     }
 
-    public func list() async throws -> QueueList {
-        try await transport.request(VoiceMLRequest(method: .get, path: path("Queues")))
+    public func list(_ params: ListPageParams = .init()) async throws -> QueueList {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path("Queues"),
+            query: params.queryItems()
+        ))
     }
 
     public func get(_ queueSid: String) async throws -> Queue {

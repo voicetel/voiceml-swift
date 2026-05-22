@@ -70,6 +70,7 @@ public struct ListRecordingsParams: Sendable {
     public var conferenceSid: String?
     public var page: Int?
     public var pageSize: Int?
+    public var pageToken: String?
 
     public init(
         dateCreated: String? = nil,
@@ -78,7 +79,8 @@ public struct ListRecordingsParams: Sendable {
         callSid: String? = nil,
         conferenceSid: String? = nil,
         page: Int? = nil,
-        pageSize: Int? = nil
+        pageSize: Int? = nil,
+        pageToken: String? = nil
     ) {
         self.dateCreated = dateCreated
         self.dateCreatedLt = dateCreatedLt
@@ -87,6 +89,7 @@ public struct ListRecordingsParams: Sendable {
         self.conferenceSid = conferenceSid
         self.page = page
         self.pageSize = pageSize
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
@@ -98,6 +101,44 @@ public struct ListRecordingsParams: Sendable {
             QueryItem("ConferenceSid", conferenceSid),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
+        ]
+    }
+}
+
+/// Filter parameters for call- and conference-scoped recording list endpoints.
+public struct ListCallRecordingsParams: Sendable {
+    public var dateCreated: String?
+    public var dateCreatedLt: String?
+    public var dateCreatedGt: String?
+    public var page: Int?
+    public var pageSize: Int?
+    public var pageToken: String?
+
+    public init(
+        dateCreated: String? = nil,
+        dateCreatedLt: String? = nil,
+        dateCreatedGt: String? = nil,
+        page: Int? = nil,
+        pageSize: Int? = nil,
+        pageToken: String? = nil
+    ) {
+        self.dateCreated = dateCreated
+        self.dateCreatedLt = dateCreatedLt
+        self.dateCreatedGt = dateCreatedGt
+        self.page = page
+        self.pageSize = pageSize
+        self.pageToken = pageToken
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("DateCreated", dateCreated),
+            QueryItem("DateCreated<", dateCreatedLt),
+            QueryItem("DateCreated>", dateCreatedGt),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }

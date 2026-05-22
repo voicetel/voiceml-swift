@@ -336,6 +336,7 @@ public struct ListCallsParams: Sendable {
     public var endTimeGt: String?
     public var page: Int?
     public var pageSize: Int?
+    public var pageToken: String?
 
     public init(
         to: String? = nil,
@@ -351,7 +352,8 @@ public struct ListCallsParams: Sendable {
         endTimeLt: String? = nil,
         endTimeGt: String? = nil,
         page: Int? = nil,
-        pageSize: Int? = nil
+        pageSize: Int? = nil,
+        pageToken: String? = nil
     ) {
         self.to = to
         self.from = from
@@ -367,6 +369,7 @@ public struct ListCallsParams: Sendable {
         self.endTimeGt = endTimeGt
         self.page = page
         self.pageSize = pageSize
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
@@ -385,24 +388,28 @@ public struct ListCallsParams: Sendable {
             QueryItem("EndTime>", endTimeGt),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }
 
-/// Pagination params for compat-stub list endpoints (Notifications, Events).
+/// Pagination params for list endpoints (Notifications, Events, Queues, …).
 public struct ListPageParams: Sendable {
     public var page: Int?
     public var pageSize: Int?
+    public var pageToken: String?
 
-    public init(page: Int? = nil, pageSize: Int? = nil) {
+    public init(page: Int? = nil, pageSize: Int? = nil, pageToken: String? = nil) {
         self.page = page
         self.pageSize = pageSize
+        self.pageToken = pageToken
     }
 
     func queryItems() -> [QueryItem] {
         [
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
         ]
     }
 }

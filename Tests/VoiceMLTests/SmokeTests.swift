@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.6.3")
+        XCTAssertEqual(voiceMLVersion, "0.6.4")
     }
 
     func testRequiresAccountSidAndApiKey() {
@@ -815,5 +815,13 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(names["EndTime"], "2025-06-30")
         XCTAssertEqual(names["EndTime<"], "2025-07-01")
         XCTAssertEqual(names["EndTime>"], "2025-06-01")
+    }
+
+    func testListCallsParamsEmitsPageToken() {
+        let items = ListCallsParams(pageToken: "cursor-abc123").queryItems()
+        let names = Dictionary(uniqueKeysWithValues: items.compactMap { item in
+            item.value.map { (item.name, $0) }
+        })
+        XCTAssertEqual(names["PageToken"], "cursor-abc123")
     }
 }
