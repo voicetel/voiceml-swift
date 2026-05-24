@@ -414,6 +414,47 @@ public struct ListPageParams: Sendable {
     }
 }
 
+/// Query params for `GET /Notifications` and `GET /Calls/{sid}/Notifications`.
+public struct ListNotificationsParams: Sendable {
+    public var page: Int?
+    public var pageSize: Int?
+    public var pageToken: String?
+    public var log: Int?
+    public var messageDate: String?
+    public var messageDateLt: String?
+    public var messageDateGt: String?
+
+    public init(
+        page: Int? = nil,
+        pageSize: Int? = nil,
+        pageToken: String? = nil,
+        log: Int? = nil,
+        messageDate: String? = nil,
+        messageDateLt: String? = nil,
+        messageDateGt: String? = nil
+    ) {
+        self.page = page
+        self.pageSize = pageSize
+        self.pageToken = pageToken
+        self.log = log
+        self.messageDate = messageDate
+        self.messageDateLt = messageDateLt
+        self.messageDateGt = messageDateGt
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
+            QueryItem("PageToken", pageToken),
+            QueryItem("Log", log.map(String.init)),
+            QueryItem("MessageDate", messageDate),
+            QueryItem("MessageDate<", messageDateLt),
+            QueryItem("MessageDate>", messageDateGt),
+        ]
+    }
+}
+
 /// `GET /Calls/{sid}/Notifications` — always returns an empty list (compat stub).
 public struct NotificationsList: Codable, Sendable {
     public var notifications: [AnyCodableSink]

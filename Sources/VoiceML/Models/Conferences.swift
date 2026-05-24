@@ -100,6 +100,12 @@ public struct UpdateParticipantRequest: Sendable {
 public struct ListConferencesParams: Sendable {
     public var friendlyName: String?
     public var status: ConferenceStatus?
+    public var dateCreated: String?
+    public var dateCreatedLt: String?
+    public var dateCreatedGt: String?
+    public var dateUpdated: String?
+    public var dateUpdatedLt: String?
+    public var dateUpdatedGt: String?
     public var page: Int?
     public var pageSize: Int?
     public var pageToken: String?
@@ -107,12 +113,24 @@ public struct ListConferencesParams: Sendable {
     public init(
         friendlyName: String? = nil,
         status: ConferenceStatus? = nil,
+        dateCreated: String? = nil,
+        dateCreatedLt: String? = nil,
+        dateCreatedGt: String? = nil,
+        dateUpdated: String? = nil,
+        dateUpdatedLt: String? = nil,
+        dateUpdatedGt: String? = nil,
         page: Int? = nil,
         pageSize: Int? = nil,
         pageToken: String? = nil
     ) {
         self.friendlyName = friendlyName
         self.status = status
+        self.dateCreated = dateCreated
+        self.dateCreatedLt = dateCreatedLt
+        self.dateCreatedGt = dateCreatedGt
+        self.dateUpdated = dateUpdated
+        self.dateUpdatedLt = dateUpdatedLt
+        self.dateUpdatedGt = dateUpdatedGt
         self.page = page
         self.pageSize = pageSize
         self.pageToken = pageToken
@@ -122,6 +140,12 @@ public struct ListConferencesParams: Sendable {
         [
             QueryItem("FriendlyName", friendlyName),
             QueryItem("Status", status?.rawValue),
+            QueryItem("DateCreated", dateCreated),
+            QueryItem("DateCreated<", dateCreatedLt),
+            QueryItem("DateCreated>", dateCreatedGt),
+            QueryItem("DateUpdated", dateUpdated),
+            QueryItem("DateUpdated<", dateUpdatedLt),
+            QueryItem("DateUpdated>", dateUpdatedGt),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PageToken", pageToken),
@@ -156,12 +180,65 @@ public struct ListParticipantsParams: Sendable {
 
     func queryItems() -> [QueryItem] {
         [
-            QueryItem("Muted", muted),
-            QueryItem("Hold", hold),
-            QueryItem("Coaching", coaching),
+            QueryItem("Muted", muted.map { $0 ? "true" : "false" }),
+            QueryItem("Hold", hold.map { $0 ? "true" : "false" }),
+            QueryItem("Coaching", coaching.map { $0 ? "true" : "false" }),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PageToken", pageToken),
+        ]
+    }
+}
+
+/// Body for `POST /Conferences/{sid}/Participants`. `from` and `to` are required.
+public struct CreateParticipantRequest: Sendable {
+    public var from: String
+    public var to: String
+    public var label: String?
+    public var muted: Bool?
+    public var startConferenceOnEnter: Bool?
+    public var endConferenceOnExit: Bool?
+    public var timeout: Int?
+    public var statusCallback: String?
+    public var statusCallbackMethod: String?
+    public var statusCallbackEvent: String?
+
+    public init(
+        from: String,
+        to: String,
+        label: String? = nil,
+        muted: Bool? = nil,
+        startConferenceOnEnter: Bool? = nil,
+        endConferenceOnExit: Bool? = nil,
+        timeout: Int? = nil,
+        statusCallback: String? = nil,
+        statusCallbackMethod: String? = nil,
+        statusCallbackEvent: String? = nil
+    ) {
+        self.from = from
+        self.to = to
+        self.label = label
+        self.muted = muted
+        self.startConferenceOnEnter = startConferenceOnEnter
+        self.endConferenceOnExit = endConferenceOnExit
+        self.timeout = timeout
+        self.statusCallback = statusCallback
+        self.statusCallbackMethod = statusCallbackMethod
+        self.statusCallbackEvent = statusCallbackEvent
+    }
+
+    func formFields() -> [FormField] {
+        [
+            FormField("From", from),
+            FormField("To", to),
+            FormField("Label", label),
+            FormField("Muted", muted),
+            FormField("StartConferenceOnEnter", startConferenceOnEnter),
+            FormField("EndConferenceOnExit", endConferenceOnExit),
+            FormField("Timeout", timeout),
+            FormField("StatusCallback", statusCallback),
+            FormField("StatusCallbackMethod", statusCallbackMethod),
+            FormField("StatusCallbackEvent", statusCallbackEvent),
         ]
     }
 }

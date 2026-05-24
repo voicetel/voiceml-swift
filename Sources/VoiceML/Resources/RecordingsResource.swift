@@ -19,10 +19,14 @@ public final class RecordingsResource: Sendable {
         ))
     }
 
-    public func get(_ recordingSid: String) async throws -> Recording {
+    public func get(
+        _ recordingSid: String,
+        params: GetRecordingParams = .init()
+    ) async throws -> Recording {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Recordings", recordingSid)
+            path: path("Recordings", recordingSid),
+            query: params.queryItems()
         ))
     }
 

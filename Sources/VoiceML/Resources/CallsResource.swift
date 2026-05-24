@@ -219,12 +219,23 @@ public final class CallsResource: Sendable {
 
     public func listNotifications(
         callSid: String,
-        params: ListPageParams = .init()
+        params: ListNotificationsParams = .init()
     ) async throws -> NotificationsList {
         try await transport.request(VoiceMLRequest(
             method: .get,
             path: path("Calls", callSid, "Notifications"),
             query: params.queryItems()
+        ))
+    }
+
+    /// Fetch a per-call notification. Always 404 today (compat stub).
+    public func getNotification(
+        callSid: String,
+        notificationSid: String
+    ) async throws -> JSONObject {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path("Calls", callSid, "Notifications", notificationSid)
         ))
     }
 

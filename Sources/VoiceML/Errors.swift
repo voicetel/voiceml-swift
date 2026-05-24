@@ -26,13 +26,13 @@ public final class ConfigurationError: VoiceMLError, @unchecked Sendable {}
 
 /// Raised when the API returns a non-2xx response.
 ///
-/// The Twilio-shape error body (`{code, message, more_info, status}`) is parsed into
+/// The Twilio-compatible error body (`{code, message, more_info, status}`) is parsed into
 /// `code` / `message` when present, with the raw payload exposed on `body`.
 public class ApiError: VoiceMLError, @unchecked Sendable {
     public let statusCode: Int
     public let code: String?
     public let body: Data?
-    /// Twilio-shape `more_info` URL pointing to human docs for this error code, when the
+    /// Twilio-compatible `more_info` URL pointing to human docs for this error code, when the
     /// server included one in the response body. `nil` for transport errors, decoding
     /// failures, or 5xx responses without a structured body.
     public let moreInfo: String?

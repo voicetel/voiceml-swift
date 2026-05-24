@@ -14,7 +14,7 @@ public enum TrackSelector: String, Codable, Sendable {
     case bothTracks = "both_tracks"
 }
 
-/// Twilio-shape pagination envelope. Embedded in every list response that supports paging.
+/// Twilio-compatible pagination envelope. Embedded in every list response that supports paging.
 public struct PageEnvelope: Codable, Sendable {
     public var page: Int?
     public var pageSize: Int?
@@ -33,3 +33,35 @@ public struct HealthFailure: Codable, Sendable {
     public var check: String
     public var detail: String
 }
+
+/// Scalar JSON value for untyped compat-stub payloads (e.g. notification fetch).
+public enum JSONValue: Decodable, Sendable {
+    case string(String)
+    case int(Int)
+    case double(Double)
+    case bool(Bool)
+    case null
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Int.self) {
+            self = .int(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .double(value)
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "unsupported JSON scalar"
+            )
+        }
+    }
+}
+
+/// Untyped JSON object for compat stub endpoints.
+public typealias JSONObject = [String: JSONValue]

@@ -76,6 +76,18 @@ public final class ConferencesResource: Sendable {
         ))
     }
 
+    /// Dial a leg into a conference. `POST /Conferences/{sid}/Participants`.
+    public func createParticipant(
+        conferenceSid: String,
+        body: CreateParticipantRequest
+    ) async throws -> Participant {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("Conferences", conferenceSid, "Participants"),
+            form: body.formFields()
+        ))
+    }
+
     // MARK: - Recordings
 
     public func listRecordings(
@@ -86,6 +98,32 @@ public final class ConferencesResource: Sendable {
             method: .get,
             path: path("Conferences", conferenceSid, "Recordings"),
             query: params.queryItems()
+        ))
+    }
+
+    public func getRecording(conferenceSid: String, recordingSid: String) async throws -> Recording {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path("Conferences", conferenceSid, "Recordings", recordingSid)
+        ))
+    }
+
+    public func updateRecording(
+        conferenceSid: String,
+        recordingSid: String,
+        body: UpdateRecordingRequest
+    ) async throws -> Recording {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("Conferences", conferenceSid, "Recordings", recordingSid),
+            form: body.formFields()
+        ))
+    }
+
+    public func deleteRecording(conferenceSid: String, recordingSid: String) async throws {
+        try await transport.requestVoid(VoiceMLRequest(
+            method: .delete,
+            path: path("Conferences", conferenceSid, "Recordings", recordingSid)
         ))
     }
 }

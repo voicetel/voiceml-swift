@@ -39,13 +39,13 @@ public struct Recording: Codable, Sendable {
     /// Pre-signed download URL for the recording audio (spec v0.6.2 / D5).
     /// Optional: older payloads and not-yet-finalised recordings may omit it.
     public var mediaUrl: String?
-    /// Twilio-canonical error code for failed recordings; nil when no error.
+    /// Twilio-compatible error code for failed recordings; nil when no error.
     public var errorCode: Int?
 }
 
 /// Recordings list response.
 ///
-/// The account-scoped endpoint (`GET /Recordings`) returns the canonical Twilio fields
+/// The account-scoped endpoint (`GET /Recordings`) returns the full Twilio-compatible pagination fields
 /// (`recordings/page/pageSize/total`). Per-call (`GET /Calls/{sid}/Recordings`) and
 /// per-conference (`GET /Conferences/{sid}/Recordings`) endpoints currently return only
 /// `recordings`; the pagination fields will be `nil`.
@@ -68,6 +68,7 @@ public struct ListRecordingsParams: Sendable {
     public var dateCreatedGt: String?
     public var callSid: String?
     public var conferenceSid: String?
+    public var includeSoftDeleted: Bool?
     public var page: Int?
     public var pageSize: Int?
     public var pageToken: String?
@@ -78,6 +79,7 @@ public struct ListRecordingsParams: Sendable {
         dateCreatedGt: String? = nil,
         callSid: String? = nil,
         conferenceSid: String? = nil,
+        includeSoftDeleted: Bool? = nil,
         page: Int? = nil,
         pageSize: Int? = nil,
         pageToken: String? = nil
@@ -87,6 +89,7 @@ public struct ListRecordingsParams: Sendable {
         self.dateCreatedGt = dateCreatedGt
         self.callSid = callSid
         self.conferenceSid = conferenceSid
+        self.includeSoftDeleted = includeSoftDeleted
         self.page = page
         self.pageSize = pageSize
         self.pageToken = pageToken
@@ -99,10 +102,24 @@ public struct ListRecordingsParams: Sendable {
             QueryItem("DateCreated>", dateCreatedGt),
             QueryItem("CallSid", callSid),
             QueryItem("ConferenceSid", conferenceSid),
+            QueryItem("IncludeSoftDeleted", includeSoftDeleted.map { $0 ? "true" : "false" }),
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PageToken", pageToken),
         ]
+    }
+}
+
+/// Optional query params for `GET /Recordings/{sid}`.
+public struct GetRecordingParams: Sendable {
+    public var includeSoftDeleted: Bool?
+
+    public init(includeSoftDeleted: Bool? = nil) {
+        self.includeSoftDeleted = includeSoftDeleted
+    }
+
+    func queryItems() -> [QueryItem] {
+        [QueryItem("IncludeSoftDeleted", includeSoftDeleted.map { $0 ? "true" : "false" })]
     }
 }
 

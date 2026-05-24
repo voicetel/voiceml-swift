@@ -68,4 +68,58 @@ public final class IncomingPhoneNumbersResource: Sendable {
             path: path("IncomingPhoneNumbers", sid)
         ))
     }
+
+    // MARK: - Typed endpoints
+
+    public func listLocal(
+        _ params: ListTypedIncomingPhoneNumbersParams = .init()
+    ) async throws -> IncomingPhoneNumberList {
+        try await listTyped("Local", params)
+    }
+
+    public func createLocal(_ params: CreateIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
+        try await createTyped("Local", params)
+    }
+
+    public func listMobile(
+        _ params: ListTypedIncomingPhoneNumbersParams = .init()
+    ) async throws -> IncomingPhoneNumberList {
+        try await listTyped("Mobile", params)
+    }
+
+    public func createMobile(_ params: CreateIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
+        try await createTyped("Mobile", params)
+    }
+
+    public func listTollFree(
+        _ params: ListTypedIncomingPhoneNumbersParams = .init()
+    ) async throws -> IncomingPhoneNumberList {
+        try await listTyped("TollFree", params)
+    }
+
+    public func createTollFree(_ params: CreateIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
+        try await createTyped("TollFree", params)
+    }
+
+    private func listTyped(
+        _ kind: String,
+        _ params: ListTypedIncomingPhoneNumbersParams
+    ) async throws -> IncomingPhoneNumberList {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path("IncomingPhoneNumbers", kind),
+            query: params.queryItems()
+        ))
+    }
+
+    private func createTyped(
+        _ kind: String,
+        _ params: CreateIncomingPhoneNumberParams
+    ) async throws -> IncomingPhoneNumber {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("IncomingPhoneNumbers", kind),
+            form: params.formFields()
+        ))
+    }
 }

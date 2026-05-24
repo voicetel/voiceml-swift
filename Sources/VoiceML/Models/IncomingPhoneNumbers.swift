@@ -1,6 +1,6 @@
 import Foundation
 
-/// Twilio-shape capability matrix for a DID. VoiceML is voice-only, so the wire payload
+/// Twilio-compatible capability matrix for a DID. VoiceML is voice-only, so the wire payload
 /// always reports `voice=true` and `sms=mms=fax=false`, but the structure is preserved
 /// for Twilio SDK compatibility (e.g. callers writing `number.capabilities.voice`).
 public struct IncomingPhoneNumberCapabilities: Codable, Sendable {
@@ -66,7 +66,7 @@ public struct IncomingPhoneNumber: Codable, Sendable {
     public var dateUpdated: String
 }
 
-/// `GET /IncomingPhoneNumbers.json` list response — Twilio-shape pagination envelope
+/// `GET /IncomingPhoneNumbers.json` list response — Twilio-compatible pagination envelope
 /// plus the `incomingPhoneNumbers` items array (snake_case `incoming_phone_numbers` on
 /// the wire, converted by `JSONDecoder.keyDecodingStrategy = .convertFromSnakeCase`).
 public struct IncomingPhoneNumberList: Codable, Sendable {
@@ -102,6 +102,47 @@ public struct ListIncomingPhoneNumbersParams: Sendable {
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PhoneNumber", phoneNumber),
+            QueryItem("PageToken", pageToken),
+        ]
+    }
+}
+
+/// Query params for type-specific `/IncomingPhoneNumbers/{Local,Mobile,TollFree}` list endpoints.
+public struct ListTypedIncomingPhoneNumbersParams: Sendable {
+    public var phoneNumber: String?
+    public var friendlyName: String?
+    public var beta: Bool?
+    public var origin: String?
+    public var page: Int?
+    public var pageSize: Int?
+    public var pageToken: String?
+
+    public init(
+        phoneNumber: String? = nil,
+        friendlyName: String? = nil,
+        beta: Bool? = nil,
+        origin: String? = nil,
+        page: Int? = nil,
+        pageSize: Int? = nil,
+        pageToken: String? = nil
+    ) {
+        self.phoneNumber = phoneNumber
+        self.friendlyName = friendlyName
+        self.beta = beta
+        self.origin = origin
+        self.page = page
+        self.pageSize = pageSize
+        self.pageToken = pageToken
+    }
+
+    func queryItems() -> [QueryItem] {
+        [
+            QueryItem("PhoneNumber", phoneNumber),
+            QueryItem("FriendlyName", friendlyName),
+            QueryItem("Beta", beta.map { $0 ? "true" : "false" }),
+            QueryItem("Origin", origin),
+            QueryItem("Page", page.map(String.init)),
+            QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PageToken", pageToken),
         ]
     }

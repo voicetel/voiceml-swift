@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.6.4")
+        XCTAssertEqual(voiceMLVersion, "0.6.6")
     }
 
     func testRequiresAccountSidAndApiKey() {
@@ -823,5 +823,64 @@ final class VoiceMLSmokeTests: XCTestCase {
             item.value.map { (item.name, $0) }
         })
         XCTAssertEqual(names["PageToken"], "cursor-abc123")
+    }
+
+    // MARK: - Spec v0.6.6 additions
+
+    func testCreateParticipantSendsFromAndTo() async throws {
+        let confSid = "CF" + String(repeating: "0", count: 32)
+        enqueueJSON([
+            "call_sid": "CA" + String(repeating: "1", count: 32),
+            "conference_sid": confSid,
+            "account_sid": Self.accountSid,
+            "muted": false,
+            "hold": false,
+            "coaching": false,
+            "queue_time": "0",
+            "start_conference_on_enter": true,
+            "end_conference_on_exit": false,
+            "status": "queued",
+            "api_version": "2010-04-01",
+            "uri": "/x",
+        ], status: 201)
+        let c = try makeClient()
+
+        _ = try await c.conferences.createParticipant(
+            conferenceSid: confSid,
+            body: .init(from: "+18005550000", to: "+18005551234")
+        )
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        let form = parseForm(r.body)
+        XCTAssertEqual(form["From"]?.first, "+18005550000")
+        XCTAssertEqual(form["To"]?.first, "+18005551234")
+    }
+
+    func testListCallNotificationsSendsLogAndMessageDateFilters() async throws {
+        let callSid = "CA" + String(repeating: "2", count: 32)
+        enqueueJSON([
+            "notifications": [] as [Any],
+            "page": 0,
+            "page_size": 50,
+            "total": 0,
+        ])
+        let c = try makeClient()
+
+        _ = try await c.calls.listNotifications(
+            callSid: callSid,
+            params: .init(
+                log: 1,
+                messageDate: "2026-05-01",
+                messageDateLt: "2026-05-02",
+                messageDateGt: "2026-04-30"
+            )
+        )
+
+        let url = MockResponses.shared.captured[0].url.absoluteString
+        XCTAssertTrue(url.contains("Log=1"))
+        XCTAssertTrue(url.contains("MessageDate=2026-05-01"))
+        XCTAssertTrue(url.contains("MessageDate%3C=2026-05-02"))
+        XCTAssertTrue(url.contains("MessageDate%3E=2026-04-30"))
     }
 }
