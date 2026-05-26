@@ -27,6 +27,28 @@ public final class QueuesResource: Sendable {
         ))
     }
 
+    public func iterate(_ params: ListPageParams = .init()) -> AsyncThrowingStream<Queue, Error> {
+        var current = params
+        if current.page == nil { current.page = 0 }
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    while true {
+                        let chunk = try await self.list(current)
+                        for item in chunk.queues { continuation.yield(item) }
+                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.queues.isEmpty {
+                            continuation.finish()
+                            return
+                        }
+                        current.page = (current.page ?? 0) + 1
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
     public func get(_ queueSid: String) async throws -> Queue {
         try await transport.request(VoiceMLRequest(method: .get, path: path("Queues", queueSid)))
     }

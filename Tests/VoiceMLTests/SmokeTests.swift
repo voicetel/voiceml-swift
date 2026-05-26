@@ -857,6 +857,224 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(form["To"]?.first, "+18005551234")
     }
 
+    // MARK: - Pagination (iterate)
+
+    /// Helper: a minimal conference JSON payload.
+    private func conferencePayload(sid: String) -> [String: Any] {
+        [
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "friendly_name": "Room-\(sid.suffix(4))",
+            "status": "in-progress",
+            "api_version": "2010-04-01",
+            "uri": "/2010-04-01/Accounts/\(Self.accountSid)/Conferences/\(sid).json",
+        ]
+    }
+
+    /// Helper: a minimal recording JSON payload.
+    private func recordingPayload(sid: String) -> [String: Any] {
+        [
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "call_sid": "CA" + String(repeating: "0", count: 32),
+            "status": "completed",
+            "api_version": "2010-04-01",
+            "uri": "/2010-04-01/Accounts/\(Self.accountSid)/Recordings/\(sid).json",
+        ]
+    }
+
+    /// Helper: a minimal queue JSON payload.
+    private func queuePayload(sid: String) -> [String: Any] {
+        [
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "friendly_name": "Q-\(sid.suffix(4))",
+            "current_size": 0,
+            "max_size": 100,
+            "average_wait_time": 0,
+            "date_created": "Mon, 19 May 2026 12:00:00 +0000",
+            "date_updated": "Mon, 19 May 2026 12:00:00 +0000",
+            "uri": "/2010-04-01/Accounts/\(Self.accountSid)/Queues/\(sid).json",
+        ]
+    }
+
+    // -- calls.iterate() — two pages (2 + 1 = 3 items)
+
+    func testCallsIterateTwoPages() async throws {
+        let sid1 = "CA" + String(repeating: "a", count: 31) + "1"
+        let sid2 = "CA" + String(repeating: "a", count: 31) + "2"
+        let sid3 = "CA" + String(repeating: "a", count: 31) + "3"
+
+        // Page 0: two calls, nextPageUri present.
+        enqueueJSON([
+            "calls": [callPayload(sid: sid1), callPayload(sid: sid2)],
+            "page": 0,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Calls.json?Page=1&PageSize=2",
+            "uri": "/Calls.json?Page=0&PageSize=2",
+        ])
+        // Page 1: one call, nextPageUri nil.
+        enqueueJSON([
+            "calls": [callPayload(sid: sid3)],
+            "page": 1,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": NSNull(),
+            "uri": "/Calls.json?Page=1&PageSize=2",
+        ])
+
+        let c = try makeClient()
+        var collected: [Call] = []
+        for try await call in c.calls.iterate(.init(pageSize: 2)) {
+            collected.append(call)
+        }
+
+        XCTAssertEqual(collected.count, 3)
+        XCTAssertEqual(collected[0].sid, sid1)
+        XCTAssertEqual(collected[1].sid, sid2)
+        XCTAssertEqual(collected[2].sid, sid3)
+        // Two HTTP requests expected (page 0, page 1).
+        XCTAssertEqual(MockResponses.shared.captured.count, 2)
+    }
+
+    // -- conferences.iterate() — two pages (2 + 1 = 3 items)
+
+    func testConferencesIterateTwoPages() async throws {
+        let sid1 = "CF" + String(repeating: "b", count: 31) + "1"
+        let sid2 = "CF" + String(repeating: "b", count: 31) + "2"
+        let sid3 = "CF" + String(repeating: "b", count: 31) + "3"
+
+        enqueueJSON([
+            "conferences": [conferencePayload(sid: sid1), conferencePayload(sid: sid2)],
+            "page": 0,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Conferences.json?Page=1&PageSize=2",
+            "uri": "/Conferences.json?Page=0&PageSize=2",
+        ])
+        enqueueJSON([
+            "conferences": [conferencePayload(sid: sid3)],
+            "page": 1,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": NSNull(),
+            "uri": "/Conferences.json?Page=1&PageSize=2",
+        ])
+
+        let c = try makeClient()
+        var collected: [Conference] = []
+        for try await conf in c.conferences.iterate(.init(pageSize: 2)) {
+            collected.append(conf)
+        }
+
+        XCTAssertEqual(collected.count, 3)
+        XCTAssertEqual(collected[0].sid, sid1)
+        XCTAssertEqual(collected[1].sid, sid2)
+        XCTAssertEqual(collected[2].sid, sid3)
+        XCTAssertEqual(MockResponses.shared.captured.count, 2)
+    }
+
+    // -- recordings.iterate() — two pages (2 + 1 = 3 items)
+
+    func testRecordingsIterateTwoPages() async throws {
+        let sid1 = "RE" + String(repeating: "c", count: 31) + "1"
+        let sid2 = "RE" + String(repeating: "c", count: 31) + "2"
+        let sid3 = "RE" + String(repeating: "c", count: 31) + "3"
+
+        enqueueJSON([
+            "recordings": [recordingPayload(sid: sid1), recordingPayload(sid: sid2)],
+            "page": 0,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Recordings.json?Page=1&PageSize=2",
+            "uri": "/Recordings.json?Page=0&PageSize=2",
+        ])
+        enqueueJSON([
+            "recordings": [recordingPayload(sid: sid3)],
+            "page": 1,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": NSNull(),
+            "uri": "/Recordings.json?Page=1&PageSize=2",
+        ])
+
+        let c = try makeClient()
+        var collected: [Recording] = []
+        for try await rec in c.recordings.iterate(.init(pageSize: 2)) {
+            collected.append(rec)
+        }
+
+        XCTAssertEqual(collected.count, 3)
+        XCTAssertEqual(collected[0].sid, sid1)
+        XCTAssertEqual(collected[1].sid, sid2)
+        XCTAssertEqual(collected[2].sid, sid3)
+        XCTAssertEqual(MockResponses.shared.captured.count, 2)
+    }
+
+    // -- queues.iterate() — two pages (2 + 1 = 3 items)
+
+    func testQueuesIterateTwoPages() async throws {
+        let sid1 = "QU" + String(repeating: "d", count: 31) + "1"
+        let sid2 = "QU" + String(repeating: "d", count: 31) + "2"
+        let sid3 = "QU" + String(repeating: "d", count: 31) + "3"
+
+        enqueueJSON([
+            "queues": [queuePayload(sid: sid1), queuePayload(sid: sid2)],
+            "page": 0,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Queues.json?Page=1&PageSize=2",
+            "uri": "/Queues.json?Page=0&PageSize=2",
+        ])
+        enqueueJSON([
+            "queues": [queuePayload(sid: sid3)],
+            "page": 1,
+            "page_size": 2,
+            "total": 3,
+            "next_page_uri": NSNull(),
+            "uri": "/Queues.json?Page=1&PageSize=2",
+        ])
+
+        let c = try makeClient()
+        var collected: [Queue] = []
+        for try await queue in c.queues.iterate(.init(pageSize: 2)) {
+            collected.append(queue)
+        }
+
+        XCTAssertEqual(collected.count, 3)
+        XCTAssertEqual(collected[0].sid, sid1)
+        XCTAssertEqual(collected[1].sid, sid2)
+        XCTAssertEqual(collected[2].sid, sid3)
+        XCTAssertEqual(MockResponses.shared.captured.count, 2)
+    }
+
+    // -- single-page edge case (calls — serves as representative for all resources)
+
+    func testCallsIterateSinglePage() async throws {
+        let sid1 = "CA" + String(repeating: "e", count: 31) + "1"
+
+        enqueueJSON([
+            "calls": [callPayload(sid: sid1)],
+            "page": 0,
+            "page_size": 50,
+            "total": 1,
+            "next_page_uri": NSNull(),
+            "uri": "/Calls.json?Page=0&PageSize=50",
+        ])
+
+        let c = try makeClient()
+        var collected: [Call] = []
+        for try await call in c.calls.iterate() {
+            collected.append(call)
+        }
+
+        XCTAssertEqual(collected.count, 1)
+        XCTAssertEqual(collected[0].sid, sid1)
+        // Only a single HTTP request — no second page fetched.
+        XCTAssertEqual(MockResponses.shared.captured.count, 1)
+    }
+
     func testListCallNotificationsSendsLogAndMessageDateFilters() async throws {
         let callSid = "CA" + String(repeating: "2", count: 32)
         enqueueJSON([

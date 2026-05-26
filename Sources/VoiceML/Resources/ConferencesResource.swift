@@ -19,6 +19,28 @@ public final class ConferencesResource: Sendable {
         ))
     }
 
+    public func iterate(_ params: ListConferencesParams = .init()) -> AsyncThrowingStream<Conference, Error> {
+        var current = params
+        if current.page == nil { current.page = 0 }
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    while true {
+                        let chunk = try await self.list(current)
+                        for item in chunk.conferences { continuation.yield(item) }
+                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.conferences.isEmpty {
+                            continuation.finish()
+                            return
+                        }
+                        current.page = (current.page ?? 0) + 1
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
     public func get(_ conferenceSid: String) async throws -> Conference {
         try await transport.request(VoiceMLRequest(
             method: .get,

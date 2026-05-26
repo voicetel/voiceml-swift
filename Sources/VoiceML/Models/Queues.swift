@@ -17,6 +17,9 @@ public struct QueueList: Codable, Sendable {
     public var page: Int?
     public var pageSize: Int?
     public var total: Int?
+    public var nextPageUri: String?
+    public var previousPageUri: String?
+    public var firstPageUri: String?
     public var uri: String?
 }
 

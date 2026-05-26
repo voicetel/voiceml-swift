@@ -19,6 +19,28 @@ public final class RecordingsResource: Sendable {
         ))
     }
 
+    public func iterate(_ params: ListRecordingsParams = .init()) -> AsyncThrowingStream<Recording, Error> {
+        var current = params
+        if current.page == nil { current.page = 0 }
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    while true {
+                        let chunk = try await self.list(current)
+                        for item in chunk.recordings { continuation.yield(item) }
+                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.recordings.isEmpty {
+                            continuation.finish()
+                            return
+                        }
+                        current.page = (current.page ?? 0) + 1
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
     public func get(
         _ recordingSid: String,
         params: GetRecordingParams = .init()

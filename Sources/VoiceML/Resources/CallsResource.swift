@@ -24,6 +24,29 @@ public final class CallsResource: Sendable {
         ))
     }
 
+    /// Walk every page of `/Calls` matching the supplied filters and yield each ``Call``.
+    public func iterate(_ params: ListCallsParams = .init()) -> AsyncThrowingStream<Call, Error> {
+        var current = params
+        if current.page == nil { current.page = 0 }
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    while true {
+                        let chunk = try await self.list(current)
+                        for call in chunk.calls { continuation.yield(call) }
+                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.calls.isEmpty {
+                            continuation.finish()
+                            return
+                        }
+                        current.page = (current.page ?? 0) + 1
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
     public func create(_ body: CreateCallRequest) async throws -> Call {
         try await transport.request(VoiceMLRequest(
             method: .post,
