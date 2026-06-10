@@ -17,7 +17,10 @@ public struct CallTranscription: Codable, Sendable {
     public var languageCode: String?
     public var transcriptionEngine: TranscriptionEngine?
     public var status: TranscriptionStatus
-    public var apiVersion: String
+    // Twilio's documented Create/Update RealtimeTranscription responses
+    // omit api_version (only the LIST envelope items carry it). Optional
+    // to match.
+    public var apiVersion: String?
     public var uri: String
     public var dateCreated: String?
     public var dateUpdated: String?

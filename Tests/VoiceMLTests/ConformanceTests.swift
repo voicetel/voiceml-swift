@@ -182,13 +182,11 @@ final class ConformanceTests: XCTestCase {
             let v = try decoder.decode(IncomingPhoneNumberList.self, from: body)
             XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): IncomingPhoneNumberList.uri")
 
-        // Stream / SiprecSession / CallTranscription Create/Update fixtures don't emit
-        // api_version. Swift declares `apiVersion: String` as non-optional, so a strict
-        // JSONDecoder would throw `keyNotFound` on the missing field. Possible
-        // fix-forward (mirrors TS): relax `apiVersion: String` to `apiVersion: String?`
-        // on these three structs. This harness asserts sid/account_sid/call_sid only.
-        // If the SDK keeps api_version required, the harness surfaces the missing-key
-        // decode error here on first run — fix in a follow-up.
+        // Stream / SiprecSession / CallTranscription Create/Update fixtures
+        // don't emit api_version. The three structs declare it `apiVersion:
+        // String?` (mirrors the TS SDK's fix-forward at voiceml-node-sdk@a11b0a1)
+        // so the missing field decodes to nil instead of throwing keyNotFound.
+        // sid/account_sid/call_sid asserted here; api_version not enforced.
         case "CreateStream", "UpdateStream":
             // Disambiguate against Foundation.Stream (an unrelated abstract class).
             let v = try decoder.decode(VoiceML.Stream.self, from: body)

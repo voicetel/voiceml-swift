@@ -12,7 +12,9 @@ public struct SiprecSession: Codable, Sendable {
     public var name: String?
     public var connectorName: String?
     public var status: SiprecStatus
-    public var apiVersion: String
+    // Twilio's documented Create/Update SiprecSession responses omit
+    // api_version (only the LIST envelope items carry it). Optional to match.
+    public var apiVersion: String?
     public var uri: String
     public var dateCreated: String?
     public var dateUpdated: String?

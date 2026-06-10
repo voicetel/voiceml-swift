@@ -11,7 +11,9 @@ public struct Stream: Codable, Sendable {
     public var callSid: String
     public var name: String?
     public var status: StreamStatus
-    public var apiVersion: String
+    // Twilio's documented Create/Update Stream responses omit api_version
+    // (only the LIST envelope items carry it). Optional to match.
+    public var apiVersion: String?
     public var uri: String
     public var dateCreated: String?
     public var dateUpdated: String?
