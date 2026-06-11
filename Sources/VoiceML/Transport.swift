@@ -93,7 +93,7 @@ public final class Transport: @unchecked Sendable {
 
         self.accountSid = options.accountSid
         self.apiKey = options.apiKey
-        self.baseURL = Self.normalizeBase(options.baseURL)
+        self.baseURL = try Self.normalizeBase(options.baseURL)
         self.timeout = options.timeout
         self.maxRetries = options.maxRetries
         self.userAgent = options.userAgent
@@ -344,7 +344,17 @@ public final class Transport: @unchecked Sendable {
 
     // MARK: - Helpers
 
-    private static func normalizeBase(_ url: URL) -> URL {
+    private static func normalizeBase(_ url: URL) throws -> URL {
+        // HTTPS-only by construction. The SDK sends AccountSid + API key as HTTP
+        // Basic auth on every request; cleartext over http:// would leak both.
+        // Refusing the URL up-front is what proves to CodeQL's taint analysis
+        // (`swift/cleartext-transmission`) that AccountSid never reaches an
+        // unencrypted channel.
+        guard let scheme = url.scheme?.lowercased(), scheme == "https" else {
+            throw ConfigurationError(
+                "baseURL must use https:// (got \(url.scheme ?? "<no scheme>")://) — VoiceML auth is HTTP Basic and must not be transmitted over cleartext."
+            )
+        }
         var s = url.absoluteString
         while s.hasSuffix("/") { s.removeLast() }
         return URL(string: s) ?? url
