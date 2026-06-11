@@ -26,7 +26,7 @@ public struct QueueList: Codable, Sendable {
 public struct QueueMember: Codable, Sendable {
     public var callSid: String
     public var queueSid: String
-    public var accountSid: String
+    public var accountSid: String?
     public var dateEnqueued: String
     public var waitTime: Int
     public var position: Int

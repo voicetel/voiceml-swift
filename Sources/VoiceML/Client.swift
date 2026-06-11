@@ -27,6 +27,7 @@ public final class VoiceMLClient: Sendable {
     public let applications: ApplicationsResource
     public let recordings: RecordingsResource
     public let incomingPhoneNumbers: IncomingPhoneNumbersResource
+    public let messages: MessagesResource
     public let notifications: NotificationsResource
     public let diagnostics: DiagnosticsResource
 
@@ -48,6 +49,7 @@ public final class VoiceMLClient: Sendable {
         self.applications = ApplicationsResource(transport: transport)
         self.recordings = RecordingsResource(transport: transport)
         self.incomingPhoneNumbers = IncomingPhoneNumbersResource(transport: transport)
+        self.messages = MessagesResource(transport: transport)
         self.notifications = NotificationsResource(transport: transport)
         self.diagnostics = DiagnosticsResource(transport: transport)
     }

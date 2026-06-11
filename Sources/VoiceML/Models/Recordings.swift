@@ -3,6 +3,8 @@ import Foundation
 public enum RecordingStatus: String, Codable, Sendable {
     case inProgress = "in-progress"
     case completed, failed, absent, paused, stopped, processing
+    /// Soft-deleted recording (spec v0.6.0+ / API IncludeSoftDeleted=true).
+    case deleted
 }
 
 public enum RecordingSource: String, Codable, Sendable {

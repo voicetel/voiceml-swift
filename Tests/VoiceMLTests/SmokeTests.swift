@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.6.6")
+        XCTAssertEqual(voiceMLVersion, "0.7.0")
     }
 
     func testRequiresAccountSidAndApiKey() {
@@ -196,6 +196,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         _ = c.applications
         _ = c.recordings
         _ = c.incomingPhoneNumbers
+        _ = c.messages
         _ = c.diagnostics
     }
 
@@ -1100,5 +1101,265 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertTrue(url.contains("MessageDate=2026-05-01"))
         XCTAssertTrue(url.contains("MessageDate%3C=2026-05-02"))
         XCTAssertTrue(url.contains("MessageDate%3E=2026-04-30"))
+    }
+
+    // MARK: - Messages (v0.7.0)
+
+    private func messagePayload(
+        sid: String = "SM" + String(repeating: "0", count: 32),
+        status: String = "sent"
+    ) -> [String: Any] {
+        [
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "api_version": "2010-04-01",
+            "to": "+18005551234",
+            "from": "+18005550000",
+            "body": "hello",
+            "status": status,
+            "num_segments": "1",
+            "num_media": "0",
+            "direction": "outbound-api",
+            "price": NSNull(),
+            "price_unit": NSNull(),
+            "error_code": NSNull(),
+            "error_message": NSNull(),
+            "messaging_service_sid": NSNull(),
+            "date_created": "Mon, 19 May 2026 12:00:00 +0000",
+            "date_updated": "Mon, 19 May 2026 12:00:00 +0000",
+            "date_sent": NSNull(),
+            "uri": "/2010-04-01/Accounts/\(Self.accountSid)/Messages/\(sid).json",
+        ]
+    }
+
+    func testMessagesCreateSendsToBodyAndFrom() async throws {
+        enqueueJSON(messagePayload(), status: 201)
+        let c = try makeClient()
+
+        let msg = try await c.messages.create(.init(
+            to: "+18005551234",
+            body: "hello",
+            from: "+18005550000",
+            statusCallback: "https://example.com/cb"
+        ))
+        XCTAssertTrue(msg.sid.hasPrefix("SM"))
+        XCTAssertEqual(msg.numSegments, "1")
+        XCTAssertEqual(msg.numMedia, "0")
+        XCTAssertEqual(msg.status, "sent")
+        XCTAssertNil(msg.errorCode)
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        XCTAssertEqual(
+            r.url.absoluteString,
+            "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Messages.json"
+        )
+        XCTAssertEqual(r.headers["Content-Type"], "application/x-www-form-urlencoded")
+        let form = parseForm(r.body)
+        XCTAssertEqual(form["To"]?.first, "+18005551234")
+        XCTAssertEqual(form["Body"]?.first, "hello")
+        XCTAssertEqual(form["From"]?.first, "+18005550000")
+        XCTAssertEqual(form["StatusCallback"]?.first, "https://example.com/cb")
+        // MessagingServiceSid omitted (nil) — must not appear on the wire.
+        XCTAssertNil(form["MessagingServiceSid"])
+    }
+
+    func testMessagesFetchDecodesErrorCode() async throws {
+        let sid = "SM" + String(repeating: "1", count: 32)
+        var payload = messagePayload(sid: sid, status: "failed")
+        payload["error_code"] = 21609
+        payload["error_message"] = "SMS gateway not configured"
+        enqueueJSON(payload)
+        let c = try makeClient()
+
+        let msg = try await c.messages.fetch(sid: sid)
+        XCTAssertEqual(msg.sid, sid)
+        XCTAssertEqual(msg.status, "failed")
+        XCTAssertEqual(msg.errorCode, 21609)
+        XCTAssertEqual(msg.errorMessage, "SMS gateway not configured")
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "GET")
+        XCTAssertEqual(
+            r.url.absoluteString,
+            "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Messages/\(sid).json"
+        )
+    }
+
+    func testMessagesListEmitsDateSentOperators() async throws {
+        enqueueJSON([
+            "messages": [messagePayload()],
+            "page": 0,
+            "page_size": 50,
+            "total": 1,
+            "next_page_uri": NSNull(),
+            "uri": "/Messages",
+        ])
+        let c = try makeClient()
+
+        let result = try await c.messages.list(.init(
+            to: "+18005551234",
+            dateSent: "2026-05-01",
+            dateSentLt: "2026-05-15",
+            dateSentGt: "2026-04-30",
+            pageSize: 10
+        ))
+        XCTAssertEqual(result.messages.count, 1)
+
+        let url = MockResponses.shared.captured[0].url.absoluteString
+        XCTAssertTrue(url.contains("To=%2B18005551234"))
+        XCTAssertTrue(url.contains("DateSent=2026-05-01"))
+        XCTAssertTrue(url.contains("DateSent%3C=2026-05-15"))
+        XCTAssertTrue(url.contains("DateSent%3E=2026-04-30"))
+        XCTAssertTrue(url.contains("PageSize=10"))
+        XCTAssertTrue(url.lowercased().contains("/messages.json?"))
+    }
+
+    func testMessagesUpdateBodyRedaction() async throws {
+        let sid = "SM" + String(repeating: "2", count: 32)
+        var payload = messagePayload(sid: sid)
+        payload["body"] = ""
+        enqueueJSON(payload)
+        let c = try makeClient()
+
+        let result = try await c.messages.update(sid: sid, .init(body: ""))
+        XCTAssertEqual(result.body, "")
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        XCTAssertEqual(
+            r.url.absoluteString,
+            "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Messages/\(sid).json"
+        )
+        let form = parseForm(r.body)
+        // Empty-string Body must be transmitted (it's the redaction trigger).
+        XCTAssertEqual(form["Body"]?.first, "")
+        XCTAssertNil(form["Status"])
+    }
+
+    func testMessagesDelete() async throws {
+        enqueueRaw(Data(), status: 204)
+        let c = try makeClient()
+        let sid = "SM" + String(repeating: "3", count: 32)
+
+        try await c.messages.delete(sid: sid)
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "DELETE")
+        XCTAssertEqual(
+            r.url.absoluteString,
+            "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Messages/\(sid).json"
+        )
+    }
+
+    // MARK: - Payments (v0.7.0)
+
+    private func paymentPayload(
+        sid: String = "PY" + String(repeating: "0", count: 32),
+        callSid: String = "CA" + String(repeating: "1", count: 32)
+    ) -> [String: Any] {
+        [
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "call_sid": callSid,
+            "api_version": "2010-04-01",
+            "date_created": "Mon, 19 May 2026 12:00:00 +0000",
+            "date_updated": "Mon, 19 May 2026 12:00:00 +0000",
+            "uri": "/2010-04-01/Accounts/\(Self.accountSid)/Calls/\(callSid)/Payments/\(sid).json",
+        ]
+    }
+
+    func testCallsStartPaymentEncodesEnumsAndScalars() async throws {
+        let callSid = "CA" + String(repeating: "1", count: 32)
+        enqueueJSON(paymentPayload(callSid: callSid), status: 201)
+        let c = try makeClient()
+
+        let result = try await c.calls.startPayment(callSid: callSid, .init(
+            idempotencyKey: "idem-abc",
+            statusCallback: "https://example.com/pay-cb",
+            bankAccountType: .consumerChecking,
+            chargeAmount: "9.99",
+            currency: "USD",
+            input: .dtmf,
+            minPostalCodeLength: 5,
+            paymentMethod: .creditCard,
+            postalCode: true,
+            securityCode: false,
+            timeout: 7,
+            tokenType: .oneTime,
+            validCardTypes: "visa mastercard",
+            confirmation: true
+        ))
+        XCTAssertTrue(result.sid.hasPrefix("PY"))
+        XCTAssertEqual(result.callSid, callSid)
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        XCTAssertEqual(
+            r.url.absoluteString,
+            "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Calls/\(callSid)/Payments.json"
+        )
+        XCTAssertEqual(r.headers["Content-Type"], "application/x-www-form-urlencoded")
+
+        let form = parseForm(r.body)
+        XCTAssertEqual(form["IdempotencyKey"]?.first, "idem-abc")
+        XCTAssertEqual(form["StatusCallback"]?.first, "https://example.com/pay-cb")
+        XCTAssertEqual(form["BankAccountType"]?.first, "consumer-checking")
+        XCTAssertEqual(form["ChargeAmount"]?.first, "9.99")
+        XCTAssertEqual(form["Currency"]?.first, "USD")
+        XCTAssertEqual(form["Input"]?.first, "dtmf")
+        XCTAssertEqual(form["MinPostalCodeLength"]?.first, "5")
+        XCTAssertEqual(form["PaymentMethod"]?.first, "credit-card")
+        XCTAssertEqual(form["PostalCode"]?.first, "true")
+        XCTAssertEqual(form["SecurityCode"]?.first, "false")
+        XCTAssertEqual(form["Timeout"]?.first, "7")
+        XCTAssertEqual(form["TokenType"]?.first, "one-time")
+        XCTAssertEqual(form["ValidCardTypes"]?.first, "visa mastercard")
+        XCTAssertEqual(form["Confirmation"]?.first, "true")
+        // Omitted optionals must not appear on the wire.
+        XCTAssertNil(form["Description"])
+        XCTAssertNil(form["Parameter"])
+    }
+
+    func testCallsUpdatePaymentStatusComplete() async throws {
+        let callSid = "CA" + String(repeating: "2", count: 32)
+        let paySid = "PY" + String(repeating: "1", count: 32)
+        enqueueJSON(paymentPayload(sid: paySid, callSid: callSid), status: 202)
+        let c = try makeClient()
+
+        let result = try await c.calls.updatePayment(
+            callSid: callSid,
+            paymentSid: paySid,
+            .init(idempotencyKey: "idem-complete", status: .complete)
+        )
+        XCTAssertEqual(result.sid, paySid)
+
+        let r = MockResponses.shared.captured[0]
+        XCTAssertEqual(r.method, "POST")
+        XCTAssertEqual(
+            r.url.absoluteString,
+            "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/Calls/\(callSid)/Payments/\(paySid).json"
+        )
+        let form = parseForm(r.body)
+        XCTAssertEqual(form["IdempotencyKey"]?.first, "idem-complete")
+        XCTAssertEqual(form["Status"]?.first, "complete")
+        XCTAssertNil(form["Capture"])
+    }
+
+    func testCallsUpdatePaymentCaptureSecurityCode() async throws {
+        let callSid = "CA" + String(repeating: "3", count: 32)
+        let paySid = "PY" + String(repeating: "2", count: 32)
+        enqueueJSON(paymentPayload(sid: paySid, callSid: callSid), status: 202)
+        let c = try makeClient()
+
+        _ = try await c.calls.updatePayment(
+            callSid: callSid,
+            paymentSid: paySid,
+            .init(capture: .securityCode)
+        )
+
+        let form = parseForm(MockResponses.shared.captured[0].body)
+        XCTAssertEqual(form["Capture"]?.first, "security-code")
+        XCTAssertNil(form["Status"])
     }
 }

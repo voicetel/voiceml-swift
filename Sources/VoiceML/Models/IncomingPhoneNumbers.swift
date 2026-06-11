@@ -7,9 +7,9 @@ public struct IncomingPhoneNumberCapabilities: Codable, Sendable {
     public var voice: Bool
     public var sms: Bool
     public var mms: Bool
-    public var fax: Bool
+    public var fax: Bool?
 
-    public init(voice: Bool, sms: Bool, mms: Bool, fax: Bool) {
+    public init(voice: Bool, sms: Bool, mms: Bool, fax: Bool? = nil) {
         self.voice = voice
         self.sms = sms
         self.mms = mms

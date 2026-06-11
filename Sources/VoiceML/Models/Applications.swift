@@ -5,7 +5,7 @@ public struct Application: Codable, Sendable {
     public var accountSid: String
     public var friendlyName: String
     public var apiVersion: String
-    public var voiceUrl: String
+    public var voiceUrl: String?
     public var voiceMethod: HttpMethod?
     public var voiceFallbackUrl: String?
     public var voiceFallbackMethod: HttpMethod?

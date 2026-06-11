@@ -287,4 +287,36 @@ public final class CallsResource: Sendable {
             form: fields
         ))
     }
+
+    // MARK: - Payments
+
+    /// `POST /Calls/{callSid}/Payments` — begin a `<Pay>` session on the live call.
+    /// Returns 201 with the freshly-minted ``CallPayment``. Returns 403 when the tenant
+    /// is not `pay_enabled` or has no `stripe_secret_key` configured.
+    public func startPayment(
+        callSid: String,
+        _ req: StartPaymentRequest = .init()
+    ) async throws -> CallPayment {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("Calls", callSid, "Payments"),
+            form: req.formFields()
+        ))
+    }
+
+    /// `POST /Calls/{callSid}/Payments/{paymentSid}` — advance or terminate an existing
+    /// Pay session. `status=.complete` captures the collected fields; `status=.cancel`
+    /// aborts the session. `capture=…` tells the runtime which input the user is about
+    /// to type next.
+    public func updatePayment(
+        callSid: String,
+        paymentSid: String,
+        _ req: UpdatePaymentRequest
+    ) async throws -> CallPayment {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("Calls", callSid, "Payments", paymentSid),
+            form: req.formFields()
+        ))
+    }
 }

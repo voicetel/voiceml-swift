@@ -15,7 +15,7 @@ public enum ParticipantStatus: String, Codable, Sendable {
 public struct Conference: Codable, Sendable {
     public var sid: String
     public var accountSid: String
-    public var friendlyName: String
+    public var friendlyName: String?
     public var status: ConferenceStatus
     public var region: String?
     public var apiVersion: String
@@ -46,12 +46,12 @@ public struct Participant: Codable, Sendable {
     public var hold: Bool
     public var coaching: Bool
     public var callSidToCoach: String?
-    public var queueTime: String
+    public var queueTime: String?
     public var startConferenceOnEnter: Bool
     public var endConferenceOnExit: Bool
     public var status: ParticipantStatus
     public var label: String?
-    public var apiVersion: String
+    public var apiVersion: String?
     public var uri: String
     public var dateCreated: String?
     public var dateUpdated: String?
