@@ -237,28 +237,39 @@ public final class Transport: @unchecked Sendable {
         // suffix (`.json`, `.yaml`, `.yml`, `.wav`) or is `/health`.
         let effectivePath = Self.applyJSONSuffix(path)
 
-        // Absolute URL passthrough (rare — currently unused, kept for future flexibility).
-        let absolute: URL
-        if let u = URL(string: effectivePath), let scheme = u.scheme, !scheme.isEmpty {
-            absolute = u
-        } else {
-            absolute = URL(string: baseURL.absoluteString + effectivePath)!
-        }
+        // Build via URLComponents seeded from baseURL — which `normalizeBase` has
+        // already proven to be https://. Setting `.scheme = "https"` here as a
+        // literal makes that invariant visible to CodeQL's taint analysis and
+        // clears `swift/cleartext-transmission` on the AccountSid → URL flow:
+        // the scheme is now a constant at the point of URL construction, not
+        // derived from a possibly-tainted absolute-string concatenation.
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = baseURL.host
+        if let port = baseURL.port { components.port = port }
+        let trimmedBasePath = baseURL.path.hasSuffix("/")
+            ? String(baseURL.path.dropLast())
+            : baseURL.path
+        components.path = trimmedBasePath + effectivePath
 
         // Filter out items whose value is nil, then construct the query string manually.
         // We do this by hand (rather than via URLComponents.queryItems) because Twilio uses
         // literal `>=`/`<=` in parameter names which need explicit encoding and ordering.
         let kept = query.filter { $0.value != nil }
-        if kept.isEmpty { return absolute }
+        if !kept.isEmpty {
+            let queryString = kept.map { item -> String in
+                let n = percentEncodeQueryComponent(item.name)
+                let v = percentEncodeQueryComponent(item.value ?? "")
+                return "\(n)=\(v)"
+            }.joined(separator: "&")
+            components.percentEncodedQuery = queryString
+        }
 
-        let queryString = kept.map { item -> String in
-            let n = percentEncodeQueryComponent(item.name)
-            let v = percentEncodeQueryComponent(item.value ?? "")
-            return "\(n)=\(v)"
-        }.joined(separator: "&")
-
-        let separator = absolute.absoluteString.contains("?") ? "&" : "?"
-        return URL(string: absolute.absoluteString + separator + queryString)!
+        // `URLComponents.url` can return nil only when scheme/host don't form
+        // a valid URL — given the validated baseURL.host and the literal scheme
+        // this branch is unreachable in practice; the fallback is purely
+        // defensive (returns baseURL so a downstream error surfaces cleanly).
+        return components.url ?? baseURL
     }
 
     // MARK: - Form encoding
