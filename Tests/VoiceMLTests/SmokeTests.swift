@@ -172,7 +172,7 @@ final class VoiceMLSmokeTests: XCTestCase {
     // MARK: - Module surface
 
     func testVersion() {
-        XCTAssertEqual(voiceMLVersion, "0.7.0")
+        XCTAssertEqual(voiceMLVersion, "0.7.1.1")
     }
 
     func testRequiresAccountSidAndApiKey() {
