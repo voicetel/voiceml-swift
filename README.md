@@ -1,6 +1,6 @@
 # 📞 VoiceML Swift SDK
 
-The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/api/v0.6/voiceml/) — Twilio-compatible outbound voice and answering-machine-detection from VoiceTel, with `async/await` throughout and `Sendable` types tuned for Swift Concurrency.
+The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/api/v0.7/voiceml/) — Twilio-compatible outbound voice and answering-machine-detection from VoiceTel, with `async/await` throughout and `Sendable` types tuned for Swift Concurrency.
 
 ![Version](https://img.shields.io/badge/version-0.7.1.1-blue)
 ![Swift](https://img.shields.io/badge/swift-5.9%2B-orange)
@@ -121,7 +121,7 @@ let health = try await client.diagnostics.health()
 
 The Swift constructor also accepts `authToken:` as an alias for `apiKey:` (Twilio's terminology for the same Basic-auth password). Passing both throws `ConfigurationError` rather than silently picking one.
 
-> Don't have credentials yet? See **[voicetel.com/docs/api/v0.6/voiceml/](https://voicetel.com/docs/api/v0.6/voiceml/)** for issuance and rotation.
+> Don't have credentials yet? See **[voicetel.com/docs/api/v0.7/voiceml/](https://voicetel.com/docs/api/v0.7/voiceml/)** for issuance and rotation.
 
 ## 🗺️ Resource Reference
 
@@ -287,7 +287,7 @@ CI runs against the `swift:6.0.3` container on Linux; the package also builds ag
 
 ## 📖 API Documentation
 
-- **Reference docs:** [voicetel.com/docs/api/v0.6/voiceml/](https://voicetel.com/docs/api/v0.6/voiceml/)
+- **Reference docs:** [voicetel.com/docs/api/v0.7/voiceml/](https://voicetel.com/docs/api/v0.7/voiceml/)
 - **Validator:** [voicetel.com/voiceml/validator/](https://voicetel.com/voiceml/validator/)
 - **SDK catalogue:** [voicetel.com/docs/voiceml-sdks/](https://voicetel.com/docs/voiceml-sdks/)
 - **Type definitions:** every wire shape has a `Codable` struct under `Sources/VoiceML/Models/`.
