@@ -389,6 +389,9 @@ public final class Transport: @unchecked Sendable {
         let suffix = queryStart.map { String(path[$0...]) } ?? ""
 
         if basePath == "/health" { return path }
+        // /v2/ namespace (routes/v2) uses raw paths without the .json suffix
+        // — the spec defines them verbatim (e.g. /v2/SipDomains/{name}).
+        if basePath.hasPrefix("/v2/") { return path }
         let known = [".json", ".yaml", ".yml", ".wav"]
         for ext in known where basePath.hasSuffix(ext) {
             return path

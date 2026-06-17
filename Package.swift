@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "VoiceML",
-    // SDK release version: 0.7.1.1 (see Sources/VoiceML/Version.swift)
+    // SDK release version: 0.8.1 (see Sources/VoiceML/Version.swift)
     platforms: [.iOS(.v15), .macOS(.v12), .tvOS(.v15), .watchOS(.v8)],
     products: [.library(name: "VoiceML", targets: ["VoiceML"])],
     dependencies: [],

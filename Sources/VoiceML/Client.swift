@@ -29,6 +29,8 @@ public final class VoiceMLClient: Sendable {
     public let incomingPhoneNumbers: IncomingPhoneNumbersResource
     public let messages: MessagesResource
     public let notifications: NotificationsResource
+    public let sip: SipResource
+    public let routesV2: RoutesV2Resource
     public let diagnostics: DiagnosticsResource
 
     public let accountSid: String
@@ -51,6 +53,8 @@ public final class VoiceMLClient: Sendable {
         self.incomingPhoneNumbers = IncomingPhoneNumbersResource(transport: transport)
         self.messages = MessagesResource(transport: transport)
         self.notifications = NotificationsResource(transport: transport)
+        self.sip = SipResource(transport: transport)
+        self.routesV2 = RoutesV2Resource(transport: transport)
         self.diagnostics = DiagnosticsResource(transport: transport)
     }
 
