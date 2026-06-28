@@ -10,7 +10,11 @@ public struct CallPayment: Codable, Sendable {
     public var sid: String
     public var accountSid: String
     public var callSid: String
-    public var apiVersion: String
+    // Twilio's CreatePayments/UpdatePayments fixtures omit api_version
+    // (only the list-envelope items carry it). Optional to match — same
+    // fix-forward the TS SDK shipped at voiceml-node-sdk@a11b0a1 for the
+    // Stream/Siprec/CallTranscription Create responses.
+    public var apiVersion: String?
     public var dateCreated: String
     public var dateUpdated: String
     public var uri: String

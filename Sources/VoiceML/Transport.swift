@@ -392,6 +392,10 @@ public final class Transport: @unchecked Sendable {
         // /v2/ namespace (routes/v2) uses raw paths without the .json suffix
         // — the spec defines them verbatim (e.g. /v2/SipDomains/{name}).
         if basePath.hasPrefix("/v2/") { return path }
+        // /v1/ namespace (Voice v1, Conversations v1) also uses raw paths
+        // without the .json suffix — the Twilio sub-domain APIs follow the
+        // bare-path convention.
+        if basePath.hasPrefix("/v1/") { return path }
         let known = [".json", ".yaml", ".yml", ".wav"]
         for ext in known where basePath.hasSuffix(ext) {
             return path

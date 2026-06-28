@@ -3,9 +3,11 @@ import Foundation
 /// `client.routesV2` — Twilio routes/v2 Inbound Processing Region API.
 public final class RoutesV2Resource: Sendable {
     public let sipDomains: RoutesV2SipDomainsResource
+    public let phoneNumbers: RoutesV2PhoneNumbersResource
 
     init(transport: Transport) {
         self.sipDomains = RoutesV2SipDomainsResource(transport: transport)
+        self.phoneNumbers = RoutesV2PhoneNumbersResource(transport: transport)
     }
 }
 
@@ -22,5 +24,21 @@ public final class RoutesV2SipDomainsResource: Sendable {
 
     public func update(domainName: String, _ body: UpdateRoutesV2SipDomainRequest) async throws -> RoutesV2SipDomain {
         try await transport.request(VoiceMLRequest(method: .post, path: "/v2/SipDomains/\(domainName)", form: body.formFields()))
+    }
+}
+
+/// Operations on `/v2/PhoneNumbers/{PhoneNumber}`. Keyed by the phone number
+/// in E.164 format (or its PN sid); the account is resolved from HTTP Basic
+/// auth, so `/v2/` paths bypass `/2010-04-01/Accounts/{Sid}/`.
+public final class RoutesV2PhoneNumbersResource: Sendable {
+    private let transport: Transport
+    init(transport: Transport) { self.transport = transport }
+
+    public func fetch(phoneNumber: String) async throws -> RoutesV2PhoneNumber {
+        try await transport.request(VoiceMLRequest(method: .get, path: "/v2/PhoneNumbers/\(phoneNumber)"))
+    }
+
+    public func update(phoneNumber: String, _ body: UpdateRoutesV2PhoneNumberRequest) async throws -> RoutesV2PhoneNumber {
+        try await transport.request(VoiceMLRequest(method: .post, path: "/v2/PhoneNumbers/\(phoneNumber)", form: body.formFields()))
     }
 }

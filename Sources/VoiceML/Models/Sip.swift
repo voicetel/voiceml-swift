@@ -145,6 +145,35 @@ public struct SipIpAccessControlListMappingList: Codable, Sendable {
     public var uri: String?
 }
 
+/// Shape returned by the `/SIP/Domains/{sid}/Auth/Calls/{CredentialListMappings,IpAccessControlListMappings}`
+/// and `/SIP/Domains/{sid}/Auth/Registrations/CredentialListMappings` endpoints.
+/// Differs from `SipDomainMapping` in that it omits `uri` and `domain_sid` —
+/// the auth subresources echo only the mapped-resource sid/account/timestamps.
+public struct SipAuthMapping: Codable, Sendable {
+    public var sid: String
+    public var accountSid: String
+    public var friendlyName: String?
+    public var dateCreated: String
+    public var dateUpdated: String
+}
+
+/// Envelope for the `/SIP/Domains/{sid}/Auth/...` mapping list endpoints.
+/// Twilio serializes items under the generic `contents` key (vs. the
+/// resource-named `credential_list_mappings` / `ip_access_control_list_mappings`
+/// used by the non-Auth mapping endpoints).
+public struct SipAuthMappingList: Codable, Sendable {
+    public var contents: [SipAuthMapping]
+    public var page: Int?
+    public var pageSize: Int?
+    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
+    public var nextPageUri: String?
+    public var previousPageUri: String?
+    public var uri: String?
+}
+
 // MARK: - Request bodies
 
 /// Body for `POST /SIP/Domains`. `domainName` is required.

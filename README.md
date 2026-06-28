@@ -2,7 +2,7 @@
 
 The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/api/v0.8/voiceml/) — Twilio-compatible outbound voice and answering-machine-detection from VoiceTel, with `async/await` throughout and `Sendable` types tuned for Swift Concurrency.
 
-![Version](https://img.shields.io/badge/version-0.8.1-blue)
+![Version](https://img.shields.io/badge/version-0.9.1-blue)
 ![Swift](https://img.shields.io/badge/swift-5.9%2B-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://img.shields.io/badge/tests-54%20unit-brightgreen)

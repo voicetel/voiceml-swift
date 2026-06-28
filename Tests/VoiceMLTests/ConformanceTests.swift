@@ -206,6 +206,141 @@ final class ConformanceTests: XCTestCase {
             XCTAssertFalse(v.accountSid.isEmpty, "\(label): CallTranscription.account_sid")
             XCTAssertFalse(v.callSid.isEmpty, "\(label): CallTranscription.call_sid")
 
+        // Account/Balance/Payments/OutgoingCallerIds/Media/RecordingTranscriptions/
+        // SIP-Auth mappings: modelled here for fixture-driven conformance —
+        // the SDK doesn't surface these as first-class resource clients yet,
+        // but the Codable shapes ensure we don't ship drifted models when
+        // they are wired up.
+        case "FetchAccount", "UpdateAccount":
+            let v = try decoder.decode(Account.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): Account.sid")
+            XCTAssertFalse(v.ownerAccountSid.isEmpty, "\(label): Account.owner_account_sid")
+
+        case "FetchBalance":
+            let v = try decoder.decode(Balance.self, from: body)
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Balance.account_sid")
+            XCTAssertFalse(v.currency.isEmpty, "\(label): Balance.currency")
+
+        case "CreatePayments", "UpdatePayments":
+            let v = try decoder.decode(CallPayment.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): CallPayment.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): CallPayment.account_sid")
+            XCTAssertFalse(v.callSid.isEmpty, "\(label): CallPayment.call_sid")
+
+        case "FetchOutgoingCallerId", "UpdateOutgoingCallerId":
+            let v = try decoder.decode(OutgoingCallerId.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): OutgoingCallerId.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): OutgoingCallerId.account_sid")
+
+        case "ListOutgoingCallerId":
+            let v = try decoder.decode(OutgoingCallerIdList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): OutgoingCallerIdList.uri")
+
+        case "CreateValidationRequest":
+            // ValidationRequest has no sid (Twilio returns a verification
+            // code instead). Assert account_sid + validation_code.
+            let v = try decoder.decode(ValidationRequest.self, from: body)
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): ValidationRequest.account_sid")
+            XCTAssertFalse(v.validationCode.isEmpty, "\(label): ValidationRequest.validation_code")
+
+        case "FetchMedia":
+            let v = try decoder.decode(Media.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): Media.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Media.account_sid")
+
+        case "ListMedia":
+            let v = try decoder.decode(MediaList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): MediaList.uri")
+
+        case "FetchRecordingTranscription", "FetchTranscription":
+            let v = try decoder.decode(RecordingTranscription.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): RecordingTranscription.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): RecordingTranscription.account_sid")
+            XCTAssertFalse(v.recordingSid.isEmpty, "\(label): RecordingTranscription.recording_sid")
+
+        case "ListRecordingTranscription", "ListTranscription":
+            let v = try decoder.decode(RecordingTranscriptionList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): RecordingTranscriptionList.uri")
+
+        // SIP — Domains
+        case "CreateSipDomain", "FetchSipDomain", "UpdateSipDomain":
+            let v = try decoder.decode(SipDomain.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipDomain.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipDomain.account_sid")
+
+        case "ListSipDomain":
+            let v = try decoder.decode(SipDomainList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipDomainList.uri")
+
+        // SIP — Credentials
+        case "CreateSipCredential", "FetchSipCredential", "UpdateSipCredential":
+            let v = try decoder.decode(SipCredential.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipCredential.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipCredential.account_sid")
+
+        case "ListSipCredential":
+            let v = try decoder.decode(SipCredentialListPage.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipCredentialListPage.uri")
+
+        // SIP — CredentialLists
+        case "CreateSipCredentialList", "FetchSipCredentialList", "UpdateSipCredentialList":
+            let v = try decoder.decode(SipCredentialList.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipCredentialList.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipCredentialList.account_sid")
+
+        case "ListSipCredentialList":
+            let v = try decoder.decode(SipCredentialListList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipCredentialListList.uri")
+
+        // SIP — IpAccessControlLists
+        case "CreateSipIpAccessControlList", "FetchSipIpAccessControlList", "UpdateSipIpAccessControlList":
+            let v = try decoder.decode(SipIpAccessControlList.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipIpAccessControlList.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipIpAccessControlList.account_sid")
+
+        case "ListSipIpAccessControlList":
+            let v = try decoder.decode(SipIpAccessControlListList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipIpAccessControlListList.uri")
+
+        // SIP — IpAddresses (members of an IpAccessControlList)
+        case "CreateSipIpAddress", "FetchSipIpAddress", "UpdateSipIpAddress":
+            let v = try decoder.decode(SipIpAddress.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipIpAddress.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipIpAddress.account_sid")
+
+        case "ListSipIpAddress":
+            let v = try decoder.decode(SipIpAddressList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipIpAddressList.uri")
+
+        // SIP — Domain-scoped mappings (carry uri + domain_sid)
+        case "CreateSipCredentialListMapping", "FetchSipCredentialListMapping",
+             "CreateSipIpAccessControlListMapping", "FetchSipIpAccessControlListMapping":
+            let v = try decoder.decode(SipDomainMapping.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipDomainMapping.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipDomainMapping.account_sid")
+
+        case "ListSipCredentialListMapping":
+            let v = try decoder.decode(SipCredentialListMappingList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipCredentialListMappingList.uri")
+
+        case "ListSipIpAccessControlListMapping":
+            let v = try decoder.decode(SipIpAccessControlListMappingList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipIpAccessControlListMappingList.uri")
+
+        // SIP — Auth subresource mappings (no uri, no domain_sid)
+        case "CreateSipAuthCallsCredentialListMapping", "FetchSipAuthCallsCredentialListMapping",
+             "CreateSipAuthCallsIpAccessControlListMapping", "FetchSipAuthCallsIpAccessControlListMapping",
+             "CreateSipAuthRegistrationsCredentialListMapping", "FetchSipAuthRegistrationsCredentialListMapping":
+            let v = try decoder.decode(SipAuthMapping.self, from: body)
+            XCTAssertFalse(v.sid.isEmpty, "\(label): SipAuthMapping.sid")
+            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipAuthMapping.account_sid")
+
+        case "ListSipAuthCallsCredentialListMapping",
+             "ListSipAuthCallsIpAccessControlListMapping",
+             "ListSipAuthRegistrationsCredentialListMapping":
+            let v = try decoder.decode(SipAuthMappingList.self, from: body)
+            XCTAssertFalse((v.uri ?? "").isEmpty, "\(label): SipAuthMappingList.uri")
+
         default:
             XCTFail("conformance harness: no mapping for operation_id=\(opId). Add a case or extend skipOps.")
         }

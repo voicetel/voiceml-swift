@@ -31,6 +31,9 @@ public final class VoiceMLClient: Sendable {
     public let notifications: NotificationsResource
     public let sip: SipResource
     public let routesV2: RoutesV2Resource
+    public let voiceV1: VoiceV1Resource
+    public let conversationsV1: ConversationsV1Resource
+    public let assistantsV1: AssistantsV1Resource
     public let diagnostics: DiagnosticsResource
 
     public let accountSid: String
@@ -55,6 +58,9 @@ public final class VoiceMLClient: Sendable {
         self.notifications = NotificationsResource(transport: transport)
         self.sip = SipResource(transport: transport)
         self.routesV2 = RoutesV2Resource(transport: transport)
+        self.voiceV1 = VoiceV1Resource(transport: transport)
+        self.conversationsV1 = ConversationsV1Resource(transport: transport)
+        self.assistantsV1 = AssistantsV1Resource(transport: transport)
         self.diagnostics = DiagnosticsResource(transport: transport)
     }
 
