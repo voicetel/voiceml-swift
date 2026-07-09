@@ -1,11 +1,11 @@
 # 📞 VoiceML Swift SDK
 
-The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/api/v0.8/voiceml/) — Twilio-compatible outbound voice and answering-machine-detection from VoiceTel, with `async/await` throughout and `Sendable` types tuned for Swift Concurrency.
+The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/api/v0.9/voiceml/) — Twilio-compatible outbound voice and answering-machine-detection from VoiceTel, with `async/await` throughout and `Sendable` types tuned for Swift Concurrency.
 
-![Version](https://img.shields.io/badge/version-0.9.1-blue)
+![Version](https://img.shields.io/badge/version-0.9.2-blue)
 ![Swift](https://img.shields.io/badge/swift-5.9%2B-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Tests](https://img.shields.io/badge/tests-54%20unit-brightgreen)
+![Tests](https://img.shields.io/badge/tests-131%20unit-brightgreen)
 ![Platforms](https://img.shields.io/badge/platforms-iOS%2015%20%7C%20macOS%2012%20%7C%20tvOS%2015%20%7C%20watchOS%208%20%7C%20Linux-lightgrey)
 
 ## 📚 Table of Contents
@@ -123,7 +123,7 @@ let health = try await client.diagnostics.health()
 
 The Swift constructor also accepts `authToken:` as an alias for `apiKey:` (Twilio's terminology for the same Basic-auth password). Passing both throws `ConfigurationError` rather than silently picking one.
 
-> Don't have credentials yet? See **[voicetel.com/docs/api/v0.8/voiceml/](https://voicetel.com/docs/api/v0.8/voiceml/)** for issuance and rotation.
+> Don't have credentials yet? See **[voicetel.com/docs/api/v0.9/voiceml/](https://voicetel.com/docs/api/v0.9/voiceml/)** for issuance and rotation.
 
 ## 🗺️ Resource Reference
 
@@ -135,9 +135,15 @@ The Swift constructor also accepts `authToken:` as an alias for `apiKey:` (Twili
 | `client.applications` | CRUD on TwiML + callback bundles | |
 | `client.recordings` | account-wide list, metadata, audio fetch, delete | follows S3 redirect for audio |
 | `client.messages` | `create`, `fetch`, `list`, `iterate`, `update`, `delete` | To/From/DateSent filters; Body redaction; Status=canceled |
+| `client.messagingV1.services` | `create`, `list`, `fetch`, `update`, `delete` | Messaging Service (`MG…`); rides `messaging.voicetel.com` |
+| `client.pricing` | `v1`/`v2` `.voice` / `.messaging` / `.phoneNumbers` / `.trunking` reads | read-only voice, messaging & trunking rate cards |
 | `client.incomingPhoneNumbers` | `list`, `fetch`, `update` | |
 | `client.notifications` | `fetch`, `list` | |
 | `client.diagnostics` | `/health`, OpenAPI spec | |
+
+### Product hosts
+
+VoiceML mirrors Twilio's product-per-subdomain model. Conversations (`client.conversationsV1`) is served on `conversations.voicetel.com` and Messaging Service (`client.messagingV1`) on `messaging.voicetel.com`; everything else stays on the default `voiceml.voicetel.com`. These hosts are derived automatically from `baseURL`; self-hosters can override them with `messagingBaseURL:` / `conversationsBaseURL:` on the client initializer.
 
 Every method that takes a request body accepts a typed Swift struct from the `VoiceML` module:
 
@@ -289,7 +295,7 @@ CI runs against the `swift:6.0.3` container on Linux; the package also builds ag
 
 ## 📖 API Documentation
 
-- **Reference docs:** [voicetel.com/docs/api/v0.8/voiceml/](https://voicetel.com/docs/api/v0.8/voiceml/)
+- **Reference docs:** [voicetel.com/docs/api/v0.9/voiceml/](https://voicetel.com/docs/api/v0.9/voiceml/)
 - **Validator:** [voicetel.com/voiceml/validator/](https://voicetel.com/voiceml/validator/)
 - **SDK catalogue:** [voicetel.com/docs/voiceml-sdks/](https://voicetel.com/docs/voiceml-sdks/)
 - **Type definitions:** every wire shape has a `Codable` struct under `Sources/VoiceML/Models/`.

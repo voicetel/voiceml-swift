@@ -365,7 +365,7 @@ final class V090Tests: XCTestCase {
         XCTAssertEqual(conv.state, "active")
 
         let req = MockResponses.shared.captured[0]
-        XCTAssertEqual(req.url.absoluteString, "https://voiceml.voicetel.com/v1/Conversations")
+        XCTAssertEqual(req.url.absoluteString, "https://conversations.voicetel.com/v1/Conversations")
         let form = parseForm(req.body)
         XCTAssertEqual(form["FriendlyName"]?.first, "Support")
         XCTAssertEqual(form["Attributes"]?.first, "{}")
@@ -402,7 +402,7 @@ final class V090Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Conversations/\(chSid)/Messages"
+            "https://conversations.voicetel.com/v1/Conversations/\(chSid)/Messages"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["Author"]?.first, "+15551234567")
@@ -466,7 +466,7 @@ final class V090Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Conversations/\(chSid)/Webhooks"
+            "https://conversations.voicetel.com/v1/Conversations/\(chSid)/Webhooks"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["Target"]?.first, "webhook")
@@ -490,7 +490,7 @@ final class V090Tests: XCTestCase {
 
         XCTAssertEqual(
             MockResponses.shared.captured[0].url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Conversations/\(chSid)/Messages/\(imSid)/Receipts"
+            "https://conversations.voicetel.com/v1/Conversations/\(chSid)/Messages/\(imSid)/Receipts"
         )
     }
 
@@ -560,7 +560,7 @@ final class V090Tests: XCTestCase {
         let req = MockResponses.shared.captured[1]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Users/\(usSid)/Conversations/\(chSid)"
+            "https://conversations.voicetel.com/v1/Users/\(usSid)/Conversations/\(chSid)"
         )
         XCTAssertEqual(parseForm(req.body)["NotificationLevel"]?.first, "muted")
     }
@@ -713,7 +713,7 @@ final class V090Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/ConversationWithParticipants"
+            "https://conversations.voicetel.com/v1/ConversationWithParticipants"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["FriendlyName"]?.first, "Triage")
@@ -743,7 +743,7 @@ final class V090Tests: XCTestCase {
         XCTAssertEqual(MockResponses.shared.captured[1].method, "DELETE")
         XCTAssertEqual(
             MockResponses.shared.captured[1].url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(isSid)"
+            "https://conversations.voicetel.com/v1/Services/\(isSid)"
         )
     }
 

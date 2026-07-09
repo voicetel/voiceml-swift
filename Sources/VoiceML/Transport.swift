@@ -60,6 +60,11 @@ struct VoiceMLRequest {
     var query: [QueryItem] = []
     var form: [FormField]? = nil
     var jsonBody: Data? = nil
+    /// When true, `path` already carries percent-encoded segments (e.g. an
+    /// E.164 number `%2B18005551234`) and must be assigned to the URL's
+    /// `percentEncodedPath` verbatim rather than re-encoded. Off for every
+    /// existing caller, so their behaviour is unchanged.
+    var encodedPath: Bool = false
 }
 
 /// Status codes that trigger automatic retry (transient server / rate-limit).
@@ -106,6 +111,44 @@ public final class Transport: @unchecked Sendable {
             cfg.timeoutIntervalForResource = options.timeout
             self.session = URLSession(configuration: cfg)
         }
+    }
+
+    /// Designated init used by ``scoped(to:)`` to build a sibling transport that
+    /// reuses this one's session, auth, and retry policy against a different host.
+    private init(
+        accountSid: String,
+        apiKey: String,
+        baseURL: URL,
+        timeout: TimeInterval,
+        maxRetries: Int,
+        userAgent: String,
+        session: URLSession
+    ) {
+        self.accountSid = accountSid
+        self.apiKey = apiKey
+        self.baseURL = baseURL
+        self.timeout = timeout
+        self.maxRetries = maxRetries
+        self.userAgent = userAgent
+        self.session = session
+    }
+
+    /// Return a sibling transport pinned to a product host, sharing this
+    /// transport's session, credentials, and retry policy. Used to route the
+    /// whole Conversations v1 group at `conversations.voicetel.com` and Messaging
+    /// Service at `messaging.voicetel.com` — they share the `/v1/Services` path
+    /// shape, so the host is what disambiguates them on the wire.
+    func scoped(to productBaseURL: URL) throws -> Transport {
+        let normalized = try Self.normalizeBase(productBaseURL)
+        return Transport(
+            accountSid: accountSid,
+            apiKey: apiKey,
+            baseURL: normalized,
+            timeout: timeout,
+            maxRetries: maxRetries,
+            userAgent: userAgent,
+            session: session
+        )
     }
 
     // MARK: - Public request entry points
@@ -198,7 +241,7 @@ public final class Transport: @unchecked Sendable {
     // MARK: - Request construction
 
     private func buildURLRequest(_ req: VoiceMLRequest) throws -> URLRequest {
-        let url = buildURL(path: req.path, query: req.query)
+        let url = buildURL(path: req.path, query: req.query, pathIsPercentEncoded: req.encodedPath)
         var urlReq = URLRequest(url: url)
         urlReq.httpMethod = req.method.rawValue
         urlReq.timeoutInterval = timeout
@@ -230,7 +273,7 @@ public final class Transport: @unchecked Sendable {
         }
     }
 
-    func buildURL(path: String, query: [QueryItem]) -> URL {
+    func buildURL(path: String, query: [QueryItem], pathIsPercentEncoded: Bool = false) -> URL {
         // Append `.json` suffix to REST paths to match Twilio's canonical URL shape
         // (the v0.5.x server accepts both forms; this future-proofs us against the
         // bare-path form being deprecated). Skip if the path already carries a known
@@ -250,7 +293,14 @@ public final class Transport: @unchecked Sendable {
         let trimmedBasePath = baseURL.path.hasSuffix("/")
             ? String(baseURL.path.dropLast())
             : baseURL.path
-        components.path = trimmedBasePath + effectivePath
+        if pathIsPercentEncoded {
+            // Caller pre-encoded the path segments (e.g. an E.164 number
+            // `%2B18005551234`); assign verbatim so URLComponents doesn't
+            // re-escape the `%`.
+            components.percentEncodedPath = trimmedBasePath + effectivePath
+        } else {
+            components.path = trimmedBasePath + effectivePath
+        }
 
         // Filter out items whose value is nil, then construct the query string manually.
         // We do this by hand (rather than via URLComponents.queryItems) because Twilio uses
@@ -444,5 +494,12 @@ func percentEncodeQueryComponent(_ s: String) -> String {
 /// `%20` instead — both are accepted by every standards-compliant server (and by Twilio's
 /// implementation).
 func percentEncodeFormComponent(_ s: String) -> String {
+    s.addingPercentEncoding(withAllowedCharacters: queryAllowed) ?? s
+}
+
+/// Percent-encode a single path segment, escaping everything outside the RFC
+/// 3986 unreserved set (so an E.164 `+` becomes `%2B`). Mirrors Python's
+/// `quote(number, safe='')` for number path segments.
+func percentEncodePathSegment(_ s: String) -> String {
     s.addingPercentEncoding(withAllowedCharacters: queryAllowed) ?? s
 }

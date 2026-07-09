@@ -17,6 +17,14 @@ public struct ClientOptions: Sendable {
     /// Server base URL. Defaults to `https://voiceml.voicetel.com`.
     public let baseURL: URL
 
+    /// Override the Messaging Service host. When nil it's derived from `baseURL`
+    /// (swap the `voiceml` label → `messaging` for `*.voicetel.com` hosts).
+    public let messagingBaseURL: URL?
+
+    /// Override the Conversations host. When nil it's derived from `baseURL`
+    /// (swap the `voiceml` label → `conversations` for `*.voicetel.com` hosts).
+    public let conversationsBaseURL: URL?
+
     /// Per-request timeout. Defaults to 30 seconds.
     public let timeout: TimeInterval
 
@@ -35,6 +43,8 @@ public struct ClientOptions: Sendable {
         accountSid: String,
         apiKey: String,
         baseURL: URL = URL(string: "https://voiceml.voicetel.com")!,
+        messagingBaseURL: URL? = nil,
+        conversationsBaseURL: URL? = nil,
         timeout: TimeInterval = 30,
         maxRetries: Int = 2,
         userAgent: String = "voiceml-swift/\(voiceMLVersion)",
@@ -43,6 +53,8 @@ public struct ClientOptions: Sendable {
         self.accountSid = accountSid
         self.apiKey = apiKey
         self.baseURL = baseURL
+        self.messagingBaseURL = messagingBaseURL
+        self.conversationsBaseURL = conversationsBaseURL
         self.timeout = timeout
         self.maxRetries = maxRetries
         self.userAgent = userAgent

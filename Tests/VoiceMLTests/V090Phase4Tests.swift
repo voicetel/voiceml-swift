@@ -59,10 +59,10 @@ final class V090Phase4Tests: XCTestCase {
 
     private static func metaPayload(key: String) -> [String: Any] {
         [
-            "first_page_url": "https://voiceml.voicetel.com/v1/Services/X?PageSize=50",
+            "first_page_url": "https://conversations.voicetel.com/v1/Services/X?PageSize=50",
             "next_page_url": NSNull(),
             "previous_page_url": NSNull(),
-            "url": "https://voiceml.voicetel.com/v1/Services/X?PageSize=50",
+            "url": "https://conversations.voicetel.com/v1/Services/X?PageSize=50",
             "page": 0,
             "page_size": 50,
             "key": key,
@@ -106,7 +106,7 @@ final class V090Phase4Tests: XCTestCase {
             "friendly_name": "Support",
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
         ], status: 201)
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -125,7 +125,7 @@ final class V090Phase4Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations"
         )
         XCTAssertFalse(req.url.absoluteString.contains(".json"))
         let form = parseForm(req.body)
@@ -148,7 +148,7 @@ final class V090Phase4Tests: XCTestCase {
                     "attributes": "{}",
                     "date_created": "2026-06-27T12:00:00Z",
                     "date_updated": "2026-06-27T12:00:00Z",
-                    "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
+                    "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
                 ] as [String: Any],
             ],
             "meta": Self.metaPayload(key: "conversations"),
@@ -173,7 +173,7 @@ final class V090Phase4Tests: XCTestCase {
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
         ])
         let fetched = try await svc.conversations.fetch(conversationSid: chSid)
         XCTAssertEqual(fetched.sid, chSid)
@@ -187,7 +187,7 @@ final class V090Phase4Tests: XCTestCase {
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:01Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
         ])
         let updated = try await svc.conversations.update(conversationSid: chSid, .init(state: "closed"))
         XCTAssertEqual(updated.state, "closed")
@@ -200,7 +200,7 @@ final class V090Phase4Tests: XCTestCase {
         XCTAssertEqual(MockResponses.shared.captured[3].method, "DELETE")
         XCTAssertEqual(
             MockResponses.shared.captured[3].url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)"
         )
     }
 
@@ -222,7 +222,7 @@ final class V090Phase4Tests: XCTestCase {
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages/\(imSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages/\(imSid)",
         ], status: 201)
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -234,7 +234,7 @@ final class V090Phase4Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages"
         )
 
         // receipts list
@@ -246,7 +246,7 @@ final class V090Phase4Tests: XCTestCase {
             .receipts(messageSid: imSid).list()
         XCTAssertTrue(
             MockResponses.shared.captured[1].url.absoluteString.hasPrefix(
-                "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages/\(imSid)/Receipts"
+                "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages/\(imSid)/Receipts"
             )
         )
 
@@ -262,7 +262,7 @@ final class V090Phase4Tests: XCTestCase {
             "error_code": 0,
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages/\(imSid)/Receipts/\(dySid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Messages/\(imSid)/Receipts/\(dySid)",
         ])
         let dy = try await svc.conversations.messages(conversationSid: chSid)
             .receipts(messageSid: imSid).fetch(sid: dySid)
@@ -287,7 +287,7 @@ final class V090Phase4Tests: XCTestCase {
             "messaging_binding": ["address": "+15551234567"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Participants/\(mbSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Participants/\(mbSid)",
         ], status: 201)
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -317,7 +317,7 @@ final class V090Phase4Tests: XCTestCase {
             "chat_service_sid": Self.chatServiceSid,
             "conversation_sid": chSid,
             "target": "studio",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Webhooks/\(whSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Webhooks/\(whSid)",
             "configuration": ["flow_sid": "FW0"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
@@ -350,7 +350,7 @@ final class V090Phase4Tests: XCTestCase {
             "permissions": ["sendMessage", "leaveConversation"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Roles/\(rlSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Roles/\(rlSid)",
         ], status: 201)
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -365,7 +365,7 @@ final class V090Phase4Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Roles"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Roles"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["FriendlyName"]?.first, "channel-member")
@@ -382,7 +382,7 @@ final class V090Phase4Tests: XCTestCase {
             "permissions": ["sendMessage"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:01Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Roles/\(rlSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Roles/\(rlSid)",
         ])
         _ = try await svc.roles.update(sid: rlSid, .init(permission: ["sendMessage"]))
         let upForm = parseForm(MockResponses.shared.captured[1].body)
@@ -405,7 +405,7 @@ final class V090Phase4Tests: XCTestCase {
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Users/\(usSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Users/\(usSid)",
         ], status: 201)
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -425,7 +425,7 @@ final class V090Phase4Tests: XCTestCase {
         _ = try await svc.users.conversations(userSid: usSid).list()
         XCTAssertTrue(
             MockResponses.shared.captured[1].url.absoluteString.hasPrefix(
-                "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Users/\(usSid)/Conversations"
+                "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Users/\(usSid)/Conversations"
             )
         )
     }
@@ -444,7 +444,7 @@ final class V090Phase4Tests: XCTestCase {
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)",
         ], status: 201)
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -459,7 +459,7 @@ final class V090Phase4Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/ConversationWithParticipants"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/ConversationWithParticipants"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["FriendlyName"]?.first, "Triage")
@@ -484,7 +484,7 @@ final class V090Phase4Tests: XCTestCase {
         ))
         let url = MockResponses.shared.captured[0].url.absoluteString
         XCTAssertTrue(url.hasPrefix(
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/ParticipantConversations"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/ParticipantConversations"
         ))
         XCTAssertTrue(url.contains("Identity=alice"))
         XCTAssertTrue(url.contains("PageSize=25"))
@@ -507,7 +507,7 @@ final class V090Phase4Tests: XCTestCase {
         XCTAssertTrue(url.contains("BindingType=apn"))
         XCTAssertTrue(url.contains("Identity=alice"))
         XCTAssertTrue(url.hasPrefix(
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Bindings"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Bindings"
         ))
     }
 
@@ -520,7 +520,7 @@ final class V090Phase4Tests: XCTestCase {
             "binding_type": "fcm",
             "endpoint": "device-x",
             "identity": "alice",
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Bindings/\(bsSid)",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Bindings/\(bsSid)",
         ])
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -533,7 +533,7 @@ final class V090Phase4Tests: XCTestCase {
         XCTAssertEqual(MockResponses.shared.captured[1].method, "DELETE")
         XCTAssertEqual(
             MockResponses.shared.captured[1].url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Bindings/\(bsSid)"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Bindings/\(bsSid)"
         )
     }
 
@@ -545,7 +545,7 @@ final class V090Phase4Tests: XCTestCase {
         enqueueJSON([
             "chat_service_sid": Self.chatServiceSid,
             "reachability_enabled": false,
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration",
         ])
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -557,7 +557,7 @@ final class V090Phase4Tests: XCTestCase {
             "chat_service_sid": Self.chatServiceSid,
             "reachability_enabled": true,
             "default_chat_service_role_sid": "RL" + String(repeating: "1", count: 32),
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration",
         ], status: 202)
         _ = try await svc.configuration.update(.init(
             defaultChatServiceRoleSid: "RL" + String(repeating: "1", count: 32),
@@ -578,7 +578,7 @@ final class V090Phase4Tests: XCTestCase {
             "chat_service_sid": Self.chatServiceSid,
             "log_enabled": true,
             "new_message": ["enabled": true, "template": "hi"],
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Notifications",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Notifications",
         ])
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -597,7 +597,7 @@ final class V090Phase4Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Notifications"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Notifications"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["LogEnabled"]?.first, "true")
@@ -624,7 +624,7 @@ final class V090Phase4Tests: XCTestCase {
             "post_webhook_url": "https://example.com/post",
             "method": "POST",
             "filters": ["onMessageAdded", "onConversationAdded"],
-            "url": "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Webhooks",
+            "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Webhooks",
         ])
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
@@ -640,7 +640,7 @@ final class V090Phase4Tests: XCTestCase {
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(
             req.url.absoluteString,
-            "https://voiceml.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Webhooks"
+            "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Configuration/Webhooks"
         )
         let form = parseForm(req.body)
         XCTAssertEqual(form["Method"]?.first, "POST")
