@@ -3,14 +3,14 @@ import Foundation
 /// Twilio routes/v2 Inbound Processing Region binding. SID is `QQ…`.
 /// Keyed by SIP domain name (not the SipDomain SID).
 public struct RoutesV2SipDomain: Codable, Sendable {
-    public var sid: String
-    public var sipDomain: String
-    public var accountSid: String
+    public var sid: String?
+    public var sipDomain: String?
+    public var accountSid: String?
     public var friendlyName: String?
     public var voiceRegion: String?
     public var url: String?
-    public var dateCreated: String
-    public var dateUpdated: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
 }
 
 /// Body for `POST /v2/SipDomains/{SipDomain}`. All fields optional.

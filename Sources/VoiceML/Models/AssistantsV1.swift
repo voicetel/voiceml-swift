@@ -30,7 +30,7 @@ import Foundation
 // dependency.
 //
 // String fields with closed enum domains (status, type, role, mode) are
-// surfaced as `String` rather than Swift enums — same parity-lint
+// surfaced as `String` rather than Swift enums — same compat-lint
 // stance as the rest of the v1 surface: an unknown enum value from a
 // forward-rev'd server must not throw a decoding error.
 
@@ -277,20 +277,16 @@ public struct AssistantsV1PolicyList: Decodable, Sendable {
 /// `/v1/Sessions/{id}/Messages`, `/v1/Assistants/{id}/Tools`,
 /// `/v1/Assistants/{id}/Knowledge`, `/v1/Knowledge/{id}/Chunks`, and
 /// `/v1/Assistants/{id}/Feedbacks`.
+/// The Assistants v1 list endpoints declare only `PageSize` — cursor pagination
+/// follows from the `meta` envelope's `next_page_url`.
 public struct ListAssistantsV1PageParams: Sendable {
     public var pageSize: Int?
-    public var page: Int?
-    public var pageToken: String?
-    public init(pageSize: Int? = nil, page: Int? = nil, pageToken: String? = nil) {
+    public init(pageSize: Int? = nil) {
         self.pageSize = pageSize
-        self.page = page
-        self.pageToken = pageToken
     }
     public func queryItems() -> [QueryItem] {
         var q: [QueryItem] = []
         if let v = pageSize { q.append(QueryItem("PageSize", String(v))) }
-        if let v = page { q.append(QueryItem("Page", String(v))) }
-        if let v = pageToken { q.append(QueryItem("PageToken", v)) }
         return q
     }
 }

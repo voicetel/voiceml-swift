@@ -2,10 +2,10 @@ import Foundation
 
 /// A SIP ingress domain — Twilio-compatible `SD…` resource.
 public struct SipDomain: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var domainName: String
-    public var apiVersion: String
+    public var sid: String?
+    public var accountSid: String?
+    public var domainName: String?
+    public var apiVersion: String?
     public var friendlyName: String?
     public var authType: String?
     public var voiceUrl: String?
@@ -19,9 +19,9 @@ public struct SipDomain: Codable, Sendable {
     public var secure: Bool?
     public var byocTrunkSid: String?
     public var emergencyCallerSid: String?
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
     public var subresourceUris: [String: String]?
 }
 
@@ -29,8 +29,6 @@ public struct SipDomainList: Codable, Sendable {
     public var domains: [SipDomain]
     public var page: Int?
     public var pageSize: Int?
-    public var numPages: Int?
-    public var total: Int?
     public var start: Int?
     public var end: Int?
     public var firstPageUri: String?
@@ -40,12 +38,12 @@ public struct SipDomainList: Codable, Sendable {
 }
 
 public struct SipCredentialList: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
+    public var sid: String?
+    public var accountSid: String?
     public var friendlyName: String?
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
     public var subresourceUris: [String: String]?
 }
 
@@ -53,37 +51,43 @@ public struct SipCredentialListList: Codable, Sendable {
     public var credentialLists: [SipCredentialList]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
 public struct SipCredential: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var credentialListSid: String
-    public var username: String
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var sid: String?
+    public var accountSid: String?
+    public var credentialListSid: String?
+    public var username: String?
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
 }
 
 public struct SipCredentialListPage: Codable, Sendable {
     public var credentials: [SipCredential]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
 public struct SipIpAccessControlList: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
+    public var sid: String?
+    public var accountSid: String?
     public var friendlyName: String?
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
     public var subresourceUris: [String: String]?
 }
 
@@ -91,48 +95,57 @@ public struct SipIpAccessControlListList: Codable, Sendable {
     public var ipAccessControlLists: [SipIpAccessControlList]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
 public struct SipIpAddress: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var ipAccessControlListSid: String
-    public var friendlyName: String
-    public var ipAddress: String
-    public var cidrPrefixLength: Int
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var sid: String?
+    public var accountSid: String?
+    public var ipAccessControlListSid: String?
+    public var friendlyName: String?
+    public var ipAddress: String?
+    public var cidrPrefixLength: Int?
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
 }
 
 public struct SipIpAddressList: Codable, Sendable {
     public var ipAddresses: [SipIpAddress]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
 public struct SipDomainMapping: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
+    public var sid: String?
+    public var accountSid: String?
     public var friendlyName: String?
     public var domainSid: String?
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
 }
 
 public struct SipCredentialListMappingList: Codable, Sendable {
     public var credentialListMappings: [SipDomainMapping]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
@@ -140,8 +153,11 @@ public struct SipIpAccessControlListMappingList: Codable, Sendable {
     public var ipAccessControlListMappings: [SipDomainMapping]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
@@ -150,11 +166,11 @@ public struct SipIpAccessControlListMappingList: Codable, Sendable {
 /// Differs from `SipDomainMapping` in that it omits `uri` and `domain_sid` —
 /// the auth subresources echo only the mapped-resource sid/account/timestamps.
 public struct SipAuthMapping: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
+    public var sid: String?
+    public var accountSid: String?
     public var friendlyName: String?
-    public var dateCreated: String
-    public var dateUpdated: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
 }
 
 /// Envelope for the `/SIP/Domains/{sid}/Auth/...` mapping list endpoints.
@@ -165,7 +181,6 @@ public struct SipAuthMappingList: Codable, Sendable {
     public var contents: [SipAuthMapping]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
     public var start: Int?
     public var end: Int?
     public var firstPageUri: String?
@@ -369,6 +384,31 @@ public struct CreateSipIpAccessControlListMappingRequest: Sendable {
     public var ipAccessControlListSid: String
     public init(ipAccessControlListSid: String) { self.ipAccessControlListSid = ipAccessControlListSid }
     public func formFields() -> [FormField] { [FormField("IpAccessControlListSid", ipAccessControlListSid)] }
+}
+
+/// Query params for `/SIP` list endpoints that support the `FriendlyName` filter
+/// (Domains, CredentialLists, IpAccessControlLists, IpAddresses).
+public struct ListSipFilterParams: Sendable {
+    public var friendlyName: String?
+    public var page: Int?
+    public var pageSize: Int?
+    public var pageToken: String?
+
+    public init(friendlyName: String? = nil, page: Int? = nil, pageSize: Int? = nil, pageToken: String? = nil) {
+        self.friendlyName = friendlyName
+        self.page = page
+        self.pageSize = pageSize
+        self.pageToken = pageToken
+    }
+
+    public func queryItems() -> [QueryItem] {
+        var q: [QueryItem] = []
+        if let v = friendlyName { q.append(QueryItem("FriendlyName", v)) }
+        if let v = page { q.append(QueryItem("Page", String(v))) }
+        if let v = pageSize { q.append(QueryItem("PageSize", String(v))) }
+        if let v = pageToken { q.append(QueryItem("PageToken", v)) }
+        return q
+    }
 }
 
 /// Query params for `/SIP` list endpoints.

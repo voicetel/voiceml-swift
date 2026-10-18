@@ -217,7 +217,7 @@ final class V090Phase4Tests: XCTestCase {
             "conversation_sid": chSid,
             "sid": imSid,
             "index": 11,
-            "author": "+15551234567",
+            "author": "+14155550103",
             "body": "hi",
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
@@ -227,7 +227,7 @@ final class V090Phase4Tests: XCTestCase {
         let c = try makeClient()
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
         let msg = try await svc.conversations.messages(conversationSid: chSid)
-            .create(.init(author: "+15551234567", body: "hi"))
+            .create(.init(author: "+14155550103", body: "hi"))
         XCTAssertEqual(msg.index, 11)
         XCTAssertEqual(msg.chatServiceSid, Self.chatServiceSid)
 
@@ -284,7 +284,7 @@ final class V090Phase4Tests: XCTestCase {
             "conversation_sid": chSid,
             "sid": mbSid,
             "attributes": "{}",
-            "messaging_binding": ["address": "+15551234567"],
+            "messaging_binding": ["address": "+14155550103"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
             "url": "https://conversations.voicetel.com/v1/Services/\(Self.chatServiceSid)/Conversations/\(chSid)/Participants/\(mbSid)",
@@ -293,13 +293,13 @@ final class V090Phase4Tests: XCTestCase {
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
         _ = try await svc.conversations.participants(conversationSid: chSid)
             .create(.init(
-                messagingBindingAddress: "+15551234567",
+                messagingBindingAddress: "+14155550103",
                 messagingBindingProxyAddress: "+15550000000",
                 messagingBindingProjectedAddress: "+15559999999"
             ))
 
         let form = parseForm(MockResponses.shared.captured[0].body)
-        XCTAssertEqual(form["MessagingBinding.Address"]?.first, "+15551234567")
+        XCTAssertEqual(form["MessagingBinding.Address"]?.first, "+14155550103")
         XCTAssertEqual(form["MessagingBinding.ProxyAddress"]?.first, "+15550000000")
         XCTAssertEqual(form["MessagingBinding.ProjectedAddress"]?.first, "+15559999999")
     }
@@ -452,7 +452,7 @@ final class V090Phase4Tests: XCTestCase {
             friendlyName: "Triage",
             participant: [
                 #"{"identity":"alice"}"#,
-                #"{"messaging_binding":{"address":"+15551234567"}}"#,
+                #"{"messaging_binding":{"address":"+14155550103"}}"#,
             ]
         ))
 
@@ -479,7 +479,7 @@ final class V090Phase4Tests: XCTestCase {
         let svc = c.conversationsV1.services.scope(chatServiceSid: Self.chatServiceSid)
         _ = try await svc.participantConversations.list(.init(
             identity: "alice",
-            address: "+15551234567",
+            address: "+14155550103",
             pageSize: 25
         ))
         let url = MockResponses.shared.captured[0].url.absoluteString

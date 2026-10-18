@@ -1,6 +1,6 @@
 import Foundation
 
-/// `client.pricing` — Twilio Pricing v1/v2 (pricing.twilio.com) (#18).
+/// `client.pricing` — Pricing v1/v2 rate cards.
 ///
 /// Read-only. Served on the default host (VoiceML has no pricing subdomain).
 ///
@@ -18,10 +18,12 @@ import Foundation
 /// Every `countries.list` returns the shared ``PricingCountriesList`` envelope;
 /// `fetch` returns the product-specific country/number body.
 public final class PricingResource: Sendable {
+    public let pages: PageClient
     public let v1: PricingV1Resource
     public let v2: PricingV2Resource
 
     init(transport: Transport) {
+        self.pages = PageClient(transport: transport)
         self.v1 = PricingV1Resource(transport: transport)
         self.v2 = PricingV2Resource(transport: transport)
     }
@@ -42,7 +44,11 @@ public final class PricingCountriesResource<Body: Decodable & Sendable>: Sendabl
         try await transport.request(VoiceMLRequest(method: .get, path: basePath, query: params.queryItems()))
     }
     public func fetch(_ isoCountry: String) async throws -> Body {
-        try await transport.request(VoiceMLRequest(method: .get, path: "\(basePath)/\(isoCountry)"))
+        let segments = basePath.split(separator: "/").map(String.init) + [isoCountry]
+        return try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: try transport.rootPath(segments)
+        ))
     }
 }
 
@@ -55,8 +61,7 @@ public final class PricingV1VoiceNumbersResource: Sendable {
     public func fetch(_ number: String) async throws -> PricingVoiceNumber {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Voice/Numbers/\(percentEncodePathSegment(number))",
-            encodedPath: true
+            path: try transport.rootPath(["v1", "Voice", "Numbers", number])
         ))
     }
 }
@@ -68,9 +73,8 @@ public final class PricingV2VoiceNumbersResource: Sendable {
     public func fetch(_ destinationNumber: String, originationNumber: String? = nil) async throws -> PricingVoiceNumberV2 {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v2/Voice/Numbers/\(percentEncodePathSegment(destinationNumber))",
-            query: [QueryItem("OriginationNumber", originationNumber)],
-            encodedPath: true
+            path: try transport.rootPath(["v2", "Voice", "Numbers", destinationNumber]),
+            query: [QueryItem("OriginationNumber", originationNumber)]
         ))
     }
 }
@@ -82,9 +86,8 @@ public final class PricingV2TrunkingNumbersResource: Sendable {
     public func fetch(_ destinationNumber: String, originationNumber: String? = nil) async throws -> PricingTrunkingNumber {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v2/Trunking/Numbers/\(percentEncodePathSegment(destinationNumber))",
-            query: [QueryItem("OriginationNumber", originationNumber)],
-            encodedPath: true
+            path: try transport.rootPath(["v2", "Trunking", "Numbers", destinationNumber]),
+            query: [QueryItem("OriginationNumber", originationNumber)]
         ))
     }
 }

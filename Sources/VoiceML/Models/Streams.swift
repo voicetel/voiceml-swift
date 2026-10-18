@@ -1,30 +1,23 @@
 import Foundation
 
-public enum StreamStatus: String, Codable, Sendable {
-    case inProgress = "in-progress"
-    case stopped
+/// Live media-stream status. Open enum.
+public struct StreamStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inProgress = StreamStatus(rawValue: "in-progress")
+    public static let stopped = StreamStatus(rawValue: "stopped")
 }
 
 public struct Stream: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var callSid: String
+    public var sid: String?
+    public var accountSid: String?
+    public var callSid: String?
     public var name: String?
-    public var status: StreamStatus
-    // Twilio's documented Create/Update Stream responses omit api_version
-    // (only the LIST envelope items carry it). Optional to match.
+    public var status: StreamStatus?
     public var apiVersion: String?
-    public var uri: String
+    public var uri: String?
     public var dateCreated: String?
     public var dateUpdated: String?
-}
-
-public struct StreamList: Codable, Sendable {
-    public var streams: [Stream]
-    public var page: Int?
-    public var pageSize: Int?
-    public var total: Int?
-    public var uri: String?
 }
 
 public struct StartStreamRequest: Sendable {

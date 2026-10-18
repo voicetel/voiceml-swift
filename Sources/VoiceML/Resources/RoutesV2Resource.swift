@@ -19,11 +19,11 @@ public final class RoutesV2SipDomainsResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func fetch(domainName: String) async throws -> RoutesV2SipDomain {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v2/SipDomains/\(domainName)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v2", "SipDomains", domainName])))
     }
 
     public func update(domainName: String, _ body: UpdateRoutesV2SipDomainRequest) async throws -> RoutesV2SipDomain {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v2/SipDomains/\(domainName)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v2", "SipDomains", domainName]), form: body.formFields()))
     }
 }
 
@@ -35,10 +35,10 @@ public final class RoutesV2PhoneNumbersResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func fetch(phoneNumber: String) async throws -> RoutesV2PhoneNumber {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v2/PhoneNumbers/\(phoneNumber)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v2", "PhoneNumbers", phoneNumber])))
     }
 
     public func update(phoneNumber: String, _ body: UpdateRoutesV2PhoneNumberRequest) async throws -> RoutesV2PhoneNumber {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v2/PhoneNumbers/\(phoneNumber)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v2", "PhoneNumbers", phoneNumber]), form: body.formFields()))
     }
 }

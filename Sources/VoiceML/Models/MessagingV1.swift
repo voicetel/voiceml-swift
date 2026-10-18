@@ -37,6 +37,9 @@ public struct MessagingService: Codable, Sendable {
     public var url: String?
     public var usecase: String?
     public var useInboundWebhookOnNumber: Bool?
+    /// VoiceML extension: when on, the inbound webhook carries OptOutType=START|STOP|HELP
+    /// for keyword matches.
+    public var advancedOptOut: Bool?
 }
 
 public struct MessagingServiceList: Codable, Sendable {

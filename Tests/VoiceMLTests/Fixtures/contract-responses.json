@@ -1,0 +1,6136 @@
+{
+  "calls.list": {
+    "__status__": 200,
+    "__body__": {
+      "calls": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "api_version": null,
+          "to": null,
+          "to_formatted": null,
+          "from": null,
+          "from_formatted": null,
+          "parent_call_sid": null,
+          "caller_name": null,
+          "forwarded_from": null,
+          "status": "queued",
+          "direction": null,
+          "answered_by": null,
+          "start_time": null,
+          "end_time": null,
+          "duration": null,
+          "price": null,
+          "price_unit": null,
+          "phone_number_sid": null,
+          "group_sid": null,
+          "queue_time": null,
+          "trunk_sid": null,
+          "annotation": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null,
+          "subresource_uris": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "calls.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "api_version": null,
+      "to": null,
+      "to_formatted": null,
+      "from": null,
+      "from_formatted": null,
+      "parent_call_sid": null,
+      "caller_name": null,
+      "forwarded_from": null,
+      "status": "queued",
+      "direction": null,
+      "answered_by": null,
+      "start_time": null,
+      "end_time": null,
+      "duration": null,
+      "price": null,
+      "price_unit": null,
+      "phone_number_sid": null,
+      "group_sid": null,
+      "queue_time": null,
+      "trunk_sid": null,
+      "annotation": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "calls.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "api_version": null,
+      "to": null,
+      "to_formatted": null,
+      "from": null,
+      "from_formatted": null,
+      "parent_call_sid": null,
+      "caller_name": null,
+      "forwarded_from": null,
+      "status": "queued",
+      "direction": null,
+      "answered_by": null,
+      "start_time": null,
+      "end_time": null,
+      "duration": null,
+      "price": null,
+      "price_unit": null,
+      "phone_number_sid": null,
+      "group_sid": null,
+      "queue_time": null,
+      "trunk_sid": null,
+      "annotation": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "calls.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "api_version": null,
+      "to": null,
+      "to_formatted": null,
+      "from": null,
+      "from_formatted": null,
+      "parent_call_sid": null,
+      "caller_name": null,
+      "forwarded_from": null,
+      "status": "queued",
+      "direction": null,
+      "answered_by": null,
+      "start_time": null,
+      "end_time": null,
+      "duration": null,
+      "price": null,
+      "price_unit": null,
+      "phone_number_sid": null,
+      "group_sid": null,
+      "queue_time": null,
+      "trunk_sid": null,
+      "annotation": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "calls.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conferences.list": {
+    "__status__": 200,
+    "__body__": {
+      "conferences": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "status": "init",
+          "region": null,
+          "api_version": null,
+          "uri": null,
+          "date_created": null,
+          "date_updated": null,
+          "reason_conference_ended": "conference-ended-via-api",
+          "call_sid_ending_conference": null,
+          "subresource_uris": null,
+          "member_count": 1
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "conferences.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "status": "init",
+      "region": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "reason_conference_ended": "conference-ended-via-api",
+      "call_sid_ending_conference": null,
+      "subresource_uris": null,
+      "member_count": 1
+    }
+  },
+  "conferences.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "status": "init",
+      "region": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "reason_conference_ended": "conference-ended-via-api",
+      "call_sid_ending_conference": null,
+      "subresource_uris": null,
+      "member_count": 1
+    }
+  },
+  "participants.list": {
+    "__status__": 200,
+    "__body__": {
+      "participants": [
+        {
+          "call_sid": null,
+          "conference_sid": null,
+          "account_sid": null,
+          "muted": null,
+          "hold": null,
+          "call_sid_to_coach": null,
+          "coaching": null,
+          "queue_time": null,
+          "start_conference_on_enter": null,
+          "end_conference_on_exit": null,
+          "status": "queued",
+          "label": null,
+          "uri": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "participants.create": {
+    "__status__": 201,
+    "__body__": {
+      "call_sid": null,
+      "conference_sid": null,
+      "account_sid": null,
+      "muted": null,
+      "hold": null,
+      "call_sid_to_coach": null,
+      "coaching": null,
+      "queue_time": null,
+      "start_conference_on_enter": null,
+      "end_conference_on_exit": null,
+      "status": "queued",
+      "label": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "participants.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "call_sid": null,
+      "conference_sid": null,
+      "account_sid": null,
+      "muted": null,
+      "hold": null,
+      "call_sid_to_coach": null,
+      "coaching": null,
+      "queue_time": null,
+      "start_conference_on_enter": null,
+      "end_conference_on_exit": null,
+      "status": "queued",
+      "label": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "participants.update": {
+    "__status__": 200,
+    "__body__": {
+      "call_sid": null,
+      "conference_sid": null,
+      "account_sid": null,
+      "muted": null,
+      "hold": null,
+      "call_sid_to_coach": null,
+      "coaching": null,
+      "queue_time": null,
+      "start_conference_on_enter": null,
+      "end_conference_on_exit": null,
+      "status": "queued",
+      "label": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "participants.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "queues.list": {
+    "__status__": 200,
+    "__body__": {
+      "queues": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "current_size": 1,
+          "max_size": 1,
+          "average_wait_time": 1,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "queues.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "current_size": 1,
+      "max_size": 1,
+      "average_wait_time": 1,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "queues.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "current_size": 1,
+      "max_size": 1,
+      "average_wait_time": 1,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "queues.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "current_size": 1,
+      "max_size": 1,
+      "average_wait_time": 1,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "queues.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "queueMembers.list": {
+    "__status__": 200,
+    "__body__": {
+      "queue_members": [
+        {
+          "call_sid": null,
+          "queue_sid": null,
+          "date_enqueued": null,
+          "wait_time": 1,
+          "position": 1,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "queueMembers.fetchFront": {
+    "__status__": 200,
+    "__body__": {
+      "call_sid": null,
+      "queue_sid": null,
+      "date_enqueued": null,
+      "wait_time": 1,
+      "position": 1,
+      "uri": null
+    }
+  },
+  "queueMembers.dequeueFront": {
+    "__status__": 200,
+    "__body__": {
+      "call_sid": null,
+      "queue_sid": null,
+      "date_enqueued": null,
+      "wait_time": 1,
+      "position": 1,
+      "uri": null
+    }
+  },
+  "queueMembers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "call_sid": null,
+      "queue_sid": null,
+      "date_enqueued": null,
+      "wait_time": 1,
+      "position": 1,
+      "uri": null
+    }
+  },
+  "queueMembers.dequeue": {
+    "__status__": 200,
+    "__body__": {
+      "call_sid": null,
+      "queue_sid": null,
+      "date_enqueued": null,
+      "wait_time": 1,
+      "position": 1,
+      "uri": null
+    }
+  },
+  "applications.list": {
+    "__status__": 200,
+    "__body__": {
+      "applications": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "api_version": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "voice_caller_id_lookup": null,
+          "status_callback": null,
+          "status_callback_method": null,
+          "message_status_callback": null,
+          "sms_status_callback": null,
+          "sms_url": null,
+          "sms_method": null,
+          "sms_fallback_url": null,
+          "sms_fallback_method": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "applications.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "api_version": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_caller_id_lookup": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "message_status_callback": null,
+      "sms_status_callback": null,
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "applications.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "api_version": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_caller_id_lookup": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "message_status_callback": null,
+      "sms_status_callback": null,
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "applications.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "api_version": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_caller_id_lookup": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "message_status_callback": null,
+      "sms_status_callback": null,
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "applications.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "outgoing_caller_ids.list": {
+    "__status__": 200,
+    "__body__": {
+      "outgoing_caller_ids": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "phone_number": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "outgoing_caller_ids.create": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "validation_code": null,
+      "call_sid": null
+    }
+  },
+  "outgoing_caller_ids.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "phone_number": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "outgoing_caller_ids.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "phone_number": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "outgoing_caller_ids.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_domains.list": {
+    "__status__": 200,
+    "__body__": {
+      "domains": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "domain_name": null,
+          "api_version": null,
+          "auth_type": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "voice_status_callback_url": null,
+          "voice_status_callback_method": null,
+          "sip_registration": null,
+          "emergency_calling_enabled": null,
+          "secure": null,
+          "byoc_trunk_sid": null,
+          "emergency_caller_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null,
+          "subresource_uris": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domains.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_name": null,
+      "api_version": null,
+      "auth_type": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_status_callback_url": null,
+      "voice_status_callback_method": null,
+      "sip_registration": null,
+      "emergency_calling_enabled": null,
+      "secure": null,
+      "byoc_trunk_sid": null,
+      "emergency_caller_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_registrations.list": {
+    "__status__": 200,
+    "__body__": {
+      "registrations": [
+        {
+          "aor": "x",
+          "username": "x",
+          "domain": "x",
+          "domain_sid": "x",
+          "status": "registered",
+          "caller_id": null,
+          "user_agent": null,
+          "last_registered": null,
+          "contacts": [
+            {
+              "contact": "x",
+              "received": null,
+              "socket": null,
+              "user_agent": null,
+              "expires_at": null,
+              "registered": true
+            }
+          ],
+          "active_call": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domains.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_name": null,
+      "api_version": null,
+      "auth_type": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_status_callback_url": null,
+      "voice_status_callback_method": null,
+      "sip_registration": null,
+      "emergency_calling_enabled": null,
+      "secure": null,
+      "byoc_trunk_sid": null,
+      "emergency_caller_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_domains.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_name": null,
+      "api_version": null,
+      "auth_type": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_status_callback_url": null,
+      "voice_status_callback_method": null,
+      "sip_registration": null,
+      "emergency_calling_enabled": null,
+      "secure": null,
+      "byoc_trunk_sid": null,
+      "emergency_caller_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_domains.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_credential_lists.list": {
+    "__status__": 200,
+    "__body__": {
+      "credential_lists": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null,
+          "subresource_uris": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_credential_lists.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_credential_lists.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_credential_lists.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_credential_lists.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_credentials.list": {
+    "__status__": 200,
+    "__body__": {
+      "credentials": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "credential_list_sid": null,
+          "username": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_credentials.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "credential_list_sid": null,
+      "username": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_credentials.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "credential_list_sid": null,
+      "username": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_credentials.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "credential_list_sid": null,
+      "username": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_credentials.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_ip_access_control_lists.list": {
+    "__status__": 200,
+    "__body__": {
+      "ip_access_control_lists": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null,
+          "subresource_uris": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_ip_access_control_lists.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_ip_access_control_lists.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_ip_access_control_lists.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "sip_ip_access_control_lists.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_ip_addresses.list": {
+    "__status__": 200,
+    "__body__": {
+      "ip_addresses": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "ip_access_control_list_sid": null,
+          "friendly_name": null,
+          "ip_address": null,
+          "cidr_prefix_length": 1,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_ip_addresses.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "ip_access_control_list_sid": null,
+      "friendly_name": null,
+      "ip_address": null,
+      "cidr_prefix_length": 1,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_ip_addresses.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "ip_access_control_list_sid": null,
+      "friendly_name": null,
+      "ip_address": null,
+      "cidr_prefix_length": 1,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_ip_addresses.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "ip_access_control_list_sid": null,
+      "friendly_name": null,
+      "ip_address": null,
+      "cidr_prefix_length": 1,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_ip_addresses.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_domain_credential_list_mappings.list": {
+    "__status__": 200,
+    "__body__": {
+      "credential_list_mappings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domain_credential_list_mappings.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_credential_list_mappings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_credential_list_mappings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_domain_ip_access_control_list_mappings.list": {
+    "__status__": 200,
+    "__body__": {
+      "ip_access_control_list_mappings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domain_ip_access_control_list_mappings.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_ip_access_control_list_mappings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_ip_access_control_list_mappings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_domain_auth_calls_credential_list_mappings.list": {
+    "__status__": 200,
+    "__body__": {
+      "credential_list_mappings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domain_auth_calls_credential_list_mappings.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_auth_calls_credential_list_mappings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_auth_calls_credential_list_mappings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_domain_auth_calls_ip_access_control_list_mappings.list": {
+    "__status__": 200,
+    "__body__": {
+      "ip_access_control_list_mappings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domain_auth_calls_ip_access_control_list_mappings.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_auth_calls_ip_access_control_list_mappings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_auth_calls_ip_access_control_list_mappings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "sip_domain_auth_registrations_credential_list_mappings.list": {
+    "__status__": 200,
+    "__body__": {
+      "credential_list_mappings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "uri": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "sip_domain_auth_registrations_credential_list_mappings.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_auth_registrations_credential_list_mappings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "sip_domain_auth_registrations_credential_list_mappings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "messages.list": {
+    "__status__": 200,
+    "__body__": {
+      "messages": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "api_version": "x",
+          "to": "x",
+          "from": "x",
+          "body": "x",
+          "status": "queued",
+          "num_segments": "x",
+          "num_media": "x",
+          "direction": "outbound-api",
+          "price": null,
+          "price_unit": null,
+          "error_code": null,
+          "error_message": null,
+          "messaging_service_sid": null,
+          "date_created": "x",
+          "date_updated": "x",
+          "date_sent": null,
+          "uri": "x",
+          "subresource_uris": {
+            "media": "x",
+            "feedback": "x"
+          }
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "messages.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "api_version": "x",
+      "to": "x",
+      "from": "x",
+      "body": "x",
+      "status": "queued",
+      "num_segments": "x",
+      "num_media": "x",
+      "direction": "outbound-api",
+      "price": null,
+      "price_unit": null,
+      "error_code": null,
+      "error_message": null,
+      "messaging_service_sid": null,
+      "date_created": "x",
+      "date_updated": "x",
+      "date_sent": null,
+      "uri": "x",
+      "subresource_uris": {
+        "media": "x",
+        "feedback": "x"
+      }
+    }
+  },
+  "messages.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "api_version": "x",
+      "to": "x",
+      "from": "x",
+      "body": "x",
+      "status": "queued",
+      "num_segments": "x",
+      "num_media": "x",
+      "direction": "outbound-api",
+      "price": null,
+      "price_unit": null,
+      "error_code": null,
+      "error_message": null,
+      "messaging_service_sid": null,
+      "date_created": "x",
+      "date_updated": "x",
+      "date_sent": null,
+      "uri": "x",
+      "subresource_uris": {
+        "media": "x",
+        "feedback": "x"
+      }
+    }
+  },
+  "messages.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "api_version": "x",
+      "to": "x",
+      "from": "x",
+      "body": "x",
+      "status": "queued",
+      "num_segments": "x",
+      "num_media": "x",
+      "direction": "outbound-api",
+      "price": null,
+      "price_unit": null,
+      "error_code": null,
+      "error_message": null,
+      "messaging_service_sid": null,
+      "date_created": "x",
+      "date_updated": "x",
+      "date_sent": null,
+      "uri": "x",
+      "subresource_uris": {
+        "media": "x",
+        "feedback": "x"
+      }
+    }
+  },
+  "messages.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "media.list": {
+    "__status__": 200,
+    "__body__": {
+      "media_list": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "parent_sid": "x",
+          "content_type": null,
+          "date_created": "x",
+          "date_updated": "x",
+          "uri": "x"
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "media.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "parent_sid": "x",
+      "content_type": null,
+      "date_created": "x",
+      "date_updated": "x",
+      "uri": "x"
+    }
+  },
+  "media.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "accounts.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "friendly_name": null,
+      "status": "active",
+      "type": "Trial",
+      "owner_account_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "accounts.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "friendly_name": null,
+      "status": "active",
+      "type": "Trial",
+      "owner_account_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "uri": null,
+      "subresource_uris": null
+    }
+  },
+  "balance.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "balance": null,
+      "currency": null
+    }
+  },
+  "recordings.list": {
+    "__status__": 200,
+    "__body__": {
+      "recordings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "call_sid": null,
+          "conference_sid": null,
+          "status": "in-progress",
+          "source": "OutboundAPI",
+          "channels": null,
+          "duration": null,
+          "track": null,
+          "api_version": null,
+          "uri": null,
+          "date_created": null,
+          "date_updated": null,
+          "start_time": null,
+          "price": null,
+          "price_unit": null,
+          "encryption_details": null,
+          "subresource_uris": null,
+          "media_url": null,
+          "error_code": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "exports.list": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": "x",
+      "uri": "x",
+      "exports": [
+        {
+          "date": "x",
+          "size": 1,
+          "uri": "x"
+        }
+      ]
+    }
+  },
+  "exports.download": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "callRecordings.list": {
+    "__status__": 200,
+    "__body__": {
+      "recordings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "call_sid": null,
+          "conference_sid": null,
+          "status": "in-progress",
+          "source": "OutboundAPI",
+          "channels": null,
+          "duration": null,
+          "track": null,
+          "api_version": null,
+          "uri": null,
+          "date_created": null,
+          "date_updated": null,
+          "start_time": null,
+          "price": null,
+          "price_unit": null,
+          "encryption_details": null,
+          "subresource_uris": null,
+          "media_url": null,
+          "error_code": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "callRecordings.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "streams.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "name": null,
+      "status": "in-progress",
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "streams.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "name": null,
+      "status": "in-progress",
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "siprec.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "name": null,
+      "status": "in-progress",
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "siprec.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "name": null,
+      "status": "in-progress",
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "callTranscriptions.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "name": null,
+      "status": "in-progress",
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "callTranscriptions.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "name": null,
+      "status": "in-progress",
+      "date_updated": null,
+      "uri": null
+    }
+  },
+  "transcriptions.listAccount": {
+    "__status__": 200,
+    "__body__": {
+      "transcriptions": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "status": "in-progress",
+          "recording_sid": "x",
+          "duration": "x",
+          "transcription_text": null,
+          "type": "fast",
+          "price": "x",
+          "price_unit": "x",
+          "api_version": "x",
+          "uri": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "transcription.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "status": "in-progress",
+      "recording_sid": "x",
+      "duration": "x",
+      "transcription_text": null,
+      "type": "fast",
+      "price": "x",
+      "price_unit": "x",
+      "api_version": "x",
+      "uri": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "transcription.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "recording.transcriptions.list": {
+    "__status__": 200,
+    "__body__": {
+      "transcriptions": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "status": "in-progress",
+          "recording_sid": "x",
+          "duration": "x",
+          "transcription_text": null,
+          "type": "fast",
+          "price": "x",
+          "price_unit": "x",
+          "api_version": "x",
+          "uri": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "recording.transcription.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "status": "in-progress",
+      "recording_sid": "x",
+      "duration": "x",
+      "transcription_text": null,
+      "type": "fast",
+      "price": "x",
+      "price_unit": "x",
+      "api_version": "x",
+      "uri": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "recording.transcription.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "payments.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "call_sid": "x",
+      "api_version": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "uri": "x"
+    }
+  },
+  "payments.update": {
+    "__status__": 202,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "call_sid": "x",
+      "api_version": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "uri": "x"
+    }
+  },
+  "callNotifications.list": {
+    "__status__": 200,
+    "__body__": {
+      "notifications": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "call_sid": "x",
+          "api_version": null,
+          "error_code": "x",
+          "log": "x",
+          "message_date": "x",
+          "message_text": null,
+          "more_info": "x",
+          "request_method": null,
+          "request_url": null,
+          "uri": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "callNotifications.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "call_sid": "x",
+      "api_version": null,
+      "error_code": "x",
+      "log": "x",
+      "message_date": "x",
+      "message_text": null,
+      "more_info": "x",
+      "request_method": null,
+      "request_url": null,
+      "uri": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "notifications.list": {
+    "__status__": 200,
+    "__body__": {
+      "notifications": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "call_sid": "x",
+          "api_version": null,
+          "error_code": "x",
+          "log": "x",
+          "message_date": "x",
+          "message_text": null,
+          "more_info": "x",
+          "request_method": null,
+          "request_url": null,
+          "uri": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "notifications.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "call_sid": "x",
+      "api_version": null,
+      "error_code": "x",
+      "log": "x",
+      "message_date": "x",
+      "message_text": null,
+      "more_info": "x",
+      "request_method": null,
+      "request_url": null,
+      "uri": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "callEvents.list": {
+    "__status__": 200,
+    "__body__": {
+      "events": [
+        {
+          "request": {
+            "method": "x",
+            "parameters": {},
+            "url": "x"
+          },
+          "response": {
+            "content_type": "x",
+            "date_created": "x",
+            "request_duration": 1,
+            "response_body": "x",
+            "response_code": 1
+          }
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "userDefinedMessages.create": {
+    "__status__": 201,
+    "__body__": {
+      "code": 1,
+      "message": "x",
+      "more_info": "x",
+      "status": 1
+    }
+  },
+  "conferenceRecordings.list": {
+    "__status__": 200,
+    "__body__": {
+      "recordings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "call_sid": null,
+          "conference_sid": null,
+          "status": "in-progress",
+          "source": "OutboundAPI",
+          "channels": null,
+          "duration": null,
+          "track": null,
+          "api_version": null,
+          "uri": null,
+          "date_created": null,
+          "date_updated": null,
+          "start_time": null,
+          "price": null,
+          "price_unit": null,
+          "encryption_details": null,
+          "subresource_uris": null,
+          "media_url": null,
+          "error_code": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "conferenceRecordings.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "conferenceRecordings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "conferenceRecordings.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "conferenceRecordings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "callRecordings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "callRecordings.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "callRecordings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "recordings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "call_sid": null,
+      "conference_sid": null,
+      "status": "in-progress",
+      "source": "OutboundAPI",
+      "channels": null,
+      "duration": null,
+      "track": null,
+      "api_version": null,
+      "uri": null,
+      "date_created": null,
+      "date_updated": null,
+      "start_time": null,
+      "price": null,
+      "price_unit": null,
+      "encryption_details": null,
+      "subresource_uris": null,
+      "media_url": null,
+      "error_code": null
+    }
+  },
+  "recordings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "recordings.fetchAudio": {
+    "__status__": 200,
+    "__body__": null,
+    "__raw__": true
+  },
+  "health.check": {
+    "__status__": 200,
+    "__body__": {
+      "ok": true,
+      "warnings": [
+        {
+          "check": "x",
+          "detail": "x"
+        }
+      ]
+    }
+  },
+  "openapi.yaml": {
+    "__status__": 200,
+    "__body__": null,
+    "__raw__": true
+  },
+  "openapi.yml": {
+    "__status__": 200,
+    "__body__": null,
+    "__raw__": true
+  },
+  "openapi.json": {
+    "__status__": 200,
+    "__body__": "x"
+  },
+  "incomingPhoneNumbers.list": {
+    "__status__": 200,
+    "__body__": {
+      "incoming_phone_numbers": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "phone_number": null,
+          "friendly_name": null,
+          "api_version": null,
+          "uri": null,
+          "origin": null,
+          "beta": null,
+          "capabilities": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "voice_application_sid": null,
+          "voice_caller_id_lookup": null,
+          "voice_receive_mode": "voice",
+          "sms_url": null,
+          "sms_method": null,
+          "sms_fallback_url": null,
+          "sms_fallback_method": null,
+          "sms_application_sid": null,
+          "status_callback": null,
+          "status_callback_method": null,
+          "trunk_sid": null,
+          "address_sid": null,
+          "address_requirements": "none",
+          "identity_sid": null,
+          "bundle_sid": null,
+          "emergency_status": "Active",
+          "emergency_address_sid": null,
+          "emergency_address_status": "registered",
+          "status": null,
+          "subresource_uris": null,
+          "type": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "incomingPhoneNumbers.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "api_version": null,
+      "uri": null,
+      "origin": null,
+      "beta": null,
+      "capabilities": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_application_sid": null,
+      "voice_caller_id_lookup": null,
+      "voice_receive_mode": "voice",
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "sms_application_sid": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "trunk_sid": null,
+      "address_sid": null,
+      "address_requirements": "none",
+      "identity_sid": null,
+      "bundle_sid": null,
+      "emergency_status": "Active",
+      "emergency_address_sid": null,
+      "emergency_address_status": "registered",
+      "status": null,
+      "subresource_uris": null,
+      "type": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "incomingPhoneNumbers.listLocal": {
+    "__status__": 200,
+    "__body__": {
+      "incoming_phone_numbers": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "phone_number": null,
+          "friendly_name": null,
+          "api_version": null,
+          "uri": null,
+          "origin": null,
+          "beta": null,
+          "capabilities": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "voice_application_sid": null,
+          "voice_caller_id_lookup": null,
+          "voice_receive_mode": "voice",
+          "sms_url": null,
+          "sms_method": null,
+          "sms_fallback_url": null,
+          "sms_fallback_method": null,
+          "sms_application_sid": null,
+          "status_callback": null,
+          "status_callback_method": null,
+          "trunk_sid": null,
+          "address_sid": null,
+          "address_requirements": "none",
+          "identity_sid": null,
+          "bundle_sid": null,
+          "emergency_status": "Active",
+          "emergency_address_sid": null,
+          "emergency_address_status": "registered",
+          "status": null,
+          "subresource_uris": null,
+          "type": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "incomingPhoneNumbers.createLocal": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "api_version": null,
+      "uri": null,
+      "origin": null,
+      "beta": null,
+      "capabilities": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_application_sid": null,
+      "voice_caller_id_lookup": null,
+      "voice_receive_mode": "voice",
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "sms_application_sid": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "trunk_sid": null,
+      "address_sid": null,
+      "address_requirements": "none",
+      "identity_sid": null,
+      "bundle_sid": null,
+      "emergency_status": "Active",
+      "emergency_address_sid": null,
+      "emergency_address_status": "registered",
+      "status": null,
+      "subresource_uris": null,
+      "type": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "incomingPhoneNumbers.listMobile": {
+    "__status__": 200,
+    "__body__": {
+      "incoming_phone_numbers": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "phone_number": null,
+          "friendly_name": null,
+          "api_version": null,
+          "uri": null,
+          "origin": null,
+          "beta": null,
+          "capabilities": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "voice_application_sid": null,
+          "voice_caller_id_lookup": null,
+          "voice_receive_mode": "voice",
+          "sms_url": null,
+          "sms_method": null,
+          "sms_fallback_url": null,
+          "sms_fallback_method": null,
+          "sms_application_sid": null,
+          "status_callback": null,
+          "status_callback_method": null,
+          "trunk_sid": null,
+          "address_sid": null,
+          "address_requirements": "none",
+          "identity_sid": null,
+          "bundle_sid": null,
+          "emergency_status": "Active",
+          "emergency_address_sid": null,
+          "emergency_address_status": "registered",
+          "status": null,
+          "subresource_uris": null,
+          "type": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "incomingPhoneNumbers.createMobile": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "api_version": null,
+      "uri": null,
+      "origin": null,
+      "beta": null,
+      "capabilities": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_application_sid": null,
+      "voice_caller_id_lookup": null,
+      "voice_receive_mode": "voice",
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "sms_application_sid": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "trunk_sid": null,
+      "address_sid": null,
+      "address_requirements": "none",
+      "identity_sid": null,
+      "bundle_sid": null,
+      "emergency_status": "Active",
+      "emergency_address_sid": null,
+      "emergency_address_status": "registered",
+      "status": null,
+      "subresource_uris": null,
+      "type": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "incomingPhoneNumbers.listTollFree": {
+    "__status__": 200,
+    "__body__": {
+      "incoming_phone_numbers": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "phone_number": null,
+          "friendly_name": null,
+          "api_version": null,
+          "uri": null,
+          "origin": null,
+          "beta": null,
+          "capabilities": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "voice_application_sid": null,
+          "voice_caller_id_lookup": null,
+          "voice_receive_mode": "voice",
+          "sms_url": null,
+          "sms_method": null,
+          "sms_fallback_url": null,
+          "sms_fallback_method": null,
+          "sms_application_sid": null,
+          "status_callback": null,
+          "status_callback_method": null,
+          "trunk_sid": null,
+          "address_sid": null,
+          "address_requirements": "none",
+          "identity_sid": null,
+          "bundle_sid": null,
+          "emergency_status": "Active",
+          "emergency_address_sid": null,
+          "emergency_address_status": "registered",
+          "status": null,
+          "subresource_uris": null,
+          "type": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "incomingPhoneNumbers.createTollFree": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "api_version": null,
+      "uri": null,
+      "origin": null,
+      "beta": null,
+      "capabilities": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_application_sid": null,
+      "voice_caller_id_lookup": null,
+      "voice_receive_mode": "voice",
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "sms_application_sid": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "trunk_sid": null,
+      "address_sid": null,
+      "address_requirements": "none",
+      "identity_sid": null,
+      "bundle_sid": null,
+      "emergency_status": "Active",
+      "emergency_address_sid": null,
+      "emergency_address_status": "registered",
+      "status": null,
+      "subresource_uris": null,
+      "type": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "incomingPhoneNumbers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "api_version": null,
+      "uri": null,
+      "origin": null,
+      "beta": null,
+      "capabilities": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_application_sid": null,
+      "voice_caller_id_lookup": null,
+      "voice_receive_mode": "voice",
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "sms_application_sid": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "trunk_sid": null,
+      "address_sid": null,
+      "address_requirements": "none",
+      "identity_sid": null,
+      "bundle_sid": null,
+      "emergency_status": "Active",
+      "emergency_address_sid": null,
+      "emergency_address_status": "registered",
+      "status": null,
+      "subresource_uris": null,
+      "type": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "incomingPhoneNumbers.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "phone_number": null,
+      "friendly_name": null,
+      "api_version": null,
+      "uri": null,
+      "origin": null,
+      "beta": null,
+      "capabilities": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "voice_application_sid": null,
+      "voice_caller_id_lookup": null,
+      "voice_receive_mode": "voice",
+      "sms_url": null,
+      "sms_method": null,
+      "sms_fallback_url": null,
+      "sms_fallback_method": null,
+      "sms_application_sid": null,
+      "status_callback": null,
+      "status_callback_method": null,
+      "trunk_sid": null,
+      "address_sid": null,
+      "address_requirements": "none",
+      "identity_sid": null,
+      "bundle_sid": null,
+      "emergency_status": "Active",
+      "emergency_address_sid": null,
+      "emergency_address_status": "registered",
+      "status": null,
+      "subresource_uris": null,
+      "type": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "incomingPhoneNumbers.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "usageRecords.list": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listAllTime": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listDaily": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listLastMonth": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listMonthly": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listThisMonth": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listToday": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listYearly": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "usageRecords.listYesterday": {
+    "__status__": 200,
+    "__body__": {
+      "usage_records": [
+        {
+          "account_sid": null,
+          "api_version": null,
+          "as_of": null,
+          "category": null,
+          "count": null,
+          "count_unit": null,
+          "description": null,
+          "end_date": null,
+          "price": null,
+          "price_unit": null,
+          "start_date": null,
+          "subresource_uris": null,
+          "uri": null,
+          "usage": null,
+          "usage_unit": null
+        }
+      ],
+      "page": 1,
+      "page_size": 1,
+      "start": 1,
+      "end": 1,
+      "first_page_uri": "x",
+      "next_page_uri": null,
+      "previous_page_uri": null,
+      "uri": "x"
+    }
+  },
+  "routes.v2.sipDomains.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sip_domain": null,
+      "url": null,
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "voice_region": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "routes.v2.sipDomains.update": {
+    "__status__": 200,
+    "__body__": {
+      "sip_domain": null,
+      "url": null,
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "voice_region": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "routes.v2.phoneNumbers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "phone_number": null,
+      "url": null,
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "voice_region": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "routes.v2.phoneNumbers.update": {
+    "__status__": 200,
+    "__body__": {
+      "phone_number": null,
+      "url": null,
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "voice_region": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "voice.v1.ipRecords.list": {
+    "__status__": 200,
+    "__body__": {
+      "ip_records": [
+        {
+          "account_sid": null,
+          "sid": null,
+          "friendly_name": null,
+          "ip_address": null,
+          "cidr_prefix_length": 1,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "voice.v1.ipRecords.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "ip_address": null,
+      "cidr_prefix_length": 1,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.ipRecords.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "ip_address": null,
+      "cidr_prefix_length": 1,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.ipRecords.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "ip_address": null,
+      "cidr_prefix_length": 1,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.ipRecords.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.conversations.list": {
+    "__status__": 200,
+    "__body__": {
+      "conversations": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "messaging_service_sid": null,
+          "sid": null,
+          "friendly_name": null,
+          "unique_name": null,
+          "attributes": null,
+          "state": "initializing",
+          "date_created": null,
+          "date_updated": null,
+          "timers": null,
+          "url": null,
+          "links": null,
+          "bindings": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.conversations.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "url": null,
+      "links": null,
+      "bindings": null
+    }
+  },
+  "conversations.v1.conversations.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "url": null,
+      "links": null,
+      "bindings": null
+    }
+  },
+  "conversations.v1.conversations.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "url": null,
+      "links": null,
+      "bindings": null
+    }
+  },
+  "conversations.v1.conversations.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.conversations.messages.list": {
+    "__status__": 200,
+    "__body__": {
+      "messages": [
+        {
+          "account_sid": null,
+          "conversation_sid": null,
+          "sid": null,
+          "index": 1,
+          "author": null,
+          "body": null,
+          "media": null,
+          "attributes": null,
+          "participant_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "delivery": null,
+          "links": null,
+          "content_sid": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.conversations.messages.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "index": 1,
+      "author": null,
+      "body": null,
+      "media": null,
+      "attributes": null,
+      "participant_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "delivery": null,
+      "links": null,
+      "content_sid": null
+    }
+  },
+  "conversations.v1.conversations.messages.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "index": 1,
+      "author": null,
+      "body": null,
+      "media": null,
+      "attributes": null,
+      "participant_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "delivery": null,
+      "links": null,
+      "content_sid": null
+    }
+  },
+  "conversations.v1.conversations.messages.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "index": 1,
+      "author": null,
+      "body": null,
+      "media": null,
+      "attributes": null,
+      "participant_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "delivery": null,
+      "links": null,
+      "content_sid": null
+    }
+  },
+  "conversations.v1.conversations.messages.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.conversations.messages.receipts.list": {
+    "__status__": 200,
+    "__body__": {
+      "delivery_receipts": [
+        {
+          "account_sid": null,
+          "conversation_sid": null,
+          "sid": null,
+          "message_sid": null,
+          "channel_message_sid": null,
+          "participant_sid": null,
+          "status": "read",
+          "error_code": 1,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.conversations.messages.receipts.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "message_sid": null,
+      "channel_message_sid": null,
+      "participant_sid": null,
+      "status": "read",
+      "error_code": 1,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.conversations.participants.list": {
+    "__status__": 200,
+    "__body__": {
+      "participants": [
+        {
+          "account_sid": null,
+          "conversation_sid": null,
+          "sid": null,
+          "identity": null,
+          "attributes": null,
+          "messaging_binding": null,
+          "role_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "last_read_message_index": null,
+          "last_read_timestamp": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.conversations.participants.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "identity": null,
+      "attributes": null,
+      "messaging_binding": null,
+      "role_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "last_read_message_index": null,
+      "last_read_timestamp": null
+    }
+  },
+  "conversations.v1.conversations.participants.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "identity": null,
+      "attributes": null,
+      "messaging_binding": null,
+      "role_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "last_read_message_index": null,
+      "last_read_timestamp": null
+    }
+  },
+  "conversations.v1.conversations.participants.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "identity": null,
+      "attributes": null,
+      "messaging_binding": null,
+      "role_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "last_read_message_index": null,
+      "last_read_timestamp": null
+    }
+  },
+  "conversations.v1.conversations.participants.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.conversations.webhooks.list": {
+    "__status__": 200,
+    "__body__": {
+      "webhooks": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "conversation_sid": null,
+          "target": null,
+          "url": null,
+          "configuration": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.conversations.webhooks.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "conversation_sid": null,
+      "target": null,
+      "url": null,
+      "configuration": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "conversations.v1.conversations.webhooks.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "conversation_sid": null,
+      "target": null,
+      "url": null,
+      "configuration": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "conversations.v1.conversations.webhooks.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "conversation_sid": null,
+      "target": null,
+      "url": null,
+      "configuration": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "conversations.v1.conversations.webhooks.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.roles.list": {
+    "__status__": 200,
+    "__body__": {
+      "roles": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "chat_service_sid": null,
+          "friendly_name": null,
+          "type": "conversation",
+          "permissions": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.roles.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "friendly_name": null,
+      "type": "conversation",
+      "permissions": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.roles.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "friendly_name": null,
+      "type": "conversation",
+      "permissions": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.roles.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "friendly_name": null,
+      "type": "conversation",
+      "permissions": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.roles.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.users.list": {
+    "__status__": 200,
+    "__body__": {
+      "users": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "chat_service_sid": null,
+          "role_sid": null,
+          "identity": null,
+          "friendly_name": null,
+          "attributes": null,
+          "is_online": null,
+          "is_notifiable": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.users.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "role_sid": null,
+      "identity": null,
+      "friendly_name": null,
+      "attributes": null,
+      "is_online": null,
+      "is_notifiable": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.users.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "role_sid": null,
+      "identity": null,
+      "friendly_name": null,
+      "attributes": null,
+      "is_online": null,
+      "is_notifiable": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.users.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "role_sid": null,
+      "identity": null,
+      "friendly_name": null,
+      "attributes": null,
+      "is_online": null,
+      "is_notifiable": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.users.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.users.conversations.list": {
+    "__status__": 200,
+    "__body__": {
+      "conversations": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "conversation_sid": null,
+          "unread_messages_count": null,
+          "last_read_message_index": null,
+          "participant_sid": null,
+          "user_sid": null,
+          "friendly_name": null,
+          "conversation_state": "inactive",
+          "timers": null,
+          "attributes": null,
+          "date_created": null,
+          "date_updated": null,
+          "created_by": null,
+          "notification_level": "default",
+          "unique_name": null,
+          "url": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.users.conversations.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "unread_messages_count": null,
+      "last_read_message_index": null,
+      "participant_sid": null,
+      "user_sid": null,
+      "friendly_name": null,
+      "conversation_state": "inactive",
+      "timers": null,
+      "attributes": null,
+      "date_created": null,
+      "date_updated": null,
+      "created_by": null,
+      "notification_level": "default",
+      "unique_name": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.users.conversations.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "unread_messages_count": null,
+      "last_read_message_index": null,
+      "participant_sid": null,
+      "user_sid": null,
+      "friendly_name": null,
+      "conversation_state": "inactive",
+      "timers": null,
+      "attributes": null,
+      "date_created": null,
+      "date_updated": null,
+      "created_by": null,
+      "notification_level": "default",
+      "unique_name": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.users.conversations.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.credentials.list": {
+    "__status__": 200,
+    "__body__": {
+      "credentials": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "type": "apn",
+          "sandbox": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.credentials.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "type": "apn",
+      "sandbox": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.credentials.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "type": "apn",
+      "sandbox": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.credentials.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "type": "apn",
+      "sandbox": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.credentials.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.configuration.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "default_chat_service_sid": null,
+      "default_messaging_service_sid": null,
+      "default_inactive_timer": null,
+      "default_closed_timer": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.configuration.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "default_chat_service_sid": null,
+      "default_messaging_service_sid": null,
+      "default_inactive_timer": null,
+      "default_closed_timer": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.configuration.webhooks.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "method": "GET",
+      "filters": null,
+      "pre_webhook_url": null,
+      "post_webhook_url": null,
+      "target": "webhook",
+      "url": null
+    }
+  },
+  "conversations.v1.configuration.webhooks.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "method": "GET",
+      "filters": null,
+      "pre_webhook_url": null,
+      "post_webhook_url": null,
+      "target": "webhook",
+      "url": null
+    }
+  },
+  "conversations.v1.configuration.addresses.list": {
+    "__status__": 200,
+    "__body__": {
+      "addresses": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "type": null,
+          "address": null,
+          "friendly_name": null,
+          "auto_creation": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "address_country": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.configuration.addresses.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "type": null,
+      "address": null,
+      "friendly_name": null,
+      "auto_creation": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "address_country": null
+    }
+  },
+  "conversations.v1.configuration.addresses.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "type": null,
+      "address": null,
+      "friendly_name": null,
+      "auto_creation": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "address_country": null
+    }
+  },
+  "conversations.v1.configuration.addresses.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "type": null,
+      "address": null,
+      "friendly_name": null,
+      "auto_creation": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "address_country": null
+    }
+  },
+  "conversations.v1.configuration.addresses.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.participantConversations.list": {
+    "__status__": 200,
+    "__body__": {
+      "conversations": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "participant_sid": null,
+          "participant_user_sid": null,
+          "participant_identity": null,
+          "participant_messaging_binding": null,
+          "conversation_sid": null,
+          "conversation_unique_name": null,
+          "conversation_friendly_name": null,
+          "conversation_attributes": null,
+          "conversation_date_created": null,
+          "conversation_date_updated": null,
+          "conversation_created_by": null,
+          "conversation_state": "inactive",
+          "conversation_timers": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.conversationWithParticipants.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "links": null,
+      "bindings": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.list": {
+    "__status__": 200,
+    "__body__": {
+      "services": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "friendly_name": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.services.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "messaging.v1.services.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "friendly_name": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "inbound_request_url": "x",
+      "inbound_method": "GET",
+      "fallback_url": "x",
+      "fallback_method": "GET",
+      "status_callback": "x",
+      "sticky_sender": true,
+      "mms_converter": true,
+      "smart_encoding": true,
+      "scan_message_content": "inherit",
+      "fallback_to_long_code": true,
+      "area_code_geomatch": true,
+      "synchronous_validation": true,
+      "validity_period": 1,
+      "url": "x",
+      "usecase": "x",
+      "use_inbound_webhook_on_number": true,
+      "advanced_opt_out": true
+    }
+  },
+  "conversations.v1.services.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "messaging.v1.services.phoneNumbers.list": {
+    "__status__": 200,
+    "__body__": {
+      "phone_numbers": [
+        {
+          "sid": "x",
+          "account_sid": "x",
+          "service_sid": "x",
+          "date_created": "x",
+          "date_updated": "x",
+          "phone_number": "x",
+          "country_code": "x",
+          "capabilities": [
+            "Voice"
+          ],
+          "url": "x"
+        }
+      ],
+      "meta": {}
+    }
+  },
+  "messaging.v1.services.phoneNumbers.create": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "service_sid": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "phone_number": "x",
+      "country_code": "x",
+      "capabilities": [
+        "Voice"
+      ],
+      "url": "x"
+    }
+  },
+  "messaging.v1.services.phoneNumbers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "account_sid": "x",
+      "service_sid": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "phone_number": "x",
+      "country_code": "x",
+      "capabilities": [
+        "Voice"
+      ],
+      "url": "x"
+    }
+  },
+  "messaging.v1.services.phoneNumbers.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.conversations.list": {
+    "__status__": 200,
+    "__body__": {
+      "conversations": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "messaging_service_sid": null,
+          "sid": null,
+          "friendly_name": null,
+          "unique_name": null,
+          "attributes": null,
+          "state": "initializing",
+          "date_created": null,
+          "date_updated": null,
+          "timers": null,
+          "url": null,
+          "links": null,
+          "bindings": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.conversations.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "url": null,
+      "links": null,
+      "bindings": null
+    }
+  },
+  "conversations.v1.services.conversations.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "url": null,
+      "links": null,
+      "bindings": null
+    }
+  },
+  "conversations.v1.services.conversations.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "url": null,
+      "links": null,
+      "bindings": null
+    }
+  },
+  "conversations.v1.services.conversations.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.conversations.messages.list": {
+    "__status__": 200,
+    "__body__": {
+      "messages": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "conversation_sid": null,
+          "sid": null,
+          "index": 1,
+          "author": null,
+          "body": null,
+          "media": null,
+          "attributes": null,
+          "participant_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "delivery": null,
+          "links": null,
+          "content_sid": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.conversations.messages.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "index": 1,
+      "author": null,
+      "body": null,
+      "media": null,
+      "attributes": null,
+      "participant_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "delivery": null,
+      "links": null,
+      "content_sid": null
+    }
+  },
+  "conversations.v1.services.conversations.messages.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "index": 1,
+      "author": null,
+      "body": null,
+      "media": null,
+      "attributes": null,
+      "participant_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "delivery": null,
+      "links": null,
+      "content_sid": null
+    }
+  },
+  "conversations.v1.services.conversations.messages.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "index": 1,
+      "author": null,
+      "body": null,
+      "media": null,
+      "attributes": null,
+      "participant_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "delivery": null,
+      "links": null,
+      "content_sid": null
+    }
+  },
+  "conversations.v1.services.conversations.messages.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.conversations.participants.list": {
+    "__status__": 200,
+    "__body__": {
+      "participants": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "conversation_sid": null,
+          "sid": null,
+          "identity": null,
+          "attributes": null,
+          "messaging_binding": null,
+          "role_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "last_read_message_index": null,
+          "last_read_timestamp": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.conversations.participants.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "identity": null,
+      "attributes": null,
+      "messaging_binding": null,
+      "role_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "last_read_message_index": null,
+      "last_read_timestamp": null
+    }
+  },
+  "conversations.v1.services.conversations.participants.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "identity": null,
+      "attributes": null,
+      "messaging_binding": null,
+      "role_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "last_read_message_index": null,
+      "last_read_timestamp": null
+    }
+  },
+  "conversations.v1.services.conversations.participants.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "identity": null,
+      "attributes": null,
+      "messaging_binding": null,
+      "role_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "last_read_message_index": null,
+      "last_read_timestamp": null
+    }
+  },
+  "conversations.v1.services.conversations.participants.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.conversations.messages.receipts.list": {
+    "__status__": 200,
+    "__body__": {
+      "delivery_receipts": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "conversation_sid": null,
+          "sid": null,
+          "message_sid": null,
+          "channel_message_sid": null,
+          "participant_sid": null,
+          "status": "read",
+          "error_code": 1,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.conversations.messages.receipts.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "sid": null,
+      "message_sid": null,
+      "channel_message_sid": null,
+      "participant_sid": null,
+      "status": "read",
+      "error_code": 1,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.conversations.webhooks.list": {
+    "__status__": 200,
+    "__body__": {
+      "webhooks": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "chat_service_sid": null,
+          "conversation_sid": null,
+          "target": null,
+          "url": null,
+          "configuration": null,
+          "date_created": null,
+          "date_updated": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.conversations.webhooks.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "target": null,
+      "url": null,
+      "configuration": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "conversations.v1.services.conversations.webhooks.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "target": null,
+      "url": null,
+      "configuration": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "conversations.v1.services.conversations.webhooks.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "conversation_sid": null,
+      "target": null,
+      "url": null,
+      "configuration": null,
+      "date_created": null,
+      "date_updated": null
+    }
+  },
+  "conversations.v1.services.conversations.webhooks.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.roles.list": {
+    "__status__": 200,
+    "__body__": {
+      "roles": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "chat_service_sid": null,
+          "friendly_name": null,
+          "type": "conversation",
+          "permissions": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.roles.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "friendly_name": null,
+      "type": "conversation",
+      "permissions": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.roles.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "friendly_name": null,
+      "type": "conversation",
+      "permissions": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.roles.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "friendly_name": null,
+      "type": "conversation",
+      "permissions": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.roles.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.users.list": {
+    "__status__": 200,
+    "__body__": {
+      "users": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "chat_service_sid": null,
+          "role_sid": null,
+          "identity": null,
+          "friendly_name": null,
+          "attributes": null,
+          "is_online": null,
+          "is_notifiable": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.users.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "role_sid": null,
+      "identity": null,
+      "friendly_name": null,
+      "attributes": null,
+      "is_online": null,
+      "is_notifiable": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.services.users.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "role_sid": null,
+      "identity": null,
+      "friendly_name": null,
+      "attributes": null,
+      "is_online": null,
+      "is_notifiable": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.services.users.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "role_sid": null,
+      "identity": null,
+      "friendly_name": null,
+      "attributes": null,
+      "is_online": null,
+      "is_notifiable": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "conversations.v1.services.users.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.conversationWithParticipants.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "messaging_service_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "unique_name": null,
+      "attributes": null,
+      "state": "initializing",
+      "date_created": null,
+      "date_updated": null,
+      "timers": null,
+      "links": null,
+      "bindings": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.participantConversations.list": {
+    "__status__": 200,
+    "__body__": {
+      "conversations": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "participant_sid": null,
+          "participant_user_sid": null,
+          "participant_identity": null,
+          "participant_messaging_binding": null,
+          "conversation_sid": null,
+          "conversation_unique_name": null,
+          "conversation_friendly_name": null,
+          "conversation_attributes": null,
+          "conversation_date_created": null,
+          "conversation_date_updated": null,
+          "conversation_created_by": null,
+          "conversation_state": "inactive",
+          "conversation_timers": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.users.userConversations.list": {
+    "__status__": 200,
+    "__body__": {
+      "conversations": [
+        {
+          "account_sid": null,
+          "chat_service_sid": null,
+          "conversation_sid": null,
+          "unread_messages_count": null,
+          "last_read_message_index": null,
+          "participant_sid": null,
+          "user_sid": null,
+          "friendly_name": null,
+          "conversation_state": "inactive",
+          "timers": null,
+          "attributes": null,
+          "date_created": null,
+          "date_updated": null,
+          "created_by": null,
+          "notification_level": "default",
+          "unique_name": null,
+          "url": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.bindings.list": {
+    "__status__": 200,
+    "__body__": {
+      "bindings": [
+        {
+          "sid": null,
+          "account_sid": null,
+          "chat_service_sid": null,
+          "credential_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "endpoint": null,
+          "identity": null,
+          "binding_type": "apn",
+          "message_types": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "conversations.v1.services.bindings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "account_sid": null,
+      "chat_service_sid": null,
+      "credential_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "endpoint": null,
+      "identity": null,
+      "binding_type": "apn",
+      "message_types": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.bindings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "conversations.v1.services.configuration.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "chat_service_sid": null,
+      "default_conversation_creator_role_sid": null,
+      "default_conversation_role_sid": null,
+      "default_chat_service_role_sid": null,
+      "url": null,
+      "links": null,
+      "reachability_enabled": null
+    }
+  },
+  "conversations.v1.services.configuration.update": {
+    "__status__": 200,
+    "__body__": {
+      "chat_service_sid": null,
+      "default_conversation_creator_role_sid": null,
+      "default_conversation_role_sid": null,
+      "default_chat_service_role_sid": null,
+      "url": null,
+      "links": null,
+      "reachability_enabled": null
+    }
+  },
+  "conversations.v1.services.configuration.notifications.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "new_message": null,
+      "added_to_conversation": null,
+      "removed_from_conversation": null,
+      "log_enabled": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.configuration.notifications.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "new_message": null,
+      "added_to_conversation": null,
+      "removed_from_conversation": null,
+      "log_enabled": null,
+      "url": null
+    }
+  },
+  "conversations.v1.services.configuration.webhooks.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "pre_webhook_url": null,
+      "post_webhook_url": null,
+      "filters": null,
+      "method": "GET",
+      "url": null
+    }
+  },
+  "conversations.v1.services.configuration.webhooks.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "chat_service_sid": null,
+      "pre_webhook_url": null,
+      "post_webhook_url": null,
+      "filters": null,
+      "method": "GET",
+      "url": null
+    }
+  },
+  "assistants.v1.assistants.list": {
+    "__status__": 200,
+    "__body__": {
+      "assistants": [
+        {
+          "account_sid": "x",
+          "customer_ai": {},
+          "id": "x",
+          "model": "x",
+          "name": "x",
+          "owner": "x",
+          "url": "x",
+          "personality_prompt": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.assistants.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": "x",
+      "customer_ai": {},
+      "id": "x",
+      "model": "x",
+      "name": "x",
+      "owner": "x",
+      "url": "x",
+      "personality_prompt": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.assistants.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": "x",
+      "customer_ai": {},
+      "id": "x",
+      "model": "x",
+      "name": "x",
+      "owner": "x",
+      "url": "x",
+      "personality_prompt": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "tools": [
+        {
+          "account_sid": "x",
+          "description": "x",
+          "enabled": true,
+          "id": "x",
+          "meta": {},
+          "name": "x",
+          "requires_auth": true,
+          "type": "x",
+          "url": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "knowledge": [
+        {
+          "description": "x",
+          "id": "x",
+          "account_sid": "x",
+          "knowledge_source_details": {},
+          "name": "x",
+          "status": "x",
+          "type": "x",
+          "url": "x",
+          "embedding_model": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ]
+    }
+  },
+  "assistants.v1.assistants.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": "x",
+      "customer_ai": {},
+      "id": "x",
+      "model": "x",
+      "name": "x",
+      "owner": "x",
+      "url": "x",
+      "personality_prompt": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.assistants.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.tools.list": {
+    "__status__": 200,
+    "__body__": {
+      "tools": [
+        {
+          "account_sid": "x",
+          "description": "x",
+          "enabled": true,
+          "id": "x",
+          "meta": {},
+          "name": "x",
+          "requires_auth": true,
+          "type": "x",
+          "url": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.tools.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": "x",
+      "description": "x",
+      "enabled": true,
+      "id": "x",
+      "meta": {},
+      "name": "x",
+      "requires_auth": true,
+      "type": "x",
+      "url": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.tools.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": "x",
+      "description": "x",
+      "enabled": true,
+      "id": "x",
+      "meta": {},
+      "name": "x",
+      "requires_auth": true,
+      "type": "x",
+      "url": "x",
+      "date_created": "x",
+      "date_updated": "x",
+      "policies": [
+        {
+          "id": "x",
+          "name": "x",
+          "description": "x",
+          "account_sid": "x",
+          "user_sid": "x",
+          "type": "x",
+          "policy_details": {},
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ]
+    }
+  },
+  "assistants.v1.tools.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": "x",
+      "description": "x",
+      "enabled": true,
+      "id": "x",
+      "meta": {},
+      "name": "x",
+      "requires_auth": true,
+      "type": "x",
+      "url": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.tools.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.assistants.tools.list": {
+    "__status__": 200,
+    "__body__": {
+      "tools": [
+        {
+          "account_sid": "x",
+          "description": "x",
+          "enabled": true,
+          "id": "x",
+          "meta": {},
+          "name": "x",
+          "requires_auth": true,
+          "type": "x",
+          "url": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.assistants.tools.attach": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.assistants.tools.detach": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.knowledge.list": {
+    "__status__": 200,
+    "__body__": {
+      "knowledge": [
+        {
+          "description": "x",
+          "id": "x",
+          "account_sid": "x",
+          "knowledge_source_details": {},
+          "name": "x",
+          "status": "x",
+          "type": "x",
+          "url": "x",
+          "embedding_model": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.knowledge.create": {
+    "__status__": 201,
+    "__body__": {
+      "description": "x",
+      "id": "x",
+      "account_sid": "x",
+      "knowledge_source_details": {},
+      "name": "x",
+      "status": "x",
+      "type": "x",
+      "url": "x",
+      "embedding_model": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.knowledge.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "description": "x",
+      "id": "x",
+      "account_sid": "x",
+      "knowledge_source_details": {},
+      "name": "x",
+      "status": "x",
+      "type": "x",
+      "url": "x",
+      "embedding_model": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.knowledge.update": {
+    "__status__": 200,
+    "__body__": {
+      "description": "x",
+      "id": "x",
+      "account_sid": "x",
+      "knowledge_source_details": {},
+      "name": "x",
+      "status": "x",
+      "type": "x",
+      "url": "x",
+      "embedding_model": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.knowledge.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.knowledge.status.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": "x",
+      "status": "x",
+      "last_status": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.knowledge.chunks.list": {
+    "__status__": 200,
+    "__body__": {
+      "chunks": [
+        {
+          "account_sid": "x",
+          "content": "x",
+          "metadata": {},
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.assistants.knowledge.list": {
+    "__status__": 200,
+    "__body__": {
+      "knowledge": [
+        {
+          "description": "x",
+          "id": "x",
+          "account_sid": "x",
+          "knowledge_source_details": {},
+          "name": "x",
+          "status": "x",
+          "type": "x",
+          "url": "x",
+          "embedding_model": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.assistants.knowledge.attach": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.assistants.knowledge.detach": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "assistants.v1.assistants.messages.create": {
+    "__status__": 200,
+    "__body__": {
+      "status": "x",
+      "flagged": true,
+      "aborted": true,
+      "session_id": "x",
+      "account_sid": "x",
+      "body": "x",
+      "error": "x"
+    }
+  },
+  "assistants.v1.sessions.list": {
+    "__status__": 200,
+    "__body__": {
+      "sessions": [
+        {
+          "id": "x",
+          "account_sid": "x",
+          "assistant_id": "x",
+          "verified": true,
+          "identity": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.sessions.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "id": "x",
+      "account_sid": "x",
+      "assistant_id": "x",
+      "verified": true,
+      "identity": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.sessions.messages.list": {
+    "__status__": 200,
+    "__body__": {
+      "messages": [
+        {
+          "id": "x",
+          "account_sid": "x",
+          "assistant_id": "x",
+          "session_id": "x",
+          "identity": "x",
+          "role": "x",
+          "content": {},
+          "meta": {},
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.assistants.feedbacks.list": {
+    "__status__": 200,
+    "__body__": {
+      "feedbacks": [
+        {
+          "assistant_id": "x",
+          "id": "x",
+          "account_sid": "x",
+          "user_sid": "x",
+          "message_id": "x",
+          "score": 1.5,
+          "session_id": "x",
+          "text": "x",
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "assistants.v1.assistants.feedbacks.create": {
+    "__status__": 201,
+    "__body__": {
+      "assistant_id": "x",
+      "id": "x",
+      "account_sid": "x",
+      "user_sid": "x",
+      "message_id": "x",
+      "score": 1.5,
+      "session_id": "x",
+      "text": "x",
+      "date_created": "x",
+      "date_updated": "x"
+    }
+  },
+  "assistants.v1.policies.list": {
+    "__status__": 200,
+    "__body__": {
+      "policies": [
+        {
+          "id": "x",
+          "name": "x",
+          "description": "x",
+          "account_sid": "x",
+          "user_sid": "x",
+          "type": "x",
+          "policy_details": {},
+          "date_created": "x",
+          "date_updated": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "voice.v1.sourceIpMappings.list": {
+    "__status__": 200,
+    "__body__": {
+      "source_ip_mappings": [
+        {
+          "sid": null,
+          "ip_record_sid": null,
+          "sip_domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "voice.v1.sourceIpMappings.create": {
+    "__status__": 201,
+    "__body__": {
+      "sid": null,
+      "ip_record_sid": null,
+      "sip_domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.sourceIpMappings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "ip_record_sid": null,
+      "sip_domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.sourceIpMappings.update": {
+    "__status__": 200,
+    "__body__": {
+      "sid": null,
+      "ip_record_sid": null,
+      "sip_domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.sourceIpMappings.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "voice.v1.byocTrunks.list": {
+    "__status__": 200,
+    "__body__": {
+      "byoc_trunks": [
+        {
+          "account_sid": null,
+          "sid": null,
+          "friendly_name": null,
+          "voice_url": null,
+          "voice_method": null,
+          "voice_fallback_url": null,
+          "voice_fallback_method": null,
+          "status_callback_url": null,
+          "status_callback_method": null,
+          "cnam_lookup_enabled": null,
+          "connection_policy_sid": null,
+          "from_domain_sid": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "voice.v1.byocTrunks.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "status_callback_url": null,
+      "status_callback_method": null,
+      "cnam_lookup_enabled": null,
+      "connection_policy_sid": null,
+      "from_domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.byocTrunks.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "status_callback_url": null,
+      "status_callback_method": null,
+      "cnam_lookup_enabled": null,
+      "connection_policy_sid": null,
+      "from_domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.byocTrunks.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "status_callback_url": null,
+      "status_callback_method": null,
+      "cnam_lookup_enabled": null,
+      "connection_policy_sid": null,
+      "from_domain_sid": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.byocTrunks.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "voice.v1.connectionPolicies.list": {
+    "__status__": 200,
+    "__body__": {
+      "connection_policies": [
+        {
+          "account_sid": null,
+          "sid": null,
+          "friendly_name": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null,
+          "links": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "voice.v1.connectionPolicies.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "voice.v1.connectionPolicies.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "voice.v1.connectionPolicies.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null,
+      "links": null
+    }
+  },
+  "voice.v1.connectionPolicies.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "voice.v1.connectionPolicies.targets.list": {
+    "__status__": 200,
+    "__body__": {
+      "targets": [
+        {
+          "account_sid": null,
+          "connection_policy_sid": null,
+          "sid": null,
+          "friendly_name": null,
+          "target": null,
+          "priority": 1,
+          "weight": 1,
+          "enabled": null,
+          "date_created": null,
+          "date_updated": null,
+          "url": null
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "voice.v1.connectionPolicies.targets.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": null,
+      "connection_policy_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "target": null,
+      "priority": 1,
+      "weight": 1,
+      "enabled": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.connectionPolicies.targets.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "connection_policy_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "target": null,
+      "priority": 1,
+      "weight": 1,
+      "enabled": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.connectionPolicies.targets.update": {
+    "__status__": 200,
+    "__body__": {
+      "account_sid": null,
+      "connection_policy_sid": null,
+      "sid": null,
+      "friendly_name": null,
+      "target": null,
+      "priority": 1,
+      "weight": 1,
+      "enabled": null,
+      "date_created": null,
+      "date_updated": null,
+      "url": null
+    }
+  },
+  "voice.v1.connectionPolicies.targets.delete": {
+    "__status__": 204,
+    "__body__": null
+  },
+  "voice.v1.dialingPermissions.settings.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "dialing_permissions_inheritance": null,
+      "url": null
+    }
+  },
+  "voice.v1.dialingPermissions.settings.update": {
+    "__status__": 202,
+    "__body__": {
+      "dialing_permissions_inheritance": null,
+      "url": null
+    }
+  },
+  "pricing.v1.voice.countries.list": {
+    "__status__": 200,
+    "__body__": {
+      "countries": [
+        {
+          "country": "x",
+          "iso_country": "x",
+          "url": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "pricing.v1.voice.countries.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "country": "x",
+      "iso_country": "x",
+      "outbound_prefix_prices": [
+        {
+          "prefixes": [
+            "x"
+          ],
+          "base_price": "x",
+          "current_price": "x",
+          "friendly_name": "x"
+        }
+      ],
+      "inbound_call_prices": [
+        {
+          "base_price": "x",
+          "current_price": "x",
+          "number_type": "local"
+        }
+      ],
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v1.voice.numbers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "number": "x",
+      "country": "x",
+      "iso_country": "x",
+      "outbound_call_price": {
+        "base_price": "x",
+        "current_price": "x"
+      },
+      "inbound_call_price": {
+        "base_price": "x",
+        "current_price": "x",
+        "number_type": "local"
+      },
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v1.messaging.countries.list": {
+    "__status__": 200,
+    "__body__": {
+      "countries": [
+        {
+          "country": "x",
+          "iso_country": "x",
+          "url": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "pricing.v1.messaging.countries.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "country": "x",
+      "iso_country": "x",
+      "outbound_sms_prices": [
+        {
+          "carrier": "x",
+          "mcc": "x",
+          "mnc": "x",
+          "prices": [
+            {
+              "base_price": "x",
+              "current_price": "x",
+              "number_type": "local"
+            }
+          ]
+        }
+      ],
+      "inbound_sms_prices": [
+        {
+          "base_price": "x",
+          "current_price": "x",
+          "number_type": "local"
+        }
+      ],
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v1.phoneNumbers.countries.list": {
+    "__status__": 200,
+    "__body__": {
+      "countries": [
+        {
+          "country": "x",
+          "iso_country": "x",
+          "url": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "pricing.v1.phoneNumbers.countries.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "country": "x",
+      "iso_country": "x",
+      "phone_number_prices": [
+        {
+          "number_type": "local",
+          "base_price": "x",
+          "current_price": "x"
+        }
+      ],
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v2.voice.countries.list": {
+    "__status__": 200,
+    "__body__": {
+      "countries": [
+        {
+          "country": "x",
+          "iso_country": "x",
+          "url": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "pricing.v2.voice.countries.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "country": "x",
+      "iso_country": "x",
+      "outbound_prefix_prices": [
+        {
+          "origination_prefixes": [
+            "x"
+          ],
+          "destination_prefixes": [
+            "x"
+          ],
+          "base_price": "x",
+          "current_price": "x",
+          "friendly_name": "x"
+        }
+      ],
+      "inbound_call_prices": [
+        {
+          "base_price": "x",
+          "current_price": "x",
+          "number_type": "local"
+        }
+      ],
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v2.voice.numbers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "destination_number": "x",
+      "origination_number": null,
+      "country": "x",
+      "iso_country": "x",
+      "outbound_call_prices": [
+        {
+          "origination_prefixes": [
+            "x"
+          ],
+          "base_price": "x",
+          "current_price": "x"
+        }
+      ],
+      "inbound_call_price": {
+        "base_price": "x",
+        "current_price": "x",
+        "number_type": "local"
+      },
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v2.trunking.countries.list": {
+    "__status__": 200,
+    "__body__": {
+      "countries": [
+        {
+          "country": "x",
+          "iso_country": "x",
+          "url": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": null,
+        "page": null,
+        "page_size": null,
+        "key": null
+      }
+    }
+  },
+  "pricing.v2.trunking.countries.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "country": "x",
+      "iso_country": "x",
+      "terminating_prefix_prices": [
+        {
+          "origination_prefixes": [
+            "x"
+          ],
+          "destination_prefixes": [
+            "x"
+          ],
+          "base_price": "x",
+          "current_price": "x",
+          "friendly_name": "x"
+        }
+      ],
+      "originating_call_prices": [
+        {
+          "base_price": "x",
+          "current_price": "x",
+          "number_type": "local"
+        }
+      ],
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "pricing.v2.trunking.numbers.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "destination_number": "x",
+      "origination_number": null,
+      "country": "x",
+      "iso_country": "x",
+      "terminating_prefix_prices": [
+        {
+          "origination_prefixes": [
+            "x"
+          ],
+          "destination_prefixes": [
+            "x"
+          ],
+          "base_price": "x",
+          "current_price": "x",
+          "friendly_name": "x"
+        }
+      ],
+      "originating_call_price": {
+        "base_price": "x",
+        "current_price": "x",
+        "number_type": "local"
+      },
+      "price_unit": "x",
+      "url": "x"
+    }
+  },
+  "monitor.v1.alerts.list": {
+    "__status__": 200,
+    "__body__": {
+      "alerts": [
+        {
+          "sid": "NO111111111111111111111111111111",
+          "account_sid": "x",
+          "alert_text": "x",
+          "api_version": null,
+          "error_code": "11200",
+          "log_level": "error",
+          "more_info": "x",
+          "request_method": "POST",
+          "request_url": "x",
+          "request_headers": null,
+          "request_variables": null,
+          "response_body": null,
+          "response_headers": null,
+          "resource_sid": null,
+          "service_sid": null,
+          "date_created": "x",
+          "date_generated": "x",
+          "date_updated": "x",
+          "url": "x"
+        }
+      ],
+      "meta": {
+        "first_page_url": null,
+        "next_page_url": null,
+        "previous_page_url": null,
+        "url": "x",
+        "page": 0,
+        "page_size": 50,
+        "key": "alerts"
+      }
+    }
+  },
+  "monitor.v1.alerts.fetch": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "NO111111111111111111111111111111",
+      "account_sid": "x",
+      "alert_text": "x",
+      "api_version": null,
+      "error_code": "11200",
+      "log_level": "error",
+      "more_info": "x",
+      "request_method": "POST",
+      "request_url": "x",
+      "request_headers": "Accept: application/json",
+      "request_variables": "Digits=1234",
+      "response_body": "500 Internal Server Error",
+      "response_headers": "Content-Type: text/plain",
+      "resource_sid": null,
+      "service_sid": null,
+      "date_created": "x",
+      "date_generated": "x",
+      "date_updated": "x",
+      "url": "x"
+    }
+  },
+  "messages.feedback.create": {
+    "__status__": 201,
+    "__body__": {
+      "account_sid": "x",
+      "message_sid": "x",
+      "outcome": "confirmed",
+      "date_created": "x",
+      "date_updated": "x",
+      "uri": "x"
+    }
+  },
+  "accounts.rotateKey": {
+    "__status__": 200,
+    "__body__": {
+      "sid": "x",
+      "api_key": "x",
+      "sip_username": "x",
+      "name": null,
+      "phone_regions": [
+        "US"
+      ],
+      "allow_cidr": [],
+      "disabled": false,
+      "stt_fs_vendor": null,
+      "stt_http_url": null,
+      "stt_http_token_set": false,
+      "tts_http_url": null,
+      "tts_http_token_set": false,
+      "tts_engine_name": null,
+      "tts_default_voice": null,
+      "tts_default_language": null,
+      "stripe_secret_key_set": false,
+      "pay_enabled": false,
+      "sms_provider": null,
+      "sms_allowed_providers": [
+        "twilio"
+      ],
+      "stt_allowed_providers": [],
+      "stt_provider": null,
+      "voice_url": null,
+      "voice_method": null,
+      "voice_fallback_url": null,
+      "voice_fallback_method": null,
+      "aws_bucket": null,
+      "aws_region": null,
+      "aws_prefix": null,
+      "aws_access_key_id": null,
+      "aws_secret_access_key_set": false,
+      "aws_kms_key_id": null,
+      "created_at": "x",
+      "updated_at": "x"
+    }
+  }
+}

@@ -21,38 +21,79 @@ public class VoiceMLError: Error, @unchecked Sendable, CustomStringConvertible {
     public var localizedDescription: String { description }
 }
 
-/// Raised when the client is constructed with conflicting or missing config.
+/// Raised when the client is constructed with conflicting or missing config, or when a
+/// caller-supplied identifier is malformed before any request is sent.
 public final class ConfigurationError: VoiceMLError, @unchecked Sendable {}
 
 /// Raised when the API returns a non-2xx response.
 ///
 /// The Twilio-compatible error body (`{code, message, more_info, status}`) is parsed into
-/// `code` / `message` when present, with the raw payload exposed on `body`.
+/// `code` / `message` / `status` when present, with the raw payload exposed on `body`.
 public class ApiError: VoiceMLError, @unchecked Sendable {
     public let statusCode: Int
-    public let code: String?
+    /// Numeric error code from the response body, when the server included one.
+    public let code: Int?
     public let body: Data?
     /// Twilio-compatible `more_info` URL pointing to human docs for this error code, when the
     /// server included one in the response body. `nil` for transport errors, decoding
     /// failures, or 5xx responses without a structured body.
     public let moreInfo: String?
+    /// `status` field from the response body when present (mirrors `statusCode`).
+    public let responseStatus: Int?
+    public var status: Int? { responseStatus }
+    /// Parsed `Retry-After` delay in seconds, when the response carried one (429 responses).
+    public let retryAfter: TimeInterval?
 
     public init(
         message: String,
         statusCode: Int,
-        code: String? = nil,
+        code: Int? = nil,
         body: Data? = nil,
-        moreInfo: String? = nil
+        moreInfo: String? = nil,
+        responseStatus: Int? = nil,
+        retryAfter: TimeInterval? = nil
     ) {
         self.statusCode = statusCode
         self.code = code
         self.body = body
         self.moreInfo = moreInfo
+        self.responseStatus = responseStatus
+        self.retryAfter = retryAfter
         super.init(message)
     }
 
     public override var description: String {
-        "\(type(of: self))(statusCode=\(statusCode), code=\(code ?? "nil")): \(message)"
+        "\(type(of: self))(statusCode=\(statusCode), code=\(code.map(String.init) ?? "nil")): \(message)"
+    }
+}
+
+/// A connection, TLS, timeout or response-transfer failure. The original error is
+/// retained on `cause`; cancellation errors are propagated directly instead.
+public final class TransportError: VoiceMLError, @unchecked Sendable {
+    public let cause: Error
+
+    public init(message: String, cause: Error) {
+        self.cause = cause
+        super.init(message)
+    }
+}
+
+/// Raised when a 2xx response body could not be decoded into the expected model.
+/// Carries the underlying `DecodingError` on ``cause``.
+public final class DecodingFailedError: VoiceMLError, @unchecked Sendable {
+    public let statusCode: Int
+    public let body: Data?
+    public let cause: Error
+
+    public init(message: String, statusCode: Int, body: Data?, cause: Error) {
+        self.statusCode = statusCode
+        self.body = body
+        self.cause = cause
+        super.init(message)
+    }
+
+    public override var description: String {
+        "\(type(of: self))(statusCode=\(statusCode)): \(message) (cause: \(cause))"
     }
 }
 
@@ -70,13 +111,15 @@ public final class PermissionDeniedError: ApiError, @unchecked Sendable {}
 /// HTTP 404 — the resource does not exist (or belongs to a different tenant).
 public final class NotFoundError: ApiError, @unchecked Sendable {}
 
-/// HTTP 409 — request conflicts with current resource state (e.g. deleting a non-empty queue).
+/// HTTP 409 — request conflicts with current resource state (e.g. deleting a non-empty
+/// queue, or an optimistic-locking conflict on account update).
 public final class ConflictError: ApiError, @unchecked Sendable {}
 
 /// HTTP 410 — recording audio is no longer available (no local file, no S3 key).
 public final class GoneError: ApiError, @unchecked Sendable {}
 
-/// HTTP 429 — per-account rate limit exceeded. `Retry-After` header may hint when to retry.
+/// HTTP 429 — per-account rate limit exceeded. The parsed `Retry-After` delay (seconds or
+/// HTTP-date), when the server sent one, is exposed on `retryAfter`.
 public final class RateLimitError: ApiError, @unchecked Sendable {}
 
 /// HTTP 501 — endpoint is mounted as a stub (e.g. `UserDefinedMessages`).
@@ -88,31 +131,33 @@ public final class ServerError: ApiError, @unchecked Sendable {}
 /// Map an HTTP status code to the most specific ``ApiError`` subclass.
 public func errorFromResponse(
     statusCode: Int,
-    code: String?,
+    code: Int?,
     body: Data?,
     message: String,
-    moreInfo: String? = nil
+    moreInfo: String? = nil,
+    responseStatus: Int? = nil,
+    retryAfter: TimeInterval? = nil
 ) -> ApiError {
     switch statusCode {
     case 400:
-        return BadRequestError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return BadRequestError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 401:
-        return AuthenticationError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return AuthenticationError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 403:
-        return PermissionDeniedError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return PermissionDeniedError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 404:
-        return NotFoundError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return NotFoundError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 409:
-        return ConflictError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return ConflictError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 410:
-        return GoneError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return GoneError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 429:
-        return RateLimitError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return RateLimitError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 501:
-        return NotImplementedAPIError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return NotImplementedAPIError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     case 500...599:
-        return ServerError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return ServerError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     default:
-        return ApiError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo)
+        return ApiError(message: message, statusCode: statusCode, code: code, body: body, moreInfo: moreInfo, responseStatus: responseStatus, retryAfter: retryAfter)
     }
 }

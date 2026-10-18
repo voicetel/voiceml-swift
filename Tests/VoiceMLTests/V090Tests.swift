@@ -385,7 +385,7 @@ final class V090Tests: XCTestCase {
             "conversation_sid": chSid,
             "sid": imSid,
             "index": 7,
-            "author": "+15551234567",
+            "author": "+14155550103",
             "body": "Hello",
             "attributes": "{}",
             "date_created": "2026-06-27T12:00:00Z",
@@ -395,7 +395,7 @@ final class V090Tests: XCTestCase {
         let c = try makeClient()
 
         let msg = try await c.conversationsV1.conversations.messages(conversationSid: chSid)
-            .create(.init(author: "+15551234567", body: "Hello"))
+            .create(.init(author: "+14155550103", body: "Hello"))
         XCTAssertEqual(msg.index, 7)
         XCTAssertEqual(msg.body, "Hello")
 
@@ -405,7 +405,7 @@ final class V090Tests: XCTestCase {
             "https://conversations.voicetel.com/v1/Conversations/\(chSid)/Messages"
         )
         let form = parseForm(req.body)
-        XCTAssertEqual(form["Author"]?.first, "+15551234567")
+        XCTAssertEqual(form["Author"]?.first, "+14155550103")
         XCTAssertEqual(form["Body"]?.first, "Hello")
     }
 
@@ -419,7 +419,7 @@ final class V090Tests: XCTestCase {
             "conversation_sid": chSid,
             "sid": mbSid,
             "attributes": "{}",
-            "messaging_binding": ["address": "+15551234567", "proxy_address": "+15550000000"],
+            "messaging_binding": ["address": "+14155550103", "proxy_address": "+15550000000"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
             "url": "https://voiceml.voicetel.com/v1/Conversations/\(chSid)/Participants/\(mbSid)",
@@ -428,12 +428,12 @@ final class V090Tests: XCTestCase {
 
         _ = try await c.conversationsV1.conversations.participants(conversationSid: chSid)
             .create(.init(
-                messagingBindingAddress: "+15551234567",
+                messagingBindingAddress: "+14155550103",
                 messagingBindingProxyAddress: "+15550000000"
             ))
 
         let form = parseForm(MockResponses.shared.captured[0].body)
-        XCTAssertEqual(form["MessagingBinding.Address"]?.first, "+15551234567")
+        XCTAssertEqual(form["MessagingBinding.Address"]?.first, "+14155550103")
         XCTAssertEqual(form["MessagingBinding.ProxyAddress"]?.first, "+15550000000")
     }
 
@@ -647,7 +647,7 @@ final class V090Tests: XCTestCase {
             "sid": igSid,
             "account_sid": Self.accountSid,
             "type": "sms",
-            "address": "+15551234567",
+            "address": "+14155550103",
             "auto_creation": ["enabled": true, "type": "webhook", "webhook_url": "https://example.com/auto"],
             "date_created": "2026-06-27T12:00:00Z",
             "date_updated": "2026-06-27T12:00:00Z",
@@ -657,7 +657,7 @@ final class V090Tests: XCTestCase {
 
         _ = try await c.conversationsV1.configuration.addresses.create(.init(
             type: "sms",
-            address: "+15551234567",
+            address: "+14155550103",
             autoCreationEnabled: true,
             autoCreationType: "webhook",
             autoCreationWebhookUrl: "https://example.com/auto"
@@ -665,7 +665,7 @@ final class V090Tests: XCTestCase {
 
         let form = parseForm(MockResponses.shared.captured[0].body)
         XCTAssertEqual(form["Type"]?.first, "sms")
-        XCTAssertEqual(form["Address"]?.first, "+15551234567")
+        XCTAssertEqual(form["Address"]?.first, "+14155550103")
         XCTAssertEqual(form["AutoCreation.Enabled"]?.first, "true")
         XCTAssertEqual(form["AutoCreation.Type"]?.first, "webhook")
         XCTAssertEqual(form["AutoCreation.WebhookUrl"]?.first, "https://example.com/auto")
@@ -706,7 +706,7 @@ final class V090Tests: XCTestCase {
             friendlyName: "Triage",
             participant: [
                 #"{"identity":"alice"}"#,
-                #"{"messaging_binding":{"address":"+15551234567"}}"#,
+                #"{"messaging_binding":{"address":"+14155550103"}}"#,
             ]
         ))
 
@@ -753,7 +753,7 @@ final class V090Tests: XCTestCase {
 
     func testRoutesV2PhoneNumberFetchAndUpdate() async throws {
         let sid = "QQ" + String(repeating: "9", count: 32)
-        let pn = "+18005551234"
+        let pn = "+14155550100"
         enqueueJSON([
             "phone_number": pn,
             "sid": sid,

@@ -14,6 +14,7 @@ import Foundation
 /// - ``knowledge(knowledgeId:)`` → per-knowledge status, chunks.
 /// - ``sessions(sessionId:)`` → per-session messages.
 public final class AssistantsV1Resource: Sendable {
+    public let pages: PageClient
     public let assistants: AssistantsV1AssistantsResource
     public let tools: AssistantsV1ToolsResource
     public let knowledge: AssistantsV1KnowledgeResource
@@ -23,6 +24,7 @@ public final class AssistantsV1Resource: Sendable {
     private let transport: Transport
 
     init(transport: Transport) {
+        self.pages = PageClient(transport: transport)
         self.transport = transport
         self.assistants = AssistantsV1AssistantsResource(transport: transport)
         self.tools = AssistantsV1ToolsResource(transport: transport)
@@ -60,7 +62,7 @@ public final class AssistantsV1AssistantsResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1AssistantList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Assistants",
+            path: try transport.rootPath(["v1", "Assistants"]),
             query: params.queryItems()
         ))
     }
@@ -68,7 +70,7 @@ public final class AssistantsV1AssistantsResource: Sendable {
     public func create(_ body: CreateAssistantRequest) async throws -> AssistantsV1Assistant {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: "/v1/Assistants",
+            path: try transport.rootPath(["v1", "Assistants"]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -78,14 +80,14 @@ public final class AssistantsV1AssistantsResource: Sendable {
     public func fetch(assistantId: String) async throws -> AssistantsV1AssistantWithToolsAndKnowledge {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Assistants/\(assistantId)"
+            path: try transport.rootPath(["v1", "Assistants", assistantId])
         ))
     }
 
     public func update(assistantId: String, _ body: UpdateAssistantRequest) async throws -> AssistantsV1Assistant {
         try await transport.request(VoiceMLRequest(
             method: .put,
-            path: "/v1/Assistants/\(assistantId)",
+            path: try transport.rootPath(["v1", "Assistants", assistantId]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -93,7 +95,7 @@ public final class AssistantsV1AssistantsResource: Sendable {
     public func delete(assistantId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: "/v1/Assistants/\(assistantId)"
+            path: try transport.rootPath(["v1", "Assistants", assistantId])
         ))
     }
 
@@ -133,7 +135,7 @@ public final class AssistantsV1ToolsResource: Sendable {
     public func list(_ params: ListAssistantsV1ToolParams = .init()) async throws -> AssistantsV1ToolList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Tools",
+            path: try transport.rootPath(["v1", "Tools"]),
             query: params.queryItems()
         ))
     }
@@ -141,7 +143,7 @@ public final class AssistantsV1ToolsResource: Sendable {
     public func create(_ body: CreateToolRequest) async throws -> AssistantsV1Tool {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: "/v1/Tools",
+            path: try transport.rootPath(["v1", "Tools"]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -151,14 +153,14 @@ public final class AssistantsV1ToolsResource: Sendable {
     public func fetch(toolId: String) async throws -> AssistantsV1ToolWithPolicies {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Tools/\(toolId)"
+            path: try transport.rootPath(["v1", "Tools", toolId])
         ))
     }
 
     public func update(toolId: String, _ body: UpdateToolRequest) async throws -> AssistantsV1Tool {
         try await transport.request(VoiceMLRequest(
             method: .put,
-            path: "/v1/Tools/\(toolId)",
+            path: try transport.rootPath(["v1", "Tools", toolId]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -166,7 +168,7 @@ public final class AssistantsV1ToolsResource: Sendable {
     public func delete(toolId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: "/v1/Tools/\(toolId)"
+            path: try transport.rootPath(["v1", "Tools", toolId])
         ))
     }
 }
@@ -184,7 +186,7 @@ public final class AssistantsV1AssistantToolsResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1ToolList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Assistants/\(assistantId)/Tools",
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Tools"]),
             query: params.queryItems()
         ))
     }
@@ -192,14 +194,14 @@ public final class AssistantsV1AssistantToolsResource: Sendable {
     public func attach(toolId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .post,
-            path: "/v1/Assistants/\(assistantId)/Tools/\(toolId)"
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Tools", toolId])
         ))
     }
 
     public func detach(toolId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: "/v1/Assistants/\(assistantId)/Tools/\(toolId)"
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Tools", toolId])
         ))
     }
 }
@@ -213,7 +215,7 @@ public final class AssistantsV1KnowledgeResource: Sendable {
     public func list(_ params: ListAssistantsV1KnowledgeParams = .init()) async throws -> AssistantsV1KnowledgeList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Knowledge",
+            path: try transport.rootPath(["v1", "Knowledge"]),
             query: params.queryItems()
         ))
     }
@@ -221,7 +223,7 @@ public final class AssistantsV1KnowledgeResource: Sendable {
     public func create(_ body: CreateKnowledgeRequest) async throws -> AssistantsV1Knowledge {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: "/v1/Knowledge",
+            path: try transport.rootPath(["v1", "Knowledge"]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -229,14 +231,14 @@ public final class AssistantsV1KnowledgeResource: Sendable {
     public func fetch(knowledgeId: String) async throws -> AssistantsV1Knowledge {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Knowledge/\(knowledgeId)"
+            path: try transport.rootPath(["v1", "Knowledge", knowledgeId])
         ))
     }
 
     public func update(knowledgeId: String, _ body: UpdateKnowledgeRequest) async throws -> AssistantsV1Knowledge {
         try await transport.request(VoiceMLRequest(
             method: .put,
-            path: "/v1/Knowledge/\(knowledgeId)",
+            path: try transport.rootPath(["v1", "Knowledge", knowledgeId]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -244,7 +246,7 @@ public final class AssistantsV1KnowledgeResource: Sendable {
     public func delete(knowledgeId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: "/v1/Knowledge/\(knowledgeId)"
+            path: try transport.rootPath(["v1", "Knowledge", knowledgeId])
         ))
     }
 
@@ -280,7 +282,7 @@ public final class AssistantsV1KnowledgeStatusResource: Sendable {
     public func fetch() async throws -> AssistantsV1KnowledgeStatus {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Knowledge/\(knowledgeId)/Status"
+            path: try transport.rootPath(["v1", "Knowledge", knowledgeId, "Status"])
         ))
     }
 }
@@ -296,7 +298,7 @@ public final class AssistantsV1KnowledgeChunksResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1KnowledgeChunkList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Knowledge/\(knowledgeId)/Chunks",
+            path: try transport.rootPath(["v1", "Knowledge", knowledgeId, "Chunks"]),
             query: params.queryItems()
         ))
     }
@@ -315,7 +317,7 @@ public final class AssistantsV1AssistantKnowledgeResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1KnowledgeList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Assistants/\(assistantId)/Knowledge",
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Knowledge"]),
             query: params.queryItems()
         ))
     }
@@ -323,14 +325,14 @@ public final class AssistantsV1AssistantKnowledgeResource: Sendable {
     public func attach(knowledgeId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .post,
-            path: "/v1/Assistants/\(assistantId)/Knowledge/\(knowledgeId)"
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Knowledge", knowledgeId])
         ))
     }
 
     public func detach(knowledgeId: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: "/v1/Assistants/\(assistantId)/Knowledge/\(knowledgeId)"
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Knowledge", knowledgeId])
         ))
     }
 }
@@ -344,7 +346,7 @@ public final class AssistantsV1SessionsResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1SessionList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Sessions",
+            path: try transport.rootPath(["v1", "Sessions"]),
             query: params.queryItems()
         ))
     }
@@ -352,7 +354,7 @@ public final class AssistantsV1SessionsResource: Sendable {
     public func fetch(sessionId: String) async throws -> AssistantsV1Session {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Sessions/\(sessionId)"
+            path: try transport.rootPath(["v1", "Sessions", sessionId])
         ))
     }
 
@@ -386,7 +388,7 @@ public final class AssistantsV1SessionMessagesResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1MessageList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Sessions/\(sessionId)/Messages",
+            path: try transport.rootPath(["v1", "Sessions", sessionId, "Messages"]),
             query: params.queryItems()
         ))
     }
@@ -407,7 +409,7 @@ public final class AssistantsV1AssistantMessagesResource: Sendable {
     public func create(_ body: CreateAssistantSendMessageRequest) async throws -> AssistantsV1SendMessageResponse {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: "/v1/Assistants/\(assistantId)/Messages",
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Messages"]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -426,7 +428,7 @@ public final class AssistantsV1AssistantFeedbacksResource: Sendable {
     public func list(_ params: ListAssistantsV1PageParams = .init()) async throws -> AssistantsV1FeedbackList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Assistants/\(assistantId)/Feedbacks",
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Feedbacks"]),
             query: params.queryItems()
         ))
     }
@@ -434,7 +436,7 @@ public final class AssistantsV1AssistantFeedbacksResource: Sendable {
     public func create(_ body: CreateFeedbackRequest) async throws -> AssistantsV1Feedback {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: "/v1/Assistants/\(assistantId)/Feedbacks",
+            path: try transport.rootPath(["v1", "Assistants", assistantId, "Feedbacks"]),
             jsonBody: try body.jsonBody()
         ))
     }
@@ -449,7 +451,7 @@ public final class AssistantsV1PoliciesResource: Sendable {
     public func list(_ params: ListAssistantsV1PolicyParams = .init()) async throws -> AssistantsV1PolicyList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: "/v1/Policies",
+            path: try transport.rootPath(["v1", "Policies"]),
             query: params.queryItems()
         ))
     }

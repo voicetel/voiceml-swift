@@ -9,9 +9,10 @@ public final class CallsResource: Sendable {
         self.transport = transport
     }
 
-    /// Build a URL under `/2010-04-01/Accounts/{AccountSid}/…`.
-    private func path(_ parts: String...) -> String {
-        "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.filter { !$0.isEmpty }.joined(separator: "/")
+    /// Build a path under `/2010-04-01/Accounts/{AccountSid}/…` from validated,
+    /// individually percent-encoded segments.
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(parts)
     }
 
     // MARK: - Calls
@@ -24,27 +25,27 @@ public final class CallsResource: Sendable {
         ))
     }
 
+    /// Fetch the page after `page`, following its `next_page_uri` verbatim.
+    /// Returns nil when the page carries no further link.
+    public func nextPage(of page: CallList) async throws -> CallList? {
+        guard let url = transport.resolvePageURI(page.nextPageUri) else { return nil }
+        return try await transport.requestPage(url)
+    }
+
     /// Walk every page of `/Calls` matching the supplied filters and yield each ``Call``.
-    public func iterate(_ params: ListCallsParams = .init()) -> AsyncThrowingStream<Call, Error> {
-        var current = params
-        if current.page == nil { current.page = 0 }
-        return AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    while true {
-                        let chunk = try await self.list(current)
-                        for call in chunk.calls { continuation.yield(call) }
-                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.calls.isEmpty {
-                            continuation.finish()
-                            return
-                        }
-                        current.page = (current.page ?? 0) + 1
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
+    /// Lazily follows each page's `next_page_uri`; abandoning the sequence stops all
+    /// further requests.
+    public func iterate(_ params: ListCallsParams = .init()) -> PagerSequence<Call> {
+        PagerSequence(
+            firstPage: { [self] in
+                let page = try await list(params)
+                return PageResult(items: page.calls, nextURL: transport.resolvePageURI(page.nextPageUri))
+            },
+            followPage: { [self] url in
+                let page: CallList = try await transport.requestPage(url)
+                return PageResult(items: page.calls, nextURL: transport.resolvePageURI(page.nextPageUri))
             }
-        }
+        )
     }
 
     public func create(_ body: CreateCallRequest) async throws -> Call {
@@ -75,7 +76,7 @@ public final class CallsResource: Sendable {
 
     public func listRecordings(
         callSid: String,
-        params: ListRecordingsParams = .init()
+        params: ListCallRecordingsParams = .init()
     ) async throws -> RecordingList {
         try await transport.request(VoiceMLRequest(
             method: .get,
@@ -121,27 +122,14 @@ public final class CallsResource: Sendable {
         ))
     }
 
-    // MARK: - Streams
-
-    public func listStreams(callSid: String) async throws -> StreamList {
-        try await transport.request(VoiceMLRequest(
-            method: .get,
-            path: path("Calls", callSid, "Streams")
-        ))
-    }
+    // MARK: - Streams (start/stop only — the list/fetch GETs were removed from the
+    // API surface; the server answers 405/20004 for them)
 
     public func startStream(callSid: String, body: StartStreamRequest) async throws -> Stream {
         try await transport.request(VoiceMLRequest(
             method: .post,
             path: path("Calls", callSid, "Streams"),
             form: body.formFields()
-        ))
-    }
-
-    public func getStream(callSid: String, streamSid: String) async throws -> Stream {
-        try await transport.request(VoiceMLRequest(
-            method: .get,
-            path: path("Calls", callSid, "Streams", streamSid)
         ))
     }
 
@@ -157,14 +145,7 @@ public final class CallsResource: Sendable {
         ))
     }
 
-    // MARK: - SIPREC
-
-    public func listSiprec(callSid: String) async throws -> SiprecList {
-        try await transport.request(VoiceMLRequest(
-            method: .get,
-            path: path("Calls", callSid, "Siprec")
-        ))
-    }
+    // MARK: - SIPREC (start/stop only)
 
     public func startSiprec(
         callSid: String,
@@ -174,13 +155,6 @@ public final class CallsResource: Sendable {
             method: .post,
             path: path("Calls", callSid, "Siprec"),
             form: body.formFields()
-        ))
-    }
-
-    public func getSiprec(callSid: String, siprecSid: String) async throws -> SiprecSession {
-        try await transport.request(VoiceMLRequest(
-            method: .get,
-            path: path("Calls", callSid, "Siprec", siprecSid)
         ))
     }
 
@@ -196,14 +170,7 @@ public final class CallsResource: Sendable {
         ))
     }
 
-    // MARK: - Transcriptions
-
-    public func listTranscriptions(callSid: String) async throws -> TranscriptionList {
-        try await transport.request(VoiceMLRequest(
-            method: .get,
-            path: path("Calls", callSid, "Transcriptions")
-        ))
-    }
+    // MARK: - Transcriptions (start/stop only)
 
     public func startTranscription(
         callSid: String,
@@ -213,16 +180,6 @@ public final class CallsResource: Sendable {
             method: .post,
             path: path("Calls", callSid, "Transcriptions"),
             form: body.formFields()
-        ))
-    }
-
-    public func getTranscription(
-        callSid: String,
-        transcriptionSid: String
-    ) async throws -> CallTranscription {
-        try await transport.request(VoiceMLRequest(
-            method: .get,
-            path: path("Calls", callSid, "Transcriptions", transcriptionSid)
         ))
     }
 
@@ -238,7 +195,7 @@ public final class CallsResource: Sendable {
         ))
     }
 
-    // MARK: - Notifications / Events (compat stubs)
+    // MARK: - Notifications / Events
 
     public func listNotifications(
         callSid: String,
@@ -251,11 +208,11 @@ public final class CallsResource: Sendable {
         ))
     }
 
-    /// Fetch a per-call notification. Always 404 today (compat stub).
+    /// Fetch a per-call notification by sid.
     public func getNotification(
         callSid: String,
         notificationSid: String
-    ) async throws -> JSONObject {
+    ) async throws -> Notification {
         try await transport.request(VoiceMLRequest(
             method: .get,
             path: path("Calls", callSid, "Notifications", notificationSid)

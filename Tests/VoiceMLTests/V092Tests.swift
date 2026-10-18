@@ -233,7 +233,7 @@ final class V092Tests: XCTestCase {
             "url": "\(Self.base)/v1/Voice/Countries/US",
         ])
         enqueueJSON([
-            "number": "+18005551234",
+            "number": "+14155550100",
             "country": "United States",
             "iso_country": "US",
             "outbound_call_price": ["base_price": "0.013", "current_price": "0.013"],
@@ -243,13 +243,13 @@ final class V092Tests: XCTestCase {
                 "number_type": "toll free",
             ],
             "price_unit": "USD",
-            "url": "\(Self.base)/v1/Voice/Numbers/+18005551234",
+            "url": "\(Self.base)/v1/Voice/Numbers/+14155550100",
         ])
 
         let c = try makeClient()
         let listed = try await c.pricing.v1.voice.countries.list()
         let fetched = try await c.pricing.v1.voice.countries.fetch("US")
-        let num = try await c.pricing.v1.voice.numbers.fetch("+18005551234")
+        let num = try await c.pricing.v1.voice.numbers.fetch("+14155550100")
 
         XCTAssertEqual(listed.countries?.first?.isoCountry, "US")
         XCTAssertEqual(fetched.outboundPrefixPrices?.first?.prefixes, ["1"])
@@ -260,13 +260,13 @@ final class V092Tests: XCTestCase {
             XCTAssertEqual(r.url.host, "voiceml.voicetel.com")
         }
         // The E.164 number path segment is URL-encoded (`+` → `%2B`).
-        XCTAssertTrue(reqs[2].url.absoluteString.contains("/v1/Voice/Numbers/%2B18005551234"))
+        XCTAssertTrue(reqs[2].url.absoluteString.contains("/v1/Voice/Numbers/%2B14155550100"))
         XCTAssertFalse(reqs[0].url.absoluteString.contains(".json"))
     }
 
     func testPricingV2VoiceNumberWithOrigination() async throws {
         enqueueJSON([
-            "destination_number": "+18005551234",
+            "destination_number": "+14155550100",
             "origination_number": "+15551112222",
             "country": "United States",
             "iso_country": "US",
@@ -283,18 +283,18 @@ final class V092Tests: XCTestCase {
                 "number_type": "local",
             ],
             "price_unit": "USD",
-            "url": "\(Self.base)/v2/Voice/Numbers/+18005551234",
+            "url": "\(Self.base)/v2/Voice/Numbers/+14155550100",
         ])
         let c = try makeClient()
         let got = try await c.pricing.v2.voice.numbers.fetch(
-            "+18005551234",
+            "+14155550100",
             originationNumber: "+15551112222"
         )
         XCTAssertEqual(got.originationNumber, "+15551112222")
 
         let req = MockResponses.shared.captured[0]
         XCTAssertEqual(req.url.host, "voiceml.voicetel.com")
-        XCTAssertTrue(req.url.absoluteString.contains("/v2/Voice/Numbers/%2B18005551234"))
+        XCTAssertTrue(req.url.absoluteString.contains("/v2/Voice/Numbers/%2B14155550100"))
         XCTAssertTrue(req.url.absoluteString.contains("OriginationNumber=%2B15551112222"))
     }
 

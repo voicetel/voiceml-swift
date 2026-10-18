@@ -207,11 +207,11 @@ final class VoiceMLSmokeTests: XCTestCase {
         let c = try makeClient()
 
         let call = try await c.calls.create(.init(
-            to: "+18005551234",
-            from: "+18005550000",
+            to: "+14155550100",
+            from: "+14155550101",
             url: "https://example.com/twiml"
         ))
-        XCTAssertTrue(call.sid.hasPrefix("CA"))
+        XCTAssertTrue(call.sid?.hasPrefix("CA") == true)
 
         let captured = MockResponses.shared.captured
         XCTAssertEqual(captured.count, 1)
@@ -224,8 +224,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(r.headers["Content-Type"], "application/x-www-form-urlencoded")
 
         let form = parseForm(r.body)
-        XCTAssertEqual(form["To"]?.first, "+18005551234")
-        XCTAssertEqual(form["From"]?.first, "+18005550000")
+        XCTAssertEqual(form["To"]?.first, "+14155550100")
+        XCTAssertEqual(form["From"]?.first, "+14155550101")
         XCTAssertEqual(form["Url"]?.first, "https://example.com/twiml")
     }
 
@@ -234,7 +234,6 @@ final class VoiceMLSmokeTests: XCTestCase {
             "calls": [callPayload()],
             "page": 0,
             "page_size": 50,
-            "total": 1,
             "next_page_uri": NSNull(),
             "uri": "/Calls",
         ])
@@ -242,8 +241,8 @@ final class VoiceMLSmokeTests: XCTestCase {
 
         let result = try await c.calls.list(.init(
             status: .completed,
-            startTimeGte: "2026-01-01",
-            startTimeLte: "2026-12-31",
+            startTime: "2026-01-01",
+            startTimeGt: "2025-12-31",
             pageSize: 10
         ))
         XCTAssertEqual(result.calls.count, 1)
@@ -252,8 +251,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         // The URL string should contain literal-encoded StartTime>= and StartTime<=.
         // Compare lowercased so we tolerate either uppercase or lowercase percent-encoding.
         XCTAssertTrue(url.contains("status=completed"))
-        XCTAssertTrue(url.contains("starttime%3e%3d=2026-01-01"))
-        XCTAssertTrue(url.contains("starttime%3c%3d=2026-12-31"))
+        XCTAssertTrue(url.contains("starttime=2026-01-01"))
+        XCTAssertTrue(url.contains("starttime%3e=2025-12-31"))
         XCTAssertTrue(url.contains("pagesize=10"))
         // `.json` suffix sits between path and query string.
         XCTAssertTrue(url.contains("/calls.json?"))
@@ -342,7 +341,7 @@ final class VoiceMLSmokeTests: XCTestCase {
             XCTFail("expected throw")
         } catch let err as AuthenticationError {
             XCTAssertEqual(err.statusCode, 401)
-            XCTAssertEqual(err.code, "20003")
+            XCTAssertEqual(err.code, 20003)
         } catch {
             XCTFail("wrong error type: \(error)")
         }
@@ -403,7 +402,7 @@ final class VoiceMLSmokeTests: XCTestCase {
             XCTFail("expected throw")
         } catch let err as ApiError {
             XCTAssertEqual(err.statusCode, 409)
-            XCTAssertEqual(err.code, "20409")
+            XCTAssertEqual(err.code, 20409)
             XCTAssertTrue(err is ConflictError)
         } catch {
             XCTFail("wrong error type: \(error)")
@@ -445,8 +444,8 @@ final class VoiceMLSmokeTests: XCTestCase {
             session: session
         )
         _ = try await c.calls.create(.init(
-            to: "+18005551234",
-            from: "+18005550000",
+            to: "+14155550100",
+            from: "+14155550101",
             url: "https://example.com/twiml"
         ))
 
@@ -549,7 +548,7 @@ final class VoiceMLSmokeTests: XCTestCase {
 
     private func ipnPayload(
         sid: String = "PN" + String(repeating: "0", count: 32),
-        phoneNumber: String = "+18005551234"
+        phoneNumber: String = "+14155550100"
     ) -> [String: Any] {
         [
             "sid": sid,
@@ -599,16 +598,15 @@ final class VoiceMLSmokeTests: XCTestCase {
             "incoming_phone_numbers": [ipnPayload()],
             "page": 0,
             "page_size": 50,
-            "total": 1,
             "uri": "/IncomingPhoneNumbers.json",
         ])
         let c = try makeClient()
 
         let result = try await c.incomingPhoneNumbers.list(.init(
-            page: 0, pageSize: 50, phoneNumber: "+18005551234"
+            page: 0, pageSize: 50, phoneNumber: "+14155550100"
         ))
         XCTAssertEqual(result.incomingPhoneNumbers.count, 1)
-        XCTAssertEqual(result.incomingPhoneNumbers[0].phoneNumber, "+18005551234")
+        XCTAssertEqual(result.incomingPhoneNumbers[0].phoneNumber, "+14155550100")
         XCTAssertEqual(result.incomingPhoneNumbers[0].capabilities?.voice, true)
         XCTAssertEqual(result.incomingPhoneNumbers[0].capabilities?.sms, false)
 
@@ -618,7 +616,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertTrue(url.contains("/IncomingPhoneNumbers.json?"))
         XCTAssertTrue(url.contains("Page=0"))
         XCTAssertTrue(url.contains("PageSize=50"))
-        XCTAssertTrue(url.contains("PhoneNumber=%2B18005551234"))
+        XCTAssertTrue(url.contains("PhoneNumber=%2B14155550100"))
     }
 
     func testIncomingPhoneNumbersCreate() async throws {
@@ -626,17 +624,17 @@ final class VoiceMLSmokeTests: XCTestCase {
         let c = try makeClient()
 
         let result = try await c.incomingPhoneNumbers.create(.init(
-            phoneNumber: "+18005551234",
+            phoneNumber: "+14155550100",
             voiceUrl: "https://example.com/twiml",
             voiceMethod: .post
         ))
-        XCTAssertTrue(result.sid.hasPrefix("PN"))
+        XCTAssertTrue(result.sid?.hasPrefix("PN") == true)
 
         let r = MockResponses.shared.captured[0]
         XCTAssertEqual(r.method, "POST")
         XCTAssertEqual(r.url.absoluteString, "https://voiceml.voicetel.com/2010-04-01/Accounts/\(Self.accountSid)/IncomingPhoneNumbers.json")
         let form = parseForm(r.body)
-        XCTAssertEqual(form["PhoneNumber"]?.first, "+18005551234")
+        XCTAssertEqual(form["PhoneNumber"]?.first, "+14155550100")
         XCTAssertEqual(form["VoiceUrl"]?.first, "https://example.com/twiml")
         XCTAssertEqual(form["VoiceMethod"]?.first, "POST")
     }
@@ -696,11 +694,11 @@ final class VoiceMLSmokeTests: XCTestCase {
         let c = try makeClient(maxRetries: 0)
 
         do {
-            _ = try await c.incomingPhoneNumbers.create(.init(phoneNumber: "+18005551234"))
+            _ = try await c.incomingPhoneNumbers.create(.init(phoneNumber: "+14155550100"))
             XCTFail("expected throw")
         } catch let err as ConflictError {
             XCTAssertEqual(err.statusCode, 409)
-            XCTAssertEqual(err.code, "21452")
+            XCTAssertEqual(err.code, 21452)
             XCTAssertEqual(err.moreInfo, "https://voicetel.com/docs/api/v0.5/errors/21452")
         } catch {
             XCTFail("wrong error type: \(error)")
@@ -780,7 +778,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let p = try decoder.decode(Participant.self, from: json)
-        XCTAssertTrue(p.coaching)
+        XCTAssertEqual(p.coaching, true)
         XCTAssertEqual(p.callSidToCoach, "CA2")
         XCTAssertEqual(p.queueTime, "8")
         XCTAssertEqual(p.status, .complete)
@@ -848,14 +846,14 @@ final class VoiceMLSmokeTests: XCTestCase {
 
         _ = try await c.conferences.createParticipant(
             conferenceSid: confSid,
-            body: .init(from: "+18005550000", to: "+18005551234")
+            body: .init(from: "+14155550101", to: "+14155550100")
         )
 
         let r = MockResponses.shared.captured[0]
         XCTAssertEqual(r.method, "POST")
         let form = parseForm(r.body)
-        XCTAssertEqual(form["From"]?.first, "+18005550000")
-        XCTAssertEqual(form["To"]?.first, "+18005551234")
+        XCTAssertEqual(form["From"]?.first, "+14155550101")
+        XCTAssertEqual(form["To"]?.first, "+14155550100")
     }
 
     // MARK: - Pagination (iterate)
@@ -911,8 +909,7 @@ final class VoiceMLSmokeTests: XCTestCase {
             "calls": [callPayload(sid: sid1), callPayload(sid: sid2)],
             "page": 0,
             "page_size": 2,
-            "total": 3,
-            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Calls.json?Page=1&PageSize=2",
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Calls.json?Page=1&PageSize=2&PageToken=PTcalls1",
             "uri": "/Calls.json?Page=0&PageSize=2",
         ])
         // Page 1: one call, nextPageUri nil.
@@ -920,7 +917,6 @@ final class VoiceMLSmokeTests: XCTestCase {
             "calls": [callPayload(sid: sid3)],
             "page": 1,
             "page_size": 2,
-            "total": 3,
             "next_page_uri": NSNull(),
             "uri": "/Calls.json?Page=1&PageSize=2",
         ])
@@ -937,6 +933,11 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(collected[2].sid, sid3)
         // Two HTTP requests expected (page 0, page 1).
         XCTAssertEqual(MockResponses.shared.captured.count, 2)
+        // The second request must carry the PageToken taken from page 0's
+        // next_page_uri — never a synthesised bare Page increment.
+        let secondURL = MockResponses.shared.captured[1].url.absoluteString
+        XCTAssertTrue(secondURL.contains("PageToken=PTcalls1"), secondURL)
+        XCTAssertTrue(secondURL.contains("Page=1"), secondURL)
     }
 
     // -- conferences.iterate() — two pages (2 + 1 = 3 items)
@@ -950,15 +951,13 @@ final class VoiceMLSmokeTests: XCTestCase {
             "conferences": [conferencePayload(sid: sid1), conferencePayload(sid: sid2)],
             "page": 0,
             "page_size": 2,
-            "total": 3,
-            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Conferences.json?Page=1&PageSize=2",
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Conferences.json?Page=1&PageSize=2&PageToken=PTconf1",
             "uri": "/Conferences.json?Page=0&PageSize=2",
         ])
         enqueueJSON([
             "conferences": [conferencePayload(sid: sid3)],
             "page": 1,
             "page_size": 2,
-            "total": 3,
             "next_page_uri": NSNull(),
             "uri": "/Conferences.json?Page=1&PageSize=2",
         ])
@@ -974,6 +973,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(collected[1].sid, sid2)
         XCTAssertEqual(collected[2].sid, sid3)
         XCTAssertEqual(MockResponses.shared.captured.count, 2)
+        let secondURL = MockResponses.shared.captured[1].url.absoluteString
+        XCTAssertTrue(secondURL.contains("PageToken=PT"), secondURL)
     }
 
     // -- recordings.iterate() — two pages (2 + 1 = 3 items)
@@ -987,15 +988,13 @@ final class VoiceMLSmokeTests: XCTestCase {
             "recordings": [recordingPayload(sid: sid1), recordingPayload(sid: sid2)],
             "page": 0,
             "page_size": 2,
-            "total": 3,
-            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Recordings.json?Page=1&PageSize=2",
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Recordings.json?Page=1&PageSize=2&PageToken=PTrec1",
             "uri": "/Recordings.json?Page=0&PageSize=2",
         ])
         enqueueJSON([
             "recordings": [recordingPayload(sid: sid3)],
             "page": 1,
             "page_size": 2,
-            "total": 3,
             "next_page_uri": NSNull(),
             "uri": "/Recordings.json?Page=1&PageSize=2",
         ])
@@ -1011,6 +1010,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(collected[1].sid, sid2)
         XCTAssertEqual(collected[2].sid, sid3)
         XCTAssertEqual(MockResponses.shared.captured.count, 2)
+        let secondURL = MockResponses.shared.captured[1].url.absoluteString
+        XCTAssertTrue(secondURL.contains("PageToken=PT"), secondURL)
     }
 
     // -- queues.iterate() — two pages (2 + 1 = 3 items)
@@ -1024,15 +1025,13 @@ final class VoiceMLSmokeTests: XCTestCase {
             "queues": [queuePayload(sid: sid1), queuePayload(sid: sid2)],
             "page": 0,
             "page_size": 2,
-            "total": 3,
-            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Queues.json?Page=1&PageSize=2",
+            "next_page_uri": "/2010-04-01/Accounts/\(Self.accountSid)/Queues.json?Page=1&PageSize=2&PageToken=PTqueue1",
             "uri": "/Queues.json?Page=0&PageSize=2",
         ])
         enqueueJSON([
             "queues": [queuePayload(sid: sid3)],
             "page": 1,
             "page_size": 2,
-            "total": 3,
             "next_page_uri": NSNull(),
             "uri": "/Queues.json?Page=1&PageSize=2",
         ])
@@ -1048,6 +1047,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(collected[1].sid, sid2)
         XCTAssertEqual(collected[2].sid, sid3)
         XCTAssertEqual(MockResponses.shared.captured.count, 2)
+        let secondURL = MockResponses.shared.captured[1].url.absoluteString
+        XCTAssertTrue(secondURL.contains("PageToken=PT"), secondURL)
     }
 
     // -- single-page edge case (calls — serves as representative for all resources)
@@ -1059,7 +1060,6 @@ final class VoiceMLSmokeTests: XCTestCase {
             "calls": [callPayload(sid: sid1)],
             "page": 0,
             "page_size": 50,
-            "total": 1,
             "next_page_uri": NSNull(),
             "uri": "/Calls.json?Page=0&PageSize=50",
         ])
@@ -1082,7 +1082,6 @@ final class VoiceMLSmokeTests: XCTestCase {
             "notifications": [] as [Any],
             "page": 0,
             "page_size": 50,
-            "total": 0,
         ])
         let c = try makeClient()
 
@@ -1113,8 +1112,8 @@ final class VoiceMLSmokeTests: XCTestCase {
             "sid": sid,
             "account_sid": Self.accountSid,
             "api_version": "2010-04-01",
-            "to": "+18005551234",
-            "from": "+18005550000",
+            "to": "+14155550100",
+            "from": "+14155550101",
             "body": "hello",
             "status": status,
             "num_segments": "1",
@@ -1137,12 +1136,12 @@ final class VoiceMLSmokeTests: XCTestCase {
         let c = try makeClient()
 
         let msg = try await c.messages.create(.init(
-            to: "+18005551234",
+            to: "+14155550100",
             body: "hello",
-            from: "+18005550000",
+            from: "+14155550101",
             statusCallback: "https://example.com/cb"
         ))
-        XCTAssertTrue(msg.sid.hasPrefix("SM"))
+        XCTAssertTrue(msg.sid?.hasPrefix("SM") == true)
         XCTAssertEqual(msg.numSegments, "1")
         XCTAssertEqual(msg.numMedia, "0")
         XCTAssertEqual(msg.status, "sent")
@@ -1156,9 +1155,9 @@ final class VoiceMLSmokeTests: XCTestCase {
         )
         XCTAssertEqual(r.headers["Content-Type"], "application/x-www-form-urlencoded")
         let form = parseForm(r.body)
-        XCTAssertEqual(form["To"]?.first, "+18005551234")
+        XCTAssertEqual(form["To"]?.first, "+14155550100")
         XCTAssertEqual(form["Body"]?.first, "hello")
-        XCTAssertEqual(form["From"]?.first, "+18005550000")
+        XCTAssertEqual(form["From"]?.first, "+14155550101")
         XCTAssertEqual(form["StatusCallback"]?.first, "https://example.com/cb")
         // MessagingServiceSid omitted (nil) — must not appear on the wire.
         XCTAssertNil(form["MessagingServiceSid"])
@@ -1191,14 +1190,13 @@ final class VoiceMLSmokeTests: XCTestCase {
             "messages": [messagePayload()],
             "page": 0,
             "page_size": 50,
-            "total": 1,
             "next_page_uri": NSNull(),
             "uri": "/Messages",
         ])
         let c = try makeClient()
 
         let result = try await c.messages.list(.init(
-            to: "+18005551234",
+            to: "+14155550100",
             dateSent: "2026-05-01",
             dateSentLt: "2026-05-15",
             dateSentGt: "2026-04-30",
@@ -1207,7 +1205,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(result.messages.count, 1)
 
         let url = MockResponses.shared.captured[0].url.absoluteString
-        XCTAssertTrue(url.contains("To=%2B18005551234"))
+        XCTAssertTrue(url.contains("To=%2B14155550100"))
         XCTAssertTrue(url.contains("DateSent=2026-05-01"))
         XCTAssertTrue(url.contains("DateSent%3C=2026-05-15"))
         XCTAssertTrue(url.contains("DateSent%3E=2026-04-30"))

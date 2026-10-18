@@ -1,7 +1,6 @@
 import Foundation
 
-/// `/Messages` REST resource — VoiceTel's Twilio-compatible SMS surface, backed by
-/// the SDK 2.2 gateway. Outbound-only today (no MMS, no inbound webhook delivery).
+/// `/Messages` REST resource — outbound SMS and MMS.
 public final class MessagesResource: Sendable {
     private let transport: Transport
 
@@ -9,13 +8,19 @@ public final class MessagesResource: Sendable {
         self.transport = transport
     }
 
-    private func path(_ parts: String...) -> String {
-        "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.filter { !$0.isEmpty }.joined(separator: "/")
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(parts)
     }
 
-    /// Dispatch an outbound SMS.
+    /// Dispatch an outbound SMS or MMS. The request must carry `body` and/or at least
+    /// one `mediaUrl` entry — supplying neither throws ``ConfigurationError`` before any
+    /// request is made.
     public func create(_ body: CreateMessageRequest) async throws -> Message {
-        try await transport.request(VoiceMLRequest(
+        if (body.body == nil || body.body?.isEmpty == true)
+            && (body.mediaUrl == nil || body.mediaUrl?.isEmpty == true) {
+            throw ConfigurationError("messages.create requires body or at least one mediaUrl")
+        }
+        return try await transport.request(VoiceMLRequest(
             method: .post,
             path: path("Messages"),
             form: body.formFields()
@@ -39,11 +44,43 @@ public final class MessagesResource: Sendable {
         ))
     }
 
+    /// Fetch the page after `page`, following its `next_page_uri` verbatim.
+    public func nextPage(of page: MessageList) async throws -> MessageList? {
+        guard let url = transport.resolvePageURI(page.nextPageUri) else { return nil }
+        return try await transport.requestPage(url)
+    }
+
+    /// Walk every page of `/Messages` matching the supplied filters and yield each
+    /// ``Message``. Lazily follows each page's `next_page_uri`.
+    public func iterate(_ params: ListMessagesParams = .init()) -> PagerSequence<Message> {
+        PagerSequence(
+            firstPage: { [self] in
+                let page = try await list(params)
+                return PageResult(items: page.messages, nextURL: transport.resolvePageURI(page.nextPageUri))
+            },
+            followPage: { [self] url in
+                let page: MessageList = try await transport.requestPage(url)
+                return PageResult(items: page.messages, nextURL: transport.resolvePageURI(page.nextPageUri))
+            }
+        )
+    }
+
     /// Mutate an existing Message — redact `body` or attempt cancel.
     public func update(sid: String, _ body: UpdateMessageRequest) async throws -> Message {
         try await transport.request(VoiceMLRequest(
             method: .post,
             path: path("Messages", sid),
+            form: body.formFields()
+        ))
+    }
+
+    /// Submit delivery feedback for a Message. The server echoes the Feedback
+    /// resource back; any outcome other than `"confirmed"` records as
+    /// `"unconfirmed"`.
+    public func createFeedback(sid: String, _ body: CreateMessageFeedbackRequest) async throws -> MessageFeedback {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("Messages", sid, "Feedback"),
             form: body.formFields()
         ))
     }
@@ -56,26 +93,51 @@ public final class MessagesResource: Sendable {
         ))
     }
 
-    /// Walk every page of `/Messages` matching the supplied filters and yield each ``Message``.
-    public func iterate(_ params: ListMessagesParams = .init()) -> AsyncThrowingStream<Message, Error> {
-        var current = params
-        if current.page == nil { current.page = 0 }
-        return AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    while true {
-                        let chunk = try await self.list(current)
-                        for msg in chunk.messages { continuation.yield(msg) }
-                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.messages.isEmpty {
-                            continuation.finish()
-                            return
-                        }
-                        current.page = (current.page ?? 0) + 1
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
+    /// Media scope for one message: `client.messages.media(messageSid:)`.
+    public func media(messageSid: String) -> MessageMediaResource {
+        MessageMediaResource(transport: transport, messageSid: messageSid)
+    }
+}
+
+/// `/Messages/{MessageSid}/Media/…` — MMS attachments on a message.
+public final class MessageMediaResource: Sendable {
+    private let transport: Transport
+    private let messageSid: String
+
+    init(transport: Transport, messageSid: String) {
+        self.transport = transport
+        self.messageSid = messageSid
+    }
+
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(["Messages", messageSid, "Media"] + parts)
+    }
+
+    public func list(_ params: ListMediaParams = .init()) async throws -> MediaList {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path(),
+            query: params.queryItems()
+        ))
+    }
+
+    /// Fetch the page after `page`, following its `next_page_uri` verbatim.
+    public func nextPage(of page: MediaList) async throws -> MediaList? {
+        guard let url = transport.resolvePageURI(page.nextPageUri) else { return nil }
+        return try await transport.requestPage(url)
+    }
+
+    public func fetch(sid: String) async throws -> Media {
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: path(sid)
+        ))
+    }
+
+    public func delete(sid: String) async throws {
+        try await transport.requestVoid(VoiceMLRequest(
+            method: .delete,
+            path: path(sid)
+        ))
     }
 }

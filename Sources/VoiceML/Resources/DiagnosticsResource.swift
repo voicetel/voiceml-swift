@@ -3,8 +3,10 @@ import Foundation
 import FoundationNetworking
 #endif
 
-/// Diagnostic surfaces — `/health` and the OpenAPI doc endpoints. These sit at server root
-/// (not under `/2010-04-01/Accounts/{AccountSid}/`) and are intentionally unauthenticated.
+/// Diagnostic surfaces — `/health` and the OpenAPI doc endpoints. These sit at server
+/// root (not under `/2010-04-01/Accounts/{AccountSid}/`) and are unauthenticated, so
+/// they also work through the credential-less standalone helpers below. All requests
+/// go through the configured session, timeout and retry policy.
 public final class DiagnosticsResource: Sendable {
     private let transport: Transport
 
@@ -14,50 +16,78 @@ public final class DiagnosticsResource: Sendable {
 
     /// Deep liveness probe. 200 = hard checks pass; 503 raises a ``ServerError``.
     public func health() async throws -> HealthStatus {
-        let url = transport.baseURL.appendingPathComponent("health")
-        return try await fetchUnauth(url: url)
+        try await transport.request(VoiceMLRequest(
+            method: .get,
+            path: "/health",
+            authenticated: false
+        ))
     }
 
-    /// Fetch the OpenAPI spec as raw bytes; decode as you see fit.
+    /// Fetch the OpenAPI spec (JSON) as raw bytes; decode as you see fit.
     public func openapiJson() async throws -> Data {
-        let url = transport.baseURL.appendingPathComponent("openapi.json")
-        var req = URLRequest(url: url)
-        req.setValue("application/json", forHTTPHeaderField: "Accept")
-        let (data, response) = try await URLSession.shared.dataCompat(for: req)
-        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-            throw ApiError(message: "/openapi.json returned \(http.statusCode)", statusCode: http.statusCode)
+        try await fetchDoc("/openapi.json")
+    }
+
+    /// Fetch the OpenAPI spec (YAML) as raw bytes.
+    public func openapiYaml() async throws -> Data {
+        try await fetchDoc("/openapi.yaml")
+    }
+
+    /// Fetch the OpenAPI spec (`.yml` alias) as raw bytes.
+    public func openapiYml() async throws -> Data {
+        try await fetchDoc("/openapi.yml")
+    }
+
+    private func fetchDoc(_ rawPath: String) async throws -> Data {
+        let (data, status, _) = try await transport.sendUnauthDoc(rawPath)
+        if !(200..<300).contains(status) {
+            throw errorFromResponse(
+                statusCode: status,
+                code: nil,
+                body: data,
+                message: "\(rawPath) returned \(status)"
+            )
         }
         return data
     }
 
-    private func fetchUnauth<T: Decodable>(url: URL) async throws -> T {
-        var req = URLRequest(url: url)
-        req.setValue("application/json", forHTTPHeaderField: "Accept")
-        let (data, response) = try await URLSession.shared.dataCompat(for: req)
-        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-            throw ApiError(message: "\(url.path) returned \(http.statusCode)", statusCode: http.statusCode, body: data)
-        }
-        return try Transport.makeDecoder().decode(T.self, from: data)
-    }
-}
+    // MARK: - Standalone (credential-less) helpers
 
-private extension URLSession {
-    /// Async-compat shim that works on both Apple and Linux Foundation.
-    func dataCompat(for request: URLRequest) async throws -> (Data, URLResponse) {
-        #if canImport(FoundationNetworking)
-        return try await withCheckedThrowingContinuation { cont in
-            let task = self.dataTask(with: request) { data, response, error in
-                if let error = error { cont.resume(throwing: error); return }
-                guard let data = data, let response = response else {
-                    cont.resume(throwing: ApiError(message: "empty response", statusCode: 0))
-                    return
-                }
-                cont.resume(returning: (data, response))
-            }
-            task.resume()
-        }
-        #else
-        return try await data(for: request)
-        #endif
+    /// Call `GET /health` without constructing a client — diagnostics are
+    /// unauthenticated, so no credentials are needed or sent. Uses the supplied (or a
+    /// default) `URLSession` and timeout.
+    public static func health(
+        baseURL: URL = URL(string: "https://voiceml.voicetel.com")!,
+        session: URLSession? = nil,
+        timeout: TimeInterval = 30
+    ) async throws -> HealthStatus {
+        let transport = try Transport(
+            diagnosticsBaseURL: baseURL,
+            timeout: timeout,
+            resourceTimeout: timeout,
+            maxRetries: 2,
+            userAgent: "voiceml-swift/\(voiceMLVersion)",
+            session: session
+        )
+        let resource = DiagnosticsResource(transport: transport)
+        return try await resource.health()
+    }
+
+    /// Call `GET /openapi.json` without constructing a client.
+    public static func openapiJson(
+        baseURL: URL = URL(string: "https://voiceml.voicetel.com")!,
+        session: URLSession? = nil,
+        timeout: TimeInterval = 30
+    ) async throws -> Data {
+        let transport = try Transport(
+            diagnosticsBaseURL: baseURL,
+            timeout: timeout,
+            resourceTimeout: timeout,
+            maxRetries: 2,
+            userAgent: "voiceml-swift/\(voiceMLVersion)",
+            session: session
+        )
+        let resource = DiagnosticsResource(transport: transport)
+        return try await resource.openapiJson()
     }
 }

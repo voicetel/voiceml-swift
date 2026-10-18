@@ -29,7 +29,7 @@ The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/a
 ## ✨ Features
 
 ### 🛡️ Strongly Typed End-to-End
-- **Native Swift `Codable` structs** for every one of the 81 API operations — request bodies encoded to `application/x-www-form-urlencoded`, responses decoded via `Foundation.JSONDecoder`, no reflection or codegen.
+- **Native Swift `Codable` structs** for every one of the 333 API operations — request bodies encoded to `application/x-www-form-urlencoded`, responses decoded via `Foundation.JSONDecoder`, no reflection or codegen.
 - **Autocomplete everywhere.** Your IDE knows the shape of every field — `Call.sid`, `Recording.duration`, `Queue.currentSize` are all typed.
 - **Twilio-compatible wire shapes** — `AccountSid`, `From`, `To`, status callbacks, pagination envelopes — match what Twilio's Programmable Voice API documents, with idiomatic Swift names (`accountSid`, `from`, `to`) on the surface.
 
@@ -42,7 +42,7 @@ The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/a
 - Built on `URLSession` — no third-party dependencies, works on Linux via `FoundationNetworking`.
 - **Automatic retry** with exponential backoff on 429 / 5xx — honors `Retry-After` headers.
 - **Configurable timeouts** and `maxRetries` per client.
-- **HTTP Basic auth** with `AccountSid:apiKey` — exactly what the Twilio API consumes, so existing credentials work unchanged.
+- **HTTP Basic auth** with `AccountSid:apiKey` — the same HTTP Basic positions the Twilio SDKs use. VoiceML issues its own credentials; Twilio-issued credentials do not work here.
 - **Structured exception hierarchy** — `RateLimitError`, `AuthenticationError`, `NotFoundError`, etc. all subclasses of `ApiError` (itself a `VoiceMLError`) you can catch broadly or narrowly with Swift's typed `catch`.
 
 ### 📞 Complete API Coverage
@@ -51,9 +51,11 @@ The official Swift client for the [VoiceML REST API](https://voicetel.com/docs/a
 - **Queues** — create, list, update, delete, peek, dequeue (front or specific member).
 - **Applications** — CRUD on stored TwiML + callback bundles.
 - **Recordings** — account-wide list, metadata fetch, audio fetch (follows S3 redirect), delete.
-- **Messages** — create, fetch, list (To/From/DateSent filters + pagination), update (Body redaction; Status=canceled), delete.
+- **Messages** — create, fetch, list (To/From/DateSent filters + pagination), update (Body redaction; Status=canceled), delete, delivery feedback (`createFeedback`).
 - **IncomingPhoneNumbers** — list, fetch, update.
 - **Notifications** — fetch, list.
+- **Monitor Alerts** — `client.monitorAlerts` list (severity + date-window filters) and fetch over the `/v1` `meta` envelope.
+- **Accounts** — `client.accounts.fetch` / `update` / `balance` / `rotateKey` (key rotation returns the new key on `AccountWithKey.apiKey`).
 - **SIP** — SIP Trunking: Domains (CRUD), CredentialLists + Credentials (CRUD), IpAccessControlLists + IpAddresses (CRUD), Domain↔ACL/CredentialList mappings (historical, Auth/Calls, Auth/Registrations namespaces).
 - **Routes V2** — Twilio Inbound Processing Region API: `client.routesV2.sipDomains.fetch(domainName:)` / `update(domainName:_:)`.
 - **Diagnostics** — `/health` deep probe, OpenAPI spec.
@@ -99,8 +101,8 @@ let client = try VoiceMLClient(accountSid: "AC…", apiKey: "…")
 
 // Place a call.
 let call = try await client.calls.create(.init(
-    to: "+18005551234",
-    from: "+18005550000",
+    to: "+14155550100",
+    from: "+14155550101",
     url: "https://example.com/twiml",
     machineDetection: .detectMessageEnd
 ))
@@ -114,7 +116,7 @@ for try await queue in client.queues.iterate() {
 
 ## 🔑 Authentication
 
-Every endpoint uses **HTTP Basic** with your `AccountSid` as the username and your per-tenant API key as the password — identical to Twilio's auth shape, so credentials issued for Twilio code work here unchanged.
+Every endpoint uses **HTTP Basic** with your `AccountSid` as the username and your per-tenant API key as the password — the same positions Twilio SDKs use, so existing credential-passing code migrates unchanged. VoiceML issues its own credentials; Twilio-issued credentials do not work here.
 
 ```swift
 let client = try VoiceMLClient(accountSid: "AC…", apiKey: "…")
@@ -134,11 +136,13 @@ The Swift constructor also accepts `authToken:` as an alias for `apiKey:` (Twili
 | `client.queues` | `create`, `list`, `iterate`, `get`, `update`, `delete` | `peekFront`, `dequeueFront`, `getMember`, `dequeueMember` |
 | `client.applications` | CRUD on TwiML + callback bundles | |
 | `client.recordings` | account-wide list, metadata, audio fetch, delete | follows S3 redirect for audio |
-| `client.messages` | `create`, `fetch`, `list`, `iterate`, `update`, `delete` | To/From/DateSent filters; Body redaction; Status=canceled |
+| `client.messages` | `create`, `fetch`, `list`, `iterate`, `update`, `delete`, `createFeedback` | To/From/DateSent filters; Body redaction; Status=canceled; delivery feedback |
 | `client.messagingV1.services` | `create`, `list`, `fetch`, `update`, `delete` | Messaging Service (`MG…`); rides `messaging.voicetel.com` |
 | `client.pricing` | `v1`/`v2` `.voice` / `.messaging` / `.phoneNumbers` / `.trunking` reads | read-only voice, messaging & trunking rate cards |
 | `client.incomingPhoneNumbers` | `list`, `fetch`, `update` | |
 | `client.notifications` | `fetch`, `list` | |
+| `client.monitorAlerts` | `list`, `fetch`, `iterate`, `nextPage` | Monitor v1 Alerts (`/v1` `meta` envelope); severity + date-window filters |
+| `client.accounts` | `fetch`, `update`, `balance`, `rotateKey` | rotateKey returns the new API key on `AccountWithKey.apiKey` |
 | `client.diagnostics` | `/health`, OpenAPI spec | |
 
 ### Product hosts
@@ -153,8 +157,8 @@ import VoiceML
 let client = try VoiceMLClient(accountSid: "AC…", apiKey: "…")
 
 let call = try await client.calls.create(.init(
-    to: "+18005551234",
-    from: "+18005550000",
+    to: "+14155550100",
+    from: "+14155550101",
     url: "https://example.com/twiml"
 ))
 
@@ -213,7 +217,7 @@ actor CallCenter {
     func placeCall(to number: String) async throws -> Call {
         try await voiceml.calls.create(.init(
             to: number,
-            from: "+18005550000",
+            from: "+14155550101",
             url: "https://example.com/twiml"
         ))
     }
@@ -232,7 +236,7 @@ for try await call in client.calls.iterate(params) {
     process(call)
 }
 
-for try await message in client.messages.iterate(.init(fromNumber: "+18005550000", pageSize: 200)) {
+for try await message in client.messages.iterate(.init(fromNumber: "+14155550101", pageSize: 200)) {
     archive(message)
 }
 ```
@@ -254,8 +258,8 @@ request.httpMethod = "POST"
 // After — VoiceML, Twilio-compatible wire format.
 let client = try VoiceMLClient(accountSid: "AC…", apiKey: "…")
 let call = try await client.calls.create(.init(
-    to: "+18005551234",
-    from: "+18005550000",
+    to: "+14155550100",
+    from: "+14155550101",
     url: "https://example.com/twiml"
 ))
 ```

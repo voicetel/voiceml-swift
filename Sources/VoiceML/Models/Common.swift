@@ -1,6 +1,6 @@
 import Foundation
 
-/// HTTP method names accepted in the Twilio surface (status callback method, voice method,
+/// HTTP method names accepted in request bodies (status callback method, voice method,
 /// etc.) — only GET or POST.
 public enum HttpMethod: String, Codable, Sendable {
     case get = "GET"
@@ -14,12 +14,17 @@ public enum TrackSelector: String, Codable, Sendable {
     case bothTracks = "both_tracks"
 }
 
-/// Twilio-compatible pagination envelope. Embedded in every list response that supports paging.
+/// One tripped check from the `/health` deep probe.
+public struct HealthFailure: Codable, Sendable {
+    public var check: String
+    public var detail: String
+}
+
+/// Standard pagination metadata. Lists carry links and range indexes; no total count
+/// or page-count fields are returned.
 public struct PageEnvelope: Codable, Sendable {
     public var page: Int?
     public var pageSize: Int?
-    public var numPages: Int?
-    public var total: Int?
     public var start: Int?
     public var end: Int?
     public var firstPageUri: String?
@@ -28,40 +33,18 @@ public struct PageEnvelope: Codable, Sendable {
     public var uri: String?
 }
 
-/// One tripped check from the `/health` deep probe.
-public struct HealthFailure: Codable, Sendable {
-    public var check: String
-    public var detail: String
-}
-
-/// Scalar JSON value for untyped compat-stub payloads (e.g. notification fetch).
+/// A scalar JSON value for callers reading unstructured data.
 public enum JSONValue: Decodable, Sendable {
-    case string(String)
-    case int(Int)
-    case double(Double)
-    case bool(Bool)
-    case null
+    case string(String), int(Int), double(Double), bool(Bool), null
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if container.decodeNil() {
-            self = .null
-        } else if let value = try? container.decode(Bool.self) {
-            self = .bool(value)
-        } else if let value = try? container.decode(Int.self) {
-            self = .int(value)
-        } else if let value = try? container.decode(Double.self) {
-            self = .double(value)
-        } else if let value = try? container.decode(String.self) {
-            self = .string(value)
-        } else {
-            throw DecodingError.dataCorruptedError(
-                in: container,
-                debugDescription: "unsupported JSON scalar"
-            )
-        }
+        let c = try decoder.singleValueContainer()
+        if c.decodeNil() { self = .null }
+        else if let v = try? c.decode(Bool.self) { self = .bool(v) }
+        else if let v = try? c.decode(Int.self) { self = .int(v) }
+        else if let v = try? c.decode(Double.self) { self = .double(v) }
+        else { self = .string(try c.decode(String.self)) }
     }
 }
 
-/// Untyped JSON object for compat stub endpoints.
 public typealias JSONObject = [String: JSONValue]

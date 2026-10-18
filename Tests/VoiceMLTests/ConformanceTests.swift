@@ -104,8 +104,8 @@ final class ConformanceTests: XCTestCase {
         switch opId {
         case "CreateCall", "FetchCall", "UpdateCall":
             let v = try decoder.decode(Call.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Call.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Call.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Call.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Call.account_sid")
 
         case "ListCall":
             let v = try decoder.decode(CallList.self, from: body)
@@ -113,8 +113,8 @@ final class ConformanceTests: XCTestCase {
 
         case "FetchConference", "UpdateConference":
             let v = try decoder.decode(Conference.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Conference.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Conference.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Conference.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Conference.account_sid")
 
         case "ListConference":
             let v = try decoder.decode(ConferenceList.self, from: body)
@@ -122,8 +122,8 @@ final class ConformanceTests: XCTestCase {
 
         case "CreateParticipant", "FetchParticipant", "UpdateParticipant":
             let v = try decoder.decode(Participant.self, from: body)
-            XCTAssertFalse(v.callSid.isEmpty, "\(label): Participant.call_sid")
-            XCTAssertFalse(v.conferenceSid.isEmpty, "\(label): Participant.conference_sid")
+            XCTAssertFalse(v.callSid?.isEmpty ?? true, "\(label): Participant.call_sid")
+            XCTAssertFalse(v.conferenceSid?.isEmpty ?? true, "\(label): Participant.conference_sid")
 
         case "ListParticipant":
             let v = try decoder.decode(ParticipantList.self, from: body)
@@ -131,8 +131,8 @@ final class ConformanceTests: XCTestCase {
 
         case "CreateQueue", "FetchQueue", "UpdateQueue":
             let v = try decoder.decode(Queue.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Queue.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Queue.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Queue.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Queue.account_sid")
 
         case "ListQueue":
             let v = try decoder.decode(QueueList.self, from: body)
@@ -140,7 +140,7 @@ final class ConformanceTests: XCTestCase {
 
         case "FetchMember", "UpdateMember":
             let v = try decoder.decode(QueueMember.self, from: body)
-            XCTAssertFalse(v.callSid.isEmpty, "\(label): QueueMember.call_sid")
+            XCTAssertFalse(v.callSid?.isEmpty ?? true, "\(label): QueueMember.call_sid")
 
         case "ListMember":
             let v = try decoder.decode(QueueMemberList.self, from: body)
@@ -148,8 +148,8 @@ final class ConformanceTests: XCTestCase {
 
         case "CreateApplication", "FetchApplication", "UpdateApplication":
             let v = try decoder.decode(Application.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Application.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Application.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Application.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Application.account_sid")
 
         case "ListApplication":
             let v = try decoder.decode(ApplicationList.self, from: body)
@@ -158,8 +158,8 @@ final class ConformanceTests: XCTestCase {
         case "CreateCallRecording", "FetchCallRecording", "UpdateCallRecording",
              "FetchRecording", "FetchConferenceRecording", "UpdateConferenceRecording":
             let v = try decoder.decode(Recording.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Recording.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Recording.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Recording.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Recording.account_sid")
 
         case "ListCallRecording", "ListRecording", "ListConferenceRecording":
             let v = try decoder.decode(RecordingList.self, from: body)
@@ -172,8 +172,8 @@ final class ConformanceTests: XCTestCase {
              "FetchIncomingPhoneNumber",
              "UpdateIncomingPhoneNumber":
             let v = try decoder.decode(IncomingPhoneNumber.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): IncomingPhoneNumber.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): IncomingPhoneNumber.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): IncomingPhoneNumber.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): IncomingPhoneNumber.account_sid")
 
         case "ListIncomingPhoneNumber",
              "ListIncomingPhoneNumberLocal",
@@ -190,21 +190,21 @@ final class ConformanceTests: XCTestCase {
         case "CreateStream", "UpdateStream":
             // Disambiguate against Foundation.Stream (an unrelated abstract class).
             let v = try decoder.decode(VoiceML.Stream.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Stream.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Stream.account_sid")
-            XCTAssertFalse(v.callSid.isEmpty, "\(label): Stream.call_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Stream.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Stream.account_sid")
+            XCTAssertFalse(v.callSid?.isEmpty ?? true, "\(label): Stream.call_sid")
 
         case "CreateSiprec", "UpdateSiprec":
             let v = try decoder.decode(SiprecSession.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SiprecSession.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SiprecSession.account_sid")
-            XCTAssertFalse(v.callSid.isEmpty, "\(label): SiprecSession.call_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SiprecSession.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SiprecSession.account_sid")
+            XCTAssertFalse(v.callSid?.isEmpty ?? true, "\(label): SiprecSession.call_sid")
 
         case "CreateRealtimeTranscription", "UpdateRealtimeTranscription":
             let v = try decoder.decode(CallTranscription.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): CallTranscription.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): CallTranscription.account_sid")
-            XCTAssertFalse(v.callSid.isEmpty, "\(label): CallTranscription.call_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): CallTranscription.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): CallTranscription.account_sid")
+            XCTAssertFalse(v.callSid?.isEmpty ?? true, "\(label): CallTranscription.call_sid")
 
         // Account/Balance/Payments/OutgoingCallerIds/Media/RecordingTranscriptions/
         // SIP-Auth mappings: modelled here for fixture-driven conformance —
@@ -213,13 +213,13 @@ final class ConformanceTests: XCTestCase {
         // they are wired up.
         case "FetchAccount", "UpdateAccount":
             let v = try decoder.decode(Account.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Account.sid")
-            XCTAssertFalse(v.ownerAccountSid.isEmpty, "\(label): Account.owner_account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Account.sid")
+            XCTAssertFalse(v.ownerAccountSid?.isEmpty ?? true, "\(label): Account.owner_account_sid")
 
         case "FetchBalance":
             let v = try decoder.decode(Balance.self, from: body)
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Balance.account_sid")
-            XCTAssertFalse(v.currency.isEmpty, "\(label): Balance.currency")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Balance.account_sid")
+            XCTAssertFalse(v.currency?.isEmpty ?? true, "\(label): Balance.currency")
 
         case "CreatePayments", "UpdatePayments":
             let v = try decoder.decode(CallPayment.self, from: body)
@@ -229,8 +229,8 @@ final class ConformanceTests: XCTestCase {
 
         case "FetchOutgoingCallerId", "UpdateOutgoingCallerId":
             let v = try decoder.decode(OutgoingCallerId.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): OutgoingCallerId.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): OutgoingCallerId.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): OutgoingCallerId.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): OutgoingCallerId.account_sid")
 
         case "ListOutgoingCallerId":
             let v = try decoder.decode(OutgoingCallerIdList.self, from: body)
@@ -240,13 +240,13 @@ final class ConformanceTests: XCTestCase {
             // ValidationRequest has no sid (Twilio returns a verification
             // code instead). Assert account_sid + validation_code.
             let v = try decoder.decode(ValidationRequest.self, from: body)
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): ValidationRequest.account_sid")
-            XCTAssertFalse(v.validationCode.isEmpty, "\(label): ValidationRequest.validation_code")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): ValidationRequest.account_sid")
+            XCTAssertFalse(v.validationCode?.isEmpty ?? true, "\(label): ValidationRequest.validation_code")
 
         case "FetchMedia":
             let v = try decoder.decode(Media.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): Media.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): Media.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): Media.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): Media.account_sid")
 
         case "ListMedia":
             let v = try decoder.decode(MediaList.self, from: body)
@@ -254,9 +254,9 @@ final class ConformanceTests: XCTestCase {
 
         case "FetchRecordingTranscription", "FetchTranscription":
             let v = try decoder.decode(RecordingTranscription.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): RecordingTranscription.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): RecordingTranscription.account_sid")
-            XCTAssertFalse(v.recordingSid.isEmpty, "\(label): RecordingTranscription.recording_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): RecordingTranscription.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): RecordingTranscription.account_sid")
+            XCTAssertFalse(v.recordingSid?.isEmpty ?? true, "\(label): RecordingTranscription.recording_sid")
 
         case "ListRecordingTranscription", "ListTranscription":
             let v = try decoder.decode(RecordingTranscriptionList.self, from: body)
@@ -265,8 +265,8 @@ final class ConformanceTests: XCTestCase {
         // SIP — Domains
         case "CreateSipDomain", "FetchSipDomain", "UpdateSipDomain":
             let v = try decoder.decode(SipDomain.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipDomain.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipDomain.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipDomain.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipDomain.account_sid")
 
         case "ListSipDomain":
             let v = try decoder.decode(SipDomainList.self, from: body)
@@ -275,8 +275,8 @@ final class ConformanceTests: XCTestCase {
         // SIP — Credentials
         case "CreateSipCredential", "FetchSipCredential", "UpdateSipCredential":
             let v = try decoder.decode(SipCredential.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipCredential.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipCredential.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipCredential.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipCredential.account_sid")
 
         case "ListSipCredential":
             let v = try decoder.decode(SipCredentialListPage.self, from: body)
@@ -285,8 +285,8 @@ final class ConformanceTests: XCTestCase {
         // SIP — CredentialLists
         case "CreateSipCredentialList", "FetchSipCredentialList", "UpdateSipCredentialList":
             let v = try decoder.decode(SipCredentialList.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipCredentialList.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipCredentialList.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipCredentialList.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipCredentialList.account_sid")
 
         case "ListSipCredentialList":
             let v = try decoder.decode(SipCredentialListList.self, from: body)
@@ -295,8 +295,8 @@ final class ConformanceTests: XCTestCase {
         // SIP — IpAccessControlLists
         case "CreateSipIpAccessControlList", "FetchSipIpAccessControlList", "UpdateSipIpAccessControlList":
             let v = try decoder.decode(SipIpAccessControlList.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipIpAccessControlList.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipIpAccessControlList.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipIpAccessControlList.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipIpAccessControlList.account_sid")
 
         case "ListSipIpAccessControlList":
             let v = try decoder.decode(SipIpAccessControlListList.self, from: body)
@@ -305,8 +305,8 @@ final class ConformanceTests: XCTestCase {
         // SIP — IpAddresses (members of an IpAccessControlList)
         case "CreateSipIpAddress", "FetchSipIpAddress", "UpdateSipIpAddress":
             let v = try decoder.decode(SipIpAddress.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipIpAddress.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipIpAddress.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipIpAddress.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipIpAddress.account_sid")
 
         case "ListSipIpAddress":
             let v = try decoder.decode(SipIpAddressList.self, from: body)
@@ -316,8 +316,8 @@ final class ConformanceTests: XCTestCase {
         case "CreateSipCredentialListMapping", "FetchSipCredentialListMapping",
              "CreateSipIpAccessControlListMapping", "FetchSipIpAccessControlListMapping":
             let v = try decoder.decode(SipDomainMapping.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipDomainMapping.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipDomainMapping.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipDomainMapping.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipDomainMapping.account_sid")
 
         case "ListSipCredentialListMapping":
             let v = try decoder.decode(SipCredentialListMappingList.self, from: body)
@@ -332,8 +332,8 @@ final class ConformanceTests: XCTestCase {
              "CreateSipAuthCallsIpAccessControlListMapping", "FetchSipAuthCallsIpAccessControlListMapping",
              "CreateSipAuthRegistrationsCredentialListMapping", "FetchSipAuthRegistrationsCredentialListMapping":
             let v = try decoder.decode(SipAuthMapping.self, from: body)
-            XCTAssertFalse(v.sid.isEmpty, "\(label): SipAuthMapping.sid")
-            XCTAssertFalse(v.accountSid.isEmpty, "\(label): SipAuthMapping.account_sid")
+            XCTAssertFalse(v.sid?.isEmpty ?? true, "\(label): SipAuthMapping.sid")
+            XCTAssertFalse(v.accountSid?.isEmpty ?? true, "\(label): SipAuthMapping.account_sid")
 
         case "ListSipAuthCallsCredentialListMapping",
              "ListSipAuthCallsIpAccessControlListMapping",

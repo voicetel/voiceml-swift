@@ -1,15 +1,13 @@
 import Foundation
 
-/// Twilio-compatible capability matrix for a DID. VoiceML is voice-only, so the wire payload
-/// always reports `voice=true` and `sms=mms=fax=false`, but the structure is preserved
-/// for Twilio SDK compatibility (e.g. callers writing `number.capabilities.voice`).
+/// Capability matrix for a DID.
 public struct IncomingPhoneNumberCapabilities: Codable, Sendable {
-    public var voice: Bool
-    public var sms: Bool
-    public var mms: Bool
+    public var voice: Bool?
+    public var sms: Bool?
+    public var mms: Bool?
     public var fax: Bool?
 
-    public init(voice: Bool, sms: Bool, mms: Bool, fax: Bool? = nil) {
+    public init(voice: Bool? = nil, sms: Bool? = nil, mms: Bool? = nil, fax: Bool? = nil) {
         self.voice = voice
         self.sms = sms
         self.mms = mms
@@ -22,17 +20,13 @@ public struct IncomingPhoneNumberCapabilities: Codable, Sendable {
 /// `sid` is the canonical `PN`-prefixed opaque identifier (`PN` + 32 hex chars).
 /// `phoneNumber` carries the E.164 form. These are distinct fields — `phoneNumber` is
 /// what end-users see; `sid` is what API calls reference.
-///
-/// Most fields outside the core (sid/accountSid/phoneNumber/voice routing) are present
-/// for Twilio-compat: VoiceML emits documented defaults (empty string, `false`, `null`)
-/// so strict-binding SDKs deserialize without errors.
 public struct IncomingPhoneNumber: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var phoneNumber: String
+    public var sid: String?
+    public var accountSid: String?
+    public var phoneNumber: String?
     public var friendlyName: String?
-    public var apiVersion: String
-    public var uri: String
+    public var apiVersion: String?
+    public var uri: String?
     public var origin: String?
     public var beta: Bool?
     public var capabilities: IncomingPhoneNumberCapabilities?
@@ -59,22 +53,18 @@ public struct IncomingPhoneNumber: Codable, Sendable {
     public var emergencyAddressSid: String?
     public var emergencyAddressStatus: String?
     public var status: String?
-    /// DID classification — e.g. `local`, `toll-free`, `mobile` (spec v0.6.2 / D6).
-    /// Optional for forward/backward compatibility.
+    /// DID classification — e.g. `local`, `toll-free`, `mobile`.
     public var type: String?
-    public var dateCreated: String
-    public var dateUpdated: String
+    public var subresourceUris: [String: String]?
+    public var dateCreated: String?
+    public var dateUpdated: String?
 }
 
-/// `GET /IncomingPhoneNumbers.json` list response — Twilio-compatible pagination envelope
-/// plus the `incomingPhoneNumbers` items array (snake_case `incoming_phone_numbers` on
-/// the wire, converted by `JSONDecoder.keyDecodingStrategy = .convertFromSnakeCase`).
+/// `GET /IncomingPhoneNumbers.json` list response in the standard envelope.
 public struct IncomingPhoneNumberList: Codable, Sendable {
     public var incomingPhoneNumbers: [IncomingPhoneNumber]
     public var page: Int?
     public var pageSize: Int?
-    public var numPages: Int?
-    public var total: Int?
     public var start: Int?
     public var end: Int?
     public var firstPageUri: String?
@@ -88,12 +78,26 @@ public struct ListIncomingPhoneNumbersParams: Sendable {
     public var page: Int?
     public var pageSize: Int?
     public var phoneNumber: String?
+    public var friendlyName: String?
+    public var beta: Bool?
+    public var origin: String?
     public var pageToken: String?
 
-    public init(page: Int? = nil, pageSize: Int? = nil, phoneNumber: String? = nil, pageToken: String? = nil) {
+    public init(
+        page: Int? = nil,
+        pageSize: Int? = nil,
+        phoneNumber: String? = nil,
+        friendlyName: String? = nil,
+        beta: Bool? = nil,
+        origin: String? = nil,
+        pageToken: String? = nil
+    ) {
         self.page = page
         self.pageSize = pageSize
         self.phoneNumber = phoneNumber
+        self.friendlyName = friendlyName
+        self.beta = beta
+        self.origin = origin
         self.pageToken = pageToken
     }
 
@@ -102,12 +106,16 @@ public struct ListIncomingPhoneNumbersParams: Sendable {
             QueryItem("Page", page.map(String.init)),
             QueryItem("PageSize", pageSize.map(String.init)),
             QueryItem("PhoneNumber", phoneNumber),
+            QueryItem("FriendlyName", friendlyName),
+            QueryItem("Beta", beta.map { $0 ? "true" : "false" }),
+            QueryItem("Origin", origin),
             QueryItem("PageToken", pageToken),
         ]
     }
 }
 
-/// Query params for type-specific `/IncomingPhoneNumbers/{Local,Mobile,TollFree}` list endpoints.
+/// Query params for type-specific `/IncomingPhoneNumbers/{Local,Mobile,TollFree}` list
+/// endpoints.
 public struct ListTypedIncomingPhoneNumbersParams: Sendable {
     public var phoneNumber: String?
     public var friendlyName: String?
@@ -149,27 +157,44 @@ public struct ListTypedIncomingPhoneNumbersParams: Sendable {
 }
 
 /// `POST /IncomingPhoneNumbers.json` body. Idempotent on `phoneNumber` for the same
-/// tenant — re-POSTing rebinds the voice routing rather than erroring. Returns 409
-/// when the number is already claimed by a different account.
+/// tenant — re-POSTing rebinds the routing rather than erroring. Returns 409 when the
+/// number is already claimed by a different account. Carries both the voice and the
+/// inbound-SMS webhook configuration.
 public struct CreateIncomingPhoneNumberParams: Sendable {
     public var phoneNumber: String
     public var voiceUrl: String?
     public var voiceMethod: HttpMethod?
     public var voiceFallbackUrl: String?
     public var voiceFallbackMethod: HttpMethod?
+    public var smsUrl: String?
+    public var smsMethod: HttpMethod?
+    public var smsFallbackUrl: String?
+    public var smsFallbackMethod: HttpMethod?
+    /// Bind inbound-SMS routing to an Application instead of per-number URLs.
+    public var smsApplicationSid: String?
 
     public init(
         phoneNumber: String,
         voiceUrl: String? = nil,
         voiceMethod: HttpMethod? = nil,
         voiceFallbackUrl: String? = nil,
-        voiceFallbackMethod: HttpMethod? = nil
+        voiceFallbackMethod: HttpMethod? = nil,
+        smsUrl: String? = nil,
+        smsMethod: HttpMethod? = nil,
+        smsFallbackUrl: String? = nil,
+        smsFallbackMethod: HttpMethod? = nil,
+        smsApplicationSid: String? = nil
     ) {
         self.phoneNumber = phoneNumber
         self.voiceUrl = voiceUrl
         self.voiceMethod = voiceMethod
         self.voiceFallbackUrl = voiceFallbackUrl
         self.voiceFallbackMethod = voiceFallbackMethod
+        self.smsUrl = smsUrl
+        self.smsMethod = smsMethod
+        self.smsFallbackUrl = smsFallbackUrl
+        self.smsFallbackMethod = smsFallbackMethod
+        self.smsApplicationSid = smsApplicationSid
     }
 
     func formFields() -> [FormField] {
@@ -179,6 +204,37 @@ public struct CreateIncomingPhoneNumberParams: Sendable {
             FormField("VoiceMethod", voiceMethod?.rawValue),
             FormField("VoiceFallbackUrl", voiceFallbackUrl),
             FormField("VoiceFallbackMethod", voiceFallbackMethod?.rawValue),
+            FormField("SmsUrl", smsUrl),
+            FormField("SmsMethod", smsMethod?.rawValue),
+            FormField("SmsFallbackUrl", smsFallbackUrl),
+            FormField("SmsFallbackMethod", smsFallbackMethod?.rawValue),
+            FormField("SmsApplicationSid", smsApplicationSid),
+        ]
+    }
+}
+
+/// Body for the typed `POST /IncomingPhoneNumbers/{Local,Mobile,TollFree}.json`
+/// creates — these declare only `PhoneNumber`, `VoiceUrl` and `VoiceMethod`.
+public struct CreateTypedIncomingPhoneNumberParams: Sendable {
+    public var phoneNumber: String
+    public var voiceUrl: String?
+    public var voiceMethod: HttpMethod?
+
+    public init(
+        phoneNumber: String,
+        voiceUrl: String? = nil,
+        voiceMethod: HttpMethod? = nil
+    ) {
+        self.phoneNumber = phoneNumber
+        self.voiceUrl = voiceUrl
+        self.voiceMethod = voiceMethod
+    }
+
+    func formFields() -> [FormField] {
+        [
+            FormField("PhoneNumber", phoneNumber),
+            FormField("VoiceUrl", voiceUrl),
+            FormField("VoiceMethod", voiceMethod?.rawValue),
         ]
     }
 }
@@ -190,17 +246,32 @@ public struct UpdateIncomingPhoneNumberParams: Sendable {
     public var voiceMethod: HttpMethod?
     public var voiceFallbackUrl: String?
     public var voiceFallbackMethod: HttpMethod?
+    public var smsUrl: String?
+    public var smsMethod: HttpMethod?
+    public var smsFallbackUrl: String?
+    public var smsFallbackMethod: HttpMethod?
+    public var smsApplicationSid: String?
 
     public init(
         voiceUrl: String? = nil,
         voiceMethod: HttpMethod? = nil,
         voiceFallbackUrl: String? = nil,
-        voiceFallbackMethod: HttpMethod? = nil
+        voiceFallbackMethod: HttpMethod? = nil,
+        smsUrl: String? = nil,
+        smsMethod: HttpMethod? = nil,
+        smsFallbackUrl: String? = nil,
+        smsFallbackMethod: HttpMethod? = nil,
+        smsApplicationSid: String? = nil
     ) {
         self.voiceUrl = voiceUrl
         self.voiceMethod = voiceMethod
         self.voiceFallbackUrl = voiceFallbackUrl
         self.voiceFallbackMethod = voiceFallbackMethod
+        self.smsUrl = smsUrl
+        self.smsMethod = smsMethod
+        self.smsFallbackUrl = smsFallbackUrl
+        self.smsFallbackMethod = smsFallbackMethod
+        self.smsApplicationSid = smsApplicationSid
     }
 
     func formFields() -> [FormField] {
@@ -209,6 +280,11 @@ public struct UpdateIncomingPhoneNumberParams: Sendable {
             FormField("VoiceMethod", voiceMethod?.rawValue),
             FormField("VoiceFallbackUrl", voiceFallbackUrl),
             FormField("VoiceFallbackMethod", voiceFallbackMethod?.rawValue),
+            FormField("SmsUrl", smsUrl),
+            FormField("SmsMethod", smsMethod?.rawValue),
+            FormField("SmsFallbackUrl", smsFallbackUrl),
+            FormField("SmsFallbackMethod", smsFallbackMethod?.rawValue),
+            FormField("SmsApplicationSid", smsApplicationSid),
         ]
     }
 }

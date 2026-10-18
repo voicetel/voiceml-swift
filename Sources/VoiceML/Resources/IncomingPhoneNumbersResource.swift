@@ -12,8 +12,8 @@ public final class IncomingPhoneNumbersResource: Sendable {
         self.transport = transport
     }
 
-    private func path(_ parts: String...) -> String {
-        "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.joined(separator: "/")
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(parts)
     }
 
     /// `GET /IncomingPhoneNumbers.json` — list assigned DIDs.
@@ -22,7 +22,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
     ) async throws -> IncomingPhoneNumberList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("IncomingPhoneNumbers"),
+            path: try path("IncomingPhoneNumbers"),
             query: params.queryItems()
         ))
     }
@@ -34,7 +34,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
     ) async throws -> IncomingPhoneNumber {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: path("IncomingPhoneNumbers"),
+            path: try path("IncomingPhoneNumbers"),
             form: params.formFields()
         ))
     }
@@ -43,7 +43,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
     public func get(_ sid: String) async throws -> IncomingPhoneNumber {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("IncomingPhoneNumbers", sid)
+            path: try path("IncomingPhoneNumbers", sid)
         ))
     }
 
@@ -55,7 +55,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
     ) async throws -> IncomingPhoneNumber {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: path("IncomingPhoneNumbers", sid),
+            path: try path("IncomingPhoneNumbers", sid),
             form: params.formFields()
         ))
     }
@@ -65,7 +65,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
     public func delete(_ sid: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: path("IncomingPhoneNumbers", sid)
+            path: try path("IncomingPhoneNumbers", sid)
         ))
     }
 
@@ -77,7 +77,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
         try await listTyped("Local", params)
     }
 
-    public func createLocal(_ params: CreateIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
+    public func createLocal(_ params: CreateTypedIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
         try await createTyped("Local", params)
     }
 
@@ -87,7 +87,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
         try await listTyped("Mobile", params)
     }
 
-    public func createMobile(_ params: CreateIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
+    public func createMobile(_ params: CreateTypedIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
         try await createTyped("Mobile", params)
     }
 
@@ -97,7 +97,7 @@ public final class IncomingPhoneNumbersResource: Sendable {
         try await listTyped("TollFree", params)
     }
 
-    public func createTollFree(_ params: CreateIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
+    public func createTollFree(_ params: CreateTypedIncomingPhoneNumberParams) async throws -> IncomingPhoneNumber {
         try await createTyped("TollFree", params)
     }
 
@@ -107,18 +107,18 @@ public final class IncomingPhoneNumbersResource: Sendable {
     ) async throws -> IncomingPhoneNumberList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("IncomingPhoneNumbers", kind),
+            path: try path("IncomingPhoneNumbers", kind),
             query: params.queryItems()
         ))
     }
 
     private func createTyped(
         _ kind: String,
-        _ params: CreateIncomingPhoneNumberParams
+        _ params: CreateTypedIncomingPhoneNumberParams
     ) async throws -> IncomingPhoneNumber {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: path("IncomingPhoneNumbers", kind),
+            path: try path("IncomingPhoneNumbers", kind),
             form: params.formFields()
         ))
     }

@@ -7,14 +7,14 @@ public final class ApplicationsResource: Sendable {
         self.transport = transport
     }
 
-    private func path(_ parts: String...) -> String {
-        "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.joined(separator: "/")
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(parts)
     }
 
     public func create(_ body: CreateApplicationRequest) async throws -> Application {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: path("Applications"),
+            path: try path("Applications"),
             form: body.formFields()
         ))
     }
@@ -22,7 +22,7 @@ public final class ApplicationsResource: Sendable {
     public func list(_ params: ListApplicationsParams = .init()) async throws -> ApplicationList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Applications"),
+            path: try path("Applications"),
             query: params.queryItems()
         ))
     }
@@ -30,7 +30,7 @@ public final class ApplicationsResource: Sendable {
     public func get(_ applicationSid: String) async throws -> Application {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Applications", applicationSid)
+            path: try path("Applications", applicationSid)
         ))
     }
 
@@ -40,7 +40,7 @@ public final class ApplicationsResource: Sendable {
     ) async throws -> Application {
         try await transport.request(VoiceMLRequest(
             method: .post,
-            path: path("Applications", applicationSid),
+            path: try path("Applications", applicationSid),
             form: body.formFields()
         ))
     }
@@ -48,7 +48,7 @@ public final class ApplicationsResource: Sendable {
     public func delete(_ applicationSid: String) async throws {
         try await transport.requestVoid(VoiceMLRequest(
             method: .delete,
-            path: path("Applications", applicationSid)
+            path: try path("Applications", applicationSid)
         ))
     }
 }

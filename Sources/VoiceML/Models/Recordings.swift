@@ -1,20 +1,32 @@
 import Foundation
 
-public enum RecordingStatus: String, Codable, Sendable {
-    case inProgress = "in-progress"
-    case completed, failed, absent, paused, stopped, processing
-    /// Soft-deleted recording (spec v0.6.0+ / API IncludeSoftDeleted=true).
-    case deleted
+/// Recording lifecycle status. Open enum — `failed` is deliberately not a documented
+/// wire value (an outbound-recording failure surfaces as `absent`), but the SDK keeps
+/// tolerating anything the server sends.
+public struct RecordingStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inProgress = RecordingStatus(rawValue: "in-progress")
+    public static let paused = RecordingStatus(rawValue: "paused")
+    public static let stopped = RecordingStatus(rawValue: "stopped")
+    public static let processing = RecordingStatus(rawValue: "processing")
+    public static let completed = RecordingStatus(rawValue: "completed")
+    public static let absent = RecordingStatus(rawValue: "absent")
+    public static let deleted = RecordingStatus(rawValue: "deleted")
+    public static let failed = RecordingStatus(rawValue: "failed")
 }
 
-public enum RecordingSource: String, Codable, Sendable {
-    case outboundAPI = "OutboundAPI"
-    case recordVerb = "RecordVerb"
-    case dialVerb = "DialVerb"
-    case conference = "Conference"
-    case trunking = "Trunking"
-    case startCallRecordingAPI = "StartCallRecordingAPI"
-    case startConferenceRecordingAPI = "StartConferenceRecordingAPI"
+/// What produced a recording. Open enum.
+public struct RecordingSource: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let outboundAPI = RecordingSource(rawValue: "OutboundAPI")
+    public static let recordVerb = RecordingSource(rawValue: "RecordVerb")
+    public static let dialVerb = RecordingSource(rawValue: "DialVerb")
+    public static let conference = RecordingSource(rawValue: "Conference")
+    public static let trunking = RecordingSource(rawValue: "Trunking")
+    public static let startCallRecordingAPI = RecordingSource(rawValue: "StartCallRecordingAPI")
+    public static let startConferenceRecordingAPI = RecordingSource(rawValue: "StartConferenceRecordingAPI")
 }
 
 public enum RecordingUpdateStatus: String, Codable, Sendable {
@@ -22,15 +34,25 @@ public enum RecordingUpdateStatus: String, Codable, Sendable {
     case inProgress = "in-progress"
 }
 
+/// How a paused span is represented once recording resumes (`Status=paused` updates).
+public enum PauseBehavior: String, Codable, Sendable {
+    /// Leave the paused span out of the recording.
+    case skip
+    /// Keep the paused span as silence (the server default).
+    case silence
+}
+
 public struct Recording: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var callSid: String
+    public var sid: String?
+    public var accountSid: String?
+    public var callSid: String?
     public var conferenceSid: String?
-    public var status: RecordingStatus
+    public var status: RecordingStatus?
     public var source: RecordingSource?
     public var channels: Int?
     public var duration: String?
+    /// The recorded track (`both`); present only in the response that starts a recording.
+    public var track: String?
     public var apiVersion: String?
     public var uri: String?
     public var dateCreated: String?
@@ -38,32 +60,30 @@ public struct Recording: Codable, Sendable {
     public var startTime: String?
     public var price: String?
     public var priceUnit: String?
-    /// Pre-signed download URL for the recording audio (spec v0.6.2 / D5).
-    /// Optional: older payloads and not-yet-finalised recordings may omit it.
+    /// Reserved for SSE-KMS metadata when encryption details are exposed.
+    public var encryptionDetails: [String: String]?
+    public var subresourceUris: [String: String]?
+    /// Twilio-compatible pre-signed download URL for the recording audio.
     public var mediaUrl: String?
-    /// Twilio-compatible error code for failed recordings; nil when no error.
+    /// Error code for failed recordings; `null` (or absent) means no error.
     public var errorCode: Int?
 }
 
-/// Recordings list response.
-///
-/// The account-scoped endpoint (`GET /Recordings`) returns the full Twilio-compatible pagination fields
-/// (`recordings/page/pageSize/total`). Per-call (`GET /Calls/{sid}/Recordings`) and
-/// per-conference (`GET /Conferences/{sid}/Recordings`) endpoints currently return only
-/// `recordings`; the pagination fields will be `nil`.
+/// Recordings list response in the standard envelope (`total`/`num_pages` are no
+/// longer emitted).
 public struct RecordingList: Codable, Sendable {
     public var recordings: [Recording]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
-    public var numPages: Int?
+    public var start: Int?
+    public var end: Int?
     public var firstPageUri: String?
     public var nextPageUri: String?
     public var previousPageUri: String?
     public var uri: String?
 }
 
-/// Filter parameters for recording list endpoints.
+/// Filter parameters for the account-scoped recording list endpoint.
 public struct ListRecordingsParams: Sendable {
     public var dateCreated: String?
     public var dateCreatedLt: String?
@@ -162,9 +182,12 @@ public struct ListCallRecordingsParams: Sendable {
     }
 }
 
+/// Body for `POST /Calls/{sid}/Recordings` and `POST /Conferences/{sid}/Recordings`.
 public struct StartRecordingRequest: Sendable {
     public var recordingMaxDuration: Int?
     public var recordingChannels: RecordingChannelsLayout?
+    /// `inbound` / `outbound` records a single track; `both` (default) both.
+    public var recordingTrack: RecordingTrack?
     public var playBeep: Bool?
     public var recordingStatusCallback: String?
     public var recordingStatusCallbackMethod: String?
@@ -173,6 +196,7 @@ public struct StartRecordingRequest: Sendable {
     public init(
         recordingMaxDuration: Int? = nil,
         recordingChannels: RecordingChannelsLayout? = nil,
+        recordingTrack: RecordingTrack? = nil,
         playBeep: Bool? = nil,
         recordingStatusCallback: String? = nil,
         recordingStatusCallbackMethod: String? = nil,
@@ -180,6 +204,7 @@ public struct StartRecordingRequest: Sendable {
     ) {
         self.recordingMaxDuration = recordingMaxDuration
         self.recordingChannels = recordingChannels
+        self.recordingTrack = recordingTrack
         self.playBeep = playBeep
         self.recordingStatusCallback = recordingStatusCallback
         self.recordingStatusCallbackMethod = recordingStatusCallbackMethod
@@ -190,6 +215,7 @@ public struct StartRecordingRequest: Sendable {
         [
             FormField("RecordingMaxDuration", recordingMaxDuration),
             FormField("RecordingChannels", recordingChannels?.rawValue),
+            FormField("RecordingTrack", recordingTrack?.rawValue),
             FormField("PlayBeep", playBeep),
             FormField("RecordingStatusCallback", recordingStatusCallback),
             FormField("RecordingStatusCallbackMethod", recordingStatusCallbackMethod),
@@ -198,19 +224,54 @@ public struct StartRecordingRequest: Sendable {
     }
 }
 
-public struct UpdateRecordingRequest: Sendable {
-    public var status: RecordingUpdateStatus
+/// Body for `POST /Conferences/{sid}/Recordings` — the conference variant declares only
+/// the status-callback fields.
+public struct StartConferenceRecordingRequest: Sendable {
+    public var recordingStatusCallback: String?
+    public var recordingStatusCallbackMethod: String?
+    public var recordingStatusCallbackEvent: String?
 
-    public init(status: RecordingUpdateStatus) {
-        self.status = status
+    public init(
+        recordingStatusCallback: String? = nil,
+        recordingStatusCallbackMethod: String? = nil,
+        recordingStatusCallbackEvent: String? = nil
+    ) {
+        self.recordingStatusCallback = recordingStatusCallback
+        self.recordingStatusCallbackMethod = recordingStatusCallbackMethod
+        self.recordingStatusCallbackEvent = recordingStatusCallbackEvent
     }
 
     func formFields() -> [FormField] {
-        [FormField("Status", status.rawValue)]
+        [
+            FormField("RecordingStatusCallback", recordingStatusCallback),
+            FormField("RecordingStatusCallbackMethod", recordingStatusCallbackMethod),
+            FormField("RecordingStatusCallbackEvent", recordingStatusCallbackEvent),
+        ]
     }
 }
 
-/// Result of `GET /Recordings/{sid}.wav` — the bytes after following any S3 redirect.
+/// Body for `POST …/Recordings/{sid}` — pause/resume/stop a live recording.
+public struct UpdateRecordingRequest: Sendable {
+    public var status: RecordingUpdateStatus
+    /// With `status=.paused`: `skip` leaves the paused span out; `silence` keeps it as
+    /// silence (server default).
+    public var pauseBehavior: PauseBehavior?
+
+    public init(status: RecordingUpdateStatus, pauseBehavior: PauseBehavior? = nil) {
+        self.status = status
+        self.pauseBehavior = pauseBehavior
+    }
+
+    func formFields() -> [FormField] {
+        [
+            FormField("Status", status.rawValue),
+            FormField("PauseBehavior", pauseBehavior?.rawValue),
+        ]
+    }
+}
+
+/// Result of `GET /Recordings/{sid}.wav` — the bytes after following any redirect,
+/// which never carries credentials.
 public struct RecordingAudio: Sendable {
     public var sid: String
     public var body: Data

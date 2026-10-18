@@ -1,18 +1,27 @@
 import Foundation
 
-public enum TranscriptionStatus: String, Codable, Sendable {
-    case inProgress = "in-progress"
-    case stopped
+/// Realtime call-transcription status. Open enum.
+public struct TranscriptionStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inProgress = TranscriptionStatus(rawValue: "in-progress")
+    public static let stopped = TranscriptionStatus(rawValue: "stopped")
 }
 
-public enum TranscriptionEngine: String, Codable, Sendable {
-    case deepgram, google, aws, azure
+/// Speech engine for realtime transcription. Open enum.
+public struct TranscriptionEngine: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let deepgram = TranscriptionEngine(rawValue: "deepgram")
+    public static let google = TranscriptionEngine(rawValue: "google")
+    public static let aws = TranscriptionEngine(rawValue: "aws")
+    public static let azure = TranscriptionEngine(rawValue: "azure")
 }
 
 public struct CallTranscription: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var callSid: String
+    public var sid: String?
+    public var accountSid: String?
+    public var callSid: String?
     public var name: String?
     public var languageCode: String?
     public var transcriptionEngine: TranscriptionEngine?
@@ -21,17 +30,9 @@ public struct CallTranscription: Codable, Sendable {
     // omit api_version (only the LIST envelope items carry it). Optional
     // to match.
     public var apiVersion: String?
-    public var uri: String
+    public var uri: String?
     public var dateCreated: String?
     public var dateUpdated: String?
-}
-
-public struct TranscriptionList: Codable, Sendable {
-    public var transcriptions: [CallTranscription]
-    public var page: Int?
-    public var pageSize: Int?
-    public var total: Int?
-    public var uri: String?
 }
 
 public struct StartTranscriptionRequest: Sendable {

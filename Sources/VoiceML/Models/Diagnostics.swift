@@ -6,6 +6,6 @@ import Foundation
 /// surface in `warnings` only and don't take the host out of rotation.
 public struct HealthStatus: Codable, Sendable {
     public var ok: Bool
-    public var warnings: [HealthFailure]
+    public var warnings: [HealthFailure]?
     public var failures: [HealthFailure]?
 }

@@ -1,43 +1,48 @@
 import Foundation
 
 public struct Queue: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var friendlyName: String
-    public var currentSize: Int
-    public var maxSize: Int
-    public var averageWaitTime: Int
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var sid: String?
+    public var accountSid: String?
+    public var friendlyName: String?
+    public var currentSize: Int?
+    public var maxSize: Int?
+    public var averageWaitTime: Int?
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
 }
 
 public struct QueueList: Codable, Sendable {
     public var queues: [Queue]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
     public var previousPageUri: String?
-    public var firstPageUri: String?
     public var uri: String?
 }
 
 public struct QueueMember: Codable, Sendable {
-    public var callSid: String
-    public var queueSid: String
+    public var callSid: String?
+    public var queueSid: String?
     public var accountSid: String?
-    public var dateEnqueued: String
-    public var waitTime: Int
-    public var position: Int
-    public var uri: String
+    public var dateEnqueued: String?
+    public var waitTime: Int?
+    public var position: Int?
+    public var uri: String?
 }
 
 public struct QueueMemberList: Codable, Sendable {
     public var queueMembers: [QueueMember]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
+    public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 

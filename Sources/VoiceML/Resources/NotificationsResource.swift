@@ -1,6 +1,6 @@
 import Foundation
 
-/// Account-scoped `/Notifications` compat stubs (always empty list; fetch returns 404).
+/// Account-scoped `/Notifications` — Twilio-compatible alert log.
 public final class NotificationsResource: Sendable {
     private let transport: Transport
 
@@ -8,22 +8,23 @@ public final class NotificationsResource: Sendable {
         self.transport = transport
     }
 
-    private func path(_ parts: String...) -> String {
-        "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.joined(separator: "/")
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(parts)
     }
 
     public func list(_ params: ListNotificationsParams = .init()) async throws -> NotificationsList {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Notifications"),
+            path: try path("Notifications"),
             query: params.queryItems()
         ))
     }
 
-    public func get(_ notificationSid: String) async throws -> JSONObject {
+    /// Fetch an account-scoped notification by sid.
+    public func get(_ notificationSid: String) async throws -> Notification {
         try await transport.request(VoiceMLRequest(
             method: .get,
-            path: path("Notifications", notificationSid)
+            path: try path("Notifications", notificationSid)
         ))
     }
 }

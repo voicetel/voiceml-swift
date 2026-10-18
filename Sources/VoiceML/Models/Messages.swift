@@ -1,43 +1,38 @@
 import Foundation
 
-/// One SMS resource. Decoded from `GET /Messages/{sid}` and embedded in `MessageList`.
+/// One SMS/MMS resource. Decoded from `GET /Messages/{sid}` and embedded in `MessageList`.
 ///
-/// Outbound-only today (no MMS, no inbound webhook delivery). `status` pins to "sent"
-/// on a successful SDK 2.2 dispatch and "failed" otherwise — there is no in-flight
-/// "queued"/"sending"/"delivered" lifecycle because the gateway is fire-and-forget.
-///
-/// `numSegments`/`numMedia` are deliberately string-typed on the wire to match the
-/// Twilio-compatible response shape; SDK consumers can `Int($0)` if they need a count.
+/// `status` pins to "sent" on a successful dispatch and "failed" otherwise when the
+/// gateway is fire-and-forget. `numSegments`/`numMedia` are string-typed on the wire to
+/// match the compatible response shape; SDK consumers can `Int($0)` if they need a count.
 public struct Message: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var apiVersion: String
-    public var to: String
-    public var from: String
-    public var body: String
-    public var status: String
-    public var numSegments: String
-    public var numMedia: String
-    public var direction: String
+    public var sid: String?
+    public var accountSid: String?
+    public var apiVersion: String?
+    public var to: String?
+    public var from: String?
+    public var body: String?
+    public var status: String?
+    public var numSegments: String?
+    public var numMedia: String?
+    public var direction: String?
     public var price: String?
     public var priceUnit: String?
     public var errorCode: Int?
     public var errorMessage: String?
     public var messagingServiceSid: String?
-    public var dateCreated: String
-    public var dateUpdated: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
     public var dateSent: String?
-    public var uri: String
+    public var uri: String?
     public var subresourceUris: [String: String]?
 }
 
-/// Paginated `/Messages` list response.
+/// Paginated `/Messages` list response in the standard envelope.
 public struct MessageList: Codable, Sendable {
     public var messages: [Message]
     public var page: Int?
     public var pageSize: Int?
-    public var numPages: Int?
-    public var total: Int?
     public var start: Int?
     public var end: Int?
     public var firstPageUri: String?
@@ -46,37 +41,86 @@ public struct MessageList: Codable, Sendable {
     public var uri: String?
 }
 
-/// Body for `POST /Messages`. `to` and `body` are required; `from` falls back to the
-/// tenant's configured default sender when omitted.
+/// Delivery-quality feedback echoed on `POST /Messages/{sid}/Feedback.json`.
+/// VoiceML records the outcome on the response only; any submitted `Outcome`
+/// other than `"confirmed"` echoes back as `unconfirmed`.
+public struct MessageFeedback: Codable, Sendable {
+    public var accountSid: String?
+    public var messageSid: String?
+    public var outcome: String?
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
+}
+
+/// Body for `POST /Messages/{sid}/Feedback.json`. `outcome` is `"confirmed"`
+/// or `"unconfirmed"`.
+public struct CreateMessageFeedbackRequest: Sendable {
+    public var outcome: String
+
+    public init(outcome: String) {
+        self.outcome = outcome
+    }
+
+    func formFields() -> [FormField] {
+        [FormField("Outcome", outcome)]
+    }
+}
+
+/// Body for `POST /Messages`. `to` is required; `from` falls back to the tenant's
+/// configured default sender when omitted. Supply `body` and/or one or more `mediaUrl`
+/// entries — sending neither throws ``ConfigurationError`` before any request is made
+/// (the server requires Body unless MediaUrl is present).
 public struct CreateMessageRequest: Sendable {
     public var to: String
-    public var body: String
+    public var body: String?
     public var from: String?
+    /// One or more media URLs (MMS); each entry is sent as a repeated `MediaUrl` key.
+    public var mediaUrl: [String]?
     public var messagingServiceSid: String?
+    /// Seconds the message may stay queued before failing (1–36000).
+    public var validityPeriod: Int?
     public var statusCallback: String?
+    public var statusCallbackMethod: HttpMethod?
 
     public init(
         to: String,
-        body: String,
+        body: String? = nil,
         from: String? = nil,
+        mediaUrl: [String]? = nil,
         messagingServiceSid: String? = nil,
-        statusCallback: String? = nil
+        validityPeriod: Int? = nil,
+        statusCallback: String? = nil,
+        statusCallbackMethod: HttpMethod? = nil
     ) {
         self.to = to
         self.body = body
         self.from = from
+        self.mediaUrl = mediaUrl
         self.messagingServiceSid = messagingServiceSid
+        self.validityPeriod = validityPeriod
         self.statusCallback = statusCallback
+        self.statusCallbackMethod = statusCallbackMethod
     }
 
     func formFields() -> [FormField] {
-        [
+        var fields: [FormField] = [
             FormField("To", to),
             FormField("Body", body),
             FormField("From", from),
-            FormField("MessagingServiceSid", messagingServiceSid),
-            FormField("StatusCallback", statusCallback),
         ]
+        if let media = mediaUrl {
+            for m in media {
+                fields.append(FormField("MediaUrl", m))
+            }
+        }
+        fields.append(contentsOf: [
+            FormField("MessagingServiceSid", messagingServiceSid),
+            FormField("ValidityPeriod", validityPeriod),
+            FormField("StatusCallback", statusCallback),
+            FormField("StatusCallbackMethod", statusCallbackMethod?.rawValue),
+        ])
+        return fields
     }
 }
 
@@ -103,11 +147,11 @@ public struct UpdateMessageRequest: Sendable {
 public struct ListMessagesParams: Sendable {
     public var to: String?
     public var from: String?
-    /// Twilio wire name `DateSent`. Messages sent on this UTC date.
+    /// Wire name `DateSent`. Messages sent on this UTC date.
     public var dateSent: String?
-    /// Twilio wire name `DateSent<`.
+    /// Wire name `DateSent<`.
     public var dateSentLt: String?
-    /// Twilio wire name `DateSent>`.
+    /// Wire name `DateSent>`.
     public var dateSentGt: String?
     public var page: Int?
     public var pageSize: Int?

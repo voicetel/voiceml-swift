@@ -9,14 +9,15 @@ import FoundationNetworking
 /// and the underlying `URLSession` handles concurrent requests safely.
 ///
 /// VoiceML uses HTTP Basic auth: `accountSid` (Twilio-format `"AC"` + 32 hex) is the
-/// username and `apiKey` is the password. This matches Twilio's constructor shape — code
-/// that already works against Twilio's API translates with only the base URL changed.
+/// username and a VoiceML API key is the password — the same HTTP Basic positions the
+/// Twilio SDKs use. Credentials issued for Twilio do **not** work here; use an
+/// AccountSid plus a VoiceML API key.
 ///
 /// ```swift
 /// let client = try VoiceMLClient(accountSid: "AC…", apiKey: "…")
 /// let call = try await client.calls.create(.init(
-///     to: "+18005551234",
-///     from: "+18005550000",
+///     to: "+14155550100",
+///     from: "+14155550101",
 ///     url: "https://example.com/twiml"
 /// ))
 /// ```
@@ -37,6 +38,12 @@ public final class VoiceMLClient: Sendable {
     public let conversationsV1: ConversationsV1Resource
     public let assistantsV1: AssistantsV1Resource
     public let diagnostics: DiagnosticsResource
+    public let accounts: AccountsResource
+    public let outgoingCallerIds: OutgoingCallerIdsResource
+    public let transcriptions: TranscriptionsResource
+    public let exports: ExportsResource
+    public let usageRecords: UsageRecordsResource
+    public let monitorAlerts: MonitorAlertsResource
 
     public let accountSid: String
     public let baseURL: URL
@@ -79,12 +86,18 @@ public final class VoiceMLClient: Sendable {
         self.conversationsV1 = ConversationsV1Resource(transport: conversationsTransport)
         self.assistantsV1 = AssistantsV1Resource(transport: transport)
         self.diagnostics = DiagnosticsResource(transport: transport)
+        self.accounts = AccountsResource(transport: transport)
+        self.outgoingCallerIds = OutgoingCallerIdsResource(transport: transport)
+        self.transcriptions = TranscriptionsResource(transport: transport)
+        self.exports = ExportsResource(transport: transport)
+        self.usageRecords = UsageRecordsResource(transport: transport)
+        self.monitorAlerts = MonitorAlertsResource(transport: transport)
     }
 
     /// Convenience initializer matching the Python/TS SDK constructor shape.
     ///
-    /// Pass either `apiKey:` or `authToken:` — they're aliases (Twilio's terminology
-    /// for the same Basic-auth password). Supplying both throws ``ConfigurationError``
+    /// Pass either `apiKey:` or `authToken:` — they're aliases for the same
+    /// Basic-auth password. Supplying both throws ``ConfigurationError``
     /// rather than silently picking one; supplying neither also throws.
     public convenience init(
         accountSid: String,
@@ -94,6 +107,7 @@ public final class VoiceMLClient: Sendable {
         messagingBaseURL: URL? = nil,
         conversationsBaseURL: URL? = nil,
         timeout: TimeInterval = 30,
+        resourceTimeout: TimeInterval = 300,
         maxRetries: Int = 2,
         userAgent: String? = nil,
         session: URLSession? = nil
@@ -111,9 +125,18 @@ public final class VoiceMLClient: Sendable {
             messagingBaseURL: messagingBaseURL,
             conversationsBaseURL: conversationsBaseURL,
             timeout: timeout,
+            resourceTimeout: resourceTimeout,
             maxRetries: maxRetries,
             userAgent: userAgent ?? "voiceml-swift/\(voiceMLVersion)",
             session: session
         ))
+    }
+
+    /// Fetch an absolute page URL (a list envelope's resolved `next_page_uri`, or a
+    /// `/v1` `meta.next_page_url`) through the configured session with authentication.
+    /// The URL's scheme and host must match the client's base host — credentials are
+    /// never transmitted to a different origin.
+    public func fetchPage<T: Decodable>(_ url: URL) async throws -> T {
+        try await transport.requestPage(url)
     }
 }

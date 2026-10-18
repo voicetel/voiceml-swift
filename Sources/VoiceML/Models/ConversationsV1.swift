@@ -20,7 +20,7 @@ import Foundation
 //
 // String fields with closed enum domains (state, status, type,
 // notification_level, method, target) are surfaced as `String` rather
-// than Swift enums — that matches the parity-lint stance: an unknown
+// than Swift enums — that matches the compat-lint stance: an unknown
 // enum value from a forward-rev'd server must not throw a decoding
 // error. The valid-values list is documented inline.
 

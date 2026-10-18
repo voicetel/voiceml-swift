@@ -7,8 +7,8 @@ public final class ConferencesResource: Sendable {
         self.transport = transport
     }
 
-    private func path(_ parts: String...) -> String {
-        "/2010-04-01/Accounts/\(transport.accountSid)/" + parts.joined(separator: "/")
+    private func path(_ parts: String...) throws -> String {
+        try transport.accountPath(parts)
     }
 
     public func list(_ params: ListConferencesParams = .init()) async throws -> ConferenceList {
@@ -19,26 +19,25 @@ public final class ConferencesResource: Sendable {
         ))
     }
 
-    public func iterate(_ params: ListConferencesParams = .init()) -> AsyncThrowingStream<Conference, Error> {
-        var current = params
-        if current.page == nil { current.page = 0 }
-        return AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    while true {
-                        let chunk = try await self.list(current)
-                        for item in chunk.conferences { continuation.yield(item) }
-                        if chunk.nextPageUri == nil || chunk.nextPageUri?.isEmpty == true || chunk.conferences.isEmpty {
-                            continuation.finish()
-                            return
-                        }
-                        current.page = (current.page ?? 0) + 1
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
+    /// Fetch the page after `page`, following its `next_page_uri` verbatim.
+    public func nextPage(of page: ConferenceList) async throws -> ConferenceList? {
+        guard let url = transport.resolvePageURI(page.nextPageUri) else { return nil }
+        return try await transport.requestPage(url)
+    }
+
+    /// Walk every page of `/Conferences` matching the supplied filters and yield each
+    /// ``Conference``. Lazily follows each page's `next_page_uri`.
+    public func iterate(_ params: ListConferencesParams = .init()) -> PagerSequence<Conference> {
+        PagerSequence(
+            firstPage: { [self] in
+                let page = try await list(params)
+                return PageResult(items: page.conferences, nextURL: transport.resolvePageURI(page.nextPageUri))
+            },
+            followPage: { [self] url in
+                let page: ConferenceList = try await transport.requestPage(url)
+                return PageResult(items: page.conferences, nextURL: transport.resolvePageURI(page.nextPageUri))
             }
-        }
+        )
     }
 
     public func get(_ conferenceSid: String) async throws -> Conference {
@@ -70,6 +69,12 @@ public final class ConferencesResource: Sendable {
             path: path("Conferences", conferenceSid, "Participants"),
             query: params.queryItems()
         ))
+    }
+
+    /// Fetch the page after `page`, following its `next_page_uri` verbatim.
+    public func nextPage(of page: ParticipantList) async throws -> ParticipantList? {
+        guard let url = transport.resolvePageURI(page.nextPageUri) else { return nil }
+        return try await transport.requestPage(url)
     }
 
     public func getParticipant(conferenceSid: String, callSid: String) async throws -> Participant {
@@ -120,6 +125,25 @@ public final class ConferencesResource: Sendable {
             method: .get,
             path: path("Conferences", conferenceSid, "Recordings"),
             query: params.queryItems()
+        ))
+    }
+
+    /// Fetch the page after `page`, following its `next_page_uri` verbatim.
+    public func nextPage(of page: RecordingList) async throws -> RecordingList? {
+        guard let url = transport.resolvePageURI(page.nextPageUri) else { return nil }
+        return try await transport.requestPage(url)
+    }
+
+    /// `POST /Conferences/{sid}/Recordings` — begin a fresh recording on the live
+    /// conference. Returns the running recording if one already exists.
+    public func startRecording(
+        conferenceSid: String,
+        body: StartConferenceRecordingRequest = .init()
+    ) async throws -> Recording {
+        try await transport.request(VoiceMLRequest(
+            method: .post,
+            path: path("Conferences", conferenceSid, "Recordings"),
+            form: body.formFields()
         ))
     }
 

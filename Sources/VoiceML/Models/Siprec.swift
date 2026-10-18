@@ -1,31 +1,24 @@
 import Foundation
 
-public enum SiprecStatus: String, Codable, Sendable {
-    case inProgress = "in-progress"
-    case stopped
+/// SIPREC session status. Open enum.
+public struct SiprecStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inProgress = SiprecStatus(rawValue: "in-progress")
+    public static let stopped = SiprecStatus(rawValue: "stopped")
 }
 
 public struct SiprecSession: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var callSid: String
+    public var sid: String?
+    public var accountSid: String?
+    public var callSid: String?
     public var name: String?
     public var connectorName: String?
-    public var status: SiprecStatus
-    // Twilio's documented Create/Update SiprecSession responses omit
-    // api_version (only the LIST envelope items carry it). Optional to match.
+    public var status: SiprecStatus?
     public var apiVersion: String?
-    public var uri: String
+    public var uri: String?
     public var dateCreated: String?
     public var dateUpdated: String?
-}
-
-public struct SiprecList: Codable, Sendable {
-    public var siprec: [SiprecSession]
-    public var page: Int?
-    public var pageSize: Int?
-    public var total: Int?
-    public var uri: String?
 }
 
 public struct StartSiprecRequest: Sendable {

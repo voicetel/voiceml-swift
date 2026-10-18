@@ -1,25 +1,36 @@
 import Foundation
 
-public enum ConferenceStatus: String, Codable, Sendable {
-    case `init`
-    case inProgress = "in-progress"
-    case completed
+/// Conference lifecycle status. Open enum.
+public struct ConferenceStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let initStatus = ConferenceStatus(rawValue: "init")
+    public static let inProgress = ConferenceStatus(rawValue: "in-progress")
+    public static let completed = ConferenceStatus(rawValue: "completed")
 }
 
-public enum ParticipantStatus: String, Codable, Sendable {
-    case queued, connecting, ringing, connected
-    case onHold = "on-hold"
-    case complete, failed, completed
+/// Participant lifecycle status. Open enum.
+public struct ParticipantStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let queued = ParticipantStatus(rawValue: "queued")
+    public static let connecting = ParticipantStatus(rawValue: "connecting")
+    public static let ringing = ParticipantStatus(rawValue: "ringing")
+    public static let connected = ParticipantStatus(rawValue: "connected")
+    public static let onHold = ParticipantStatus(rawValue: "on-hold")
+    public static let complete = ParticipantStatus(rawValue: "complete")
+    public static let failed = ParticipantStatus(rawValue: "failed")
+    public static let completed = ParticipantStatus(rawValue: "completed")
 }
 
 public struct Conference: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
+    public var sid: String?
+    public var accountSid: String?
     public var friendlyName: String?
-    public var status: ConferenceStatus
+    public var status: ConferenceStatus?
     public var region: String?
-    public var apiVersion: String
-    public var uri: String
+    public var apiVersion: String?
+    public var uri: String?
     public var dateCreated: String?
     public var dateUpdated: String?
     public var reasonConferenceEnded: String?
@@ -33,26 +44,29 @@ public struct ConferenceList: Codable, Sendable {
     public var conferences: [Conference]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
     public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
 public struct Participant: Codable, Sendable {
-    public var callSid: String
-    public var conferenceSid: String
-    public var accountSid: String
-    public var muted: Bool
-    public var hold: Bool
-    public var coaching: Bool
+    public var callSid: String?
+    public var conferenceSid: String?
+    public var accountSid: String?
+    public var muted: Bool?
+    public var hold: Bool?
+    public var coaching: Bool?
     public var callSidToCoach: String?
     public var queueTime: String?
-    public var startConferenceOnEnter: Bool
-    public var endConferenceOnExit: Bool
-    public var status: ParticipantStatus
+    public var startConferenceOnEnter: Bool?
+    public var endConferenceOnExit: Bool?
+    public var status: ParticipantStatus?
     public var label: String?
     public var apiVersion: String?
-    public var uri: String
+    public var uri: String?
     public var dateCreated: String?
     public var dateUpdated: String?
 }
@@ -61,7 +75,11 @@ public struct ParticipantList: Codable, Sendable {
     public var participants: [Participant]
     public var page: Int?
     public var pageSize: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
+    public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 

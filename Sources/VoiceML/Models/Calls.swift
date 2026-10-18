@@ -1,28 +1,41 @@
 import Foundation
 
-public enum CallStatus: String, Codable, Sendable {
-    case queued, ringing
-    case inProgress = "in-progress"
-    case completed, busy
-    case noAnswer = "no-answer"
-    case canceled, failed
+/// Call lifecycle status. Open enum — an unknown wire value decodes as-is instead of
+/// failing the whole payload.
+public struct CallStatus: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let queued = CallStatus(rawValue: "queued")
+    public static let ringing = CallStatus(rawValue: "ringing")
+    public static let inProgress = CallStatus(rawValue: "in-progress")
+    public static let completed = CallStatus(rawValue: "completed")
+    public static let busy = CallStatus(rawValue: "busy")
+    public static let noAnswer = CallStatus(rawValue: "no-answer")
+    public static let canceled = CallStatus(rawValue: "canceled")
+    public static let failed = CallStatus(rawValue: "failed")
 }
 
-public enum CallDirection: String, Codable, Sendable {
-    case inbound
-    case outboundApi = "outbound-api"
-    case outboundDial = "outbound-dial"
+/// Direction a call was originated in. Open enum — tolerant of `""` and new values.
+public struct CallDirection: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inbound = CallDirection(rawValue: "inbound")
+    public static let outboundApi = CallDirection(rawValue: "outbound-api")
+    public static let outboundDial = CallDirection(rawValue: "outbound-dial")
 }
 
-public enum AnsweredBy: String, Codable, Sendable {
-    case human
-    case machineStart = "machine_start"
-    case machineEndBeep = "machine_end_beep"
-    case machineEndSilence = "machine_end_silence"
-    case machineEndOther = "machine_end_other"
-    case fax
-    case unknown
-    case empty = ""
+/// AMD outcome on a call. Open enum.
+public struct AnsweredBy: OpenStringEnum {
+    public let rawValue: String
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let human = AnsweredBy(rawValue: "human")
+    public static let machineStart = AnsweredBy(rawValue: "machine_start")
+    public static let machineEndBeep = AnsweredBy(rawValue: "machine_end_beep")
+    public static let machineEndSilence = AnsweredBy(rawValue: "machine_end_silence")
+    public static let machineEndOther = AnsweredBy(rawValue: "machine_end_other")
+    public static let fax = AnsweredBy(rawValue: "fax")
+    public static let unknown = AnsweredBy(rawValue: "unknown")
+    public static let empty = AnsweredBy(rawValue: "")
 }
 
 public enum MachineDetectionMode: String, Codable, Sendable {
@@ -52,10 +65,11 @@ public enum UpdateCallStatus: String, Codable, Sendable {
 }
 
 /// A single call resource. Decoded from `GET /Calls/{sid}` and embedded in `CallList`.
+/// Fields the spec marks nullable are optional here so a null never fails the page.
 public struct Call: Codable, Sendable {
-    public var sid: String
-    public var accountSid: String
-    public var apiVersion: String
+    public var sid: String?
+    public var accountSid: String?
+    public var apiVersion: String?
     public var to: String?
     public var toFormatted: String?
     public var from: String?
@@ -63,8 +77,8 @@ public struct Call: Codable, Sendable {
     public var parentCallSid: String?
     public var callerName: String?
     public var forwardedFrom: String?
-    public var status: CallStatus
-    public var direction: CallDirection
+    public var status: CallStatus?
+    public var direction: CallDirection?
     public var answeredBy: AnsweredBy?
     public var startTime: String?
     public var endTime: String?
@@ -76,29 +90,31 @@ public struct Call: Codable, Sendable {
     public var groupSid: String?
     public var queueTime: String?
     public var trunkSid: String?
-    public var dateCreated: String
-    public var dateUpdated: String
-    public var uri: String
+    public var dateCreated: String?
+    public var dateUpdated: String?
+    public var uri: String?
     public var subresourceUris: [String: String]?
 }
 
-/// Page of calls — Twilio shape.
+/// Page of calls. The envelope carries `page`, `page_size`, `start`, `end`,
+/// `first_page_uri`, `previous_page_uri`, `next_page_uri` and `uri`; `total` and
+/// `num_pages` are no longer emitted by the server.
 public struct CallList: Codable, Sendable {
     public var calls: [Call]
     public var page: Int?
     public var pageSize: Int?
-    public var numPages: Int?
-    public var total: Int?
+    public var start: Int?
+    public var end: Int?
     public var firstPageUri: String?
     public var nextPageUri: String?
     public var previousPageUri: String?
     public var uri: String?
 }
 
-/// Body for `POST /Calls`. Sent form-urlencoded by default (Twilio convention).
+/// Body for `POST /Calls`. Sent form-urlencoded by default (wire convention).
 ///
 /// Set at most one of `url` / `twiml` / `applicationSid`. If `twiml` is set alongside
-/// `url`, Twiml wins (Twilio's documented precedence).
+/// `url`, Twiml wins (the documented precedence).
 public struct CreateCallRequest: Sendable {
     public var to: String
     public var from: String
@@ -207,7 +223,7 @@ public struct CreateCallRequest: Sendable {
         self.callToken = callToken
     }
 
-    /// Render as form fields in the Twilio wire order.
+    /// Render as form fields in the wire order.
     func formFields() -> [FormField] {
         var fields: [FormField] = [
             FormField("To", to),
@@ -312,27 +328,24 @@ public struct UpdateCallRequest: Sendable {
     }
 }
 
-/// Filter parameters for `GET /Calls`.
+/// Filter parameters for `GET /Calls`. The spec declares `StartTime`, `StartTime<`
+/// and `StartTime>` (same shape for `EndTime`).
 public struct ListCallsParams: Sendable {
     public var to: String?
     public var from: String?
     public var status: CallStatus?
     public var parentCallSid: String?
-    /// Twilio wire name `StartTime>=`. Inclusive lower bound.
-    public var startTimeGte: String?
-    /// Twilio wire name `StartTime<=`. Inclusive upper bound.
-    public var startTimeLte: String?
-    /// Twilio wire name `StartTime`. Calls started on this UTC date.
+    /// Wire name `StartTime`. Calls started on this UTC date.
     public var startTime: String?
-    /// Twilio wire name `StartTime<`.
+    /// Wire name `StartTime<`.
     public var startTimeLt: String?
-    /// Twilio wire name `StartTime>`.
+    /// Wire name `StartTime>`.
     public var startTimeGt: String?
-    /// Twilio wire name `EndTime`. Calls ended on this UTC date.
+    /// Wire name `EndTime`. Calls ended on this UTC date.
     public var endTime: String?
-    /// Twilio wire name `EndTime<`.
+    /// Wire name `EndTime<`.
     public var endTimeLt: String?
-    /// Twilio wire name `EndTime>`.
+    /// Wire name `EndTime>`.
     public var endTimeGt: String?
     public var page: Int?
     public var pageSize: Int?
@@ -343,8 +356,6 @@ public struct ListCallsParams: Sendable {
         from: String? = nil,
         status: CallStatus? = nil,
         parentCallSid: String? = nil,
-        startTimeGte: String? = nil,
-        startTimeLte: String? = nil,
         startTime: String? = nil,
         startTimeLt: String? = nil,
         startTimeGt: String? = nil,
@@ -359,8 +370,6 @@ public struct ListCallsParams: Sendable {
         self.from = from
         self.status = status
         self.parentCallSid = parentCallSid
-        self.startTimeGte = startTimeGte
-        self.startTimeLte = startTimeLte
         self.startTime = startTime
         self.startTimeLt = startTimeLt
         self.startTimeGt = startTimeGt
@@ -381,8 +390,6 @@ public struct ListCallsParams: Sendable {
             QueryItem("StartTime", startTime),
             QueryItem("StartTime<", startTimeLt),
             QueryItem("StartTime>", startTimeGt),
-            QueryItem("StartTime>=", startTimeGte),
-            QueryItem("StartTime<=", startTimeLte),
             QueryItem("EndTime", endTime),
             QueryItem("EndTime<", endTimeLt),
             QueryItem("EndTime>", endTimeGt),
@@ -455,26 +462,71 @@ public struct ListNotificationsParams: Sendable {
     }
 }
 
-/// `GET /Calls/{sid}/Notifications` — always returns an empty list (compat stub).
+/// Twilio-compatible alert-log entry. Rows are emitted when a TwiML document fetch or
+/// parse fails; `error_code`/`more_info` follow the documented error dictionary.
+public struct Notification: Codable, Sendable {
+    public var sid: String?
+    public var accountSid: String?
+    public var callSid: String?
+    public var apiVersion: String?
+    /// Numeric error code rendered as a string on the wire (e.g. `"11200"`).
+    public var errorCode: String?
+    /// `"0"` or `"1"`, as a string.
+    public var log: String?
+    public var messageDate: String?
+    public var messageText: String?
+    public var moreInfo: String?
+    public var requestMethod: String?
+    public var requestUrl: String?
+    public var uri: String?
+    public var dateCreated: String?
+    public var dateUpdated: String?
+}
+
+/// Page of notifications, in the standard list envelope.
 public struct NotificationsList: Codable, Sendable {
-    public var notifications: [AnyCodableSink]
-    public var page: Int
-    public var pageSize: Int
-    public var total: Int
+    public var notifications: [Notification]
+    public var page: Int?
+    public var pageSize: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
+    public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
 }
 
-/// `GET /Calls/{sid}/Events` — always returns an empty list (compat stub).
+/// One leg of a per-call lifecycle event: the recorded REST request or response.
+public struct CallEventRequest: Codable, Sendable {
+    public var method: String?
+    public var parameters: [String: String]?
+    public var url: String?
+}
+
+public struct CallEventResponse: Codable, Sendable {
+    public var contentType: String?
+    public var dateCreated: String?
+    public var requestDuration: Int?
+    public var responseBody: String?
+    public var responseCode: Int?
+}
+
+/// Twilio-compatible per-call lifecycle event — one row per REST request/response
+/// against a call. List-only; the Events resource has no fetch-by-id operation.
+public struct CallEvent: Codable, Sendable {
+    public var request: CallEventRequest?
+    public var response: CallEventResponse?
+}
+
+/// Page of call events, in the standard list envelope.
 public struct EventsList: Codable, Sendable {
-    public var events: [AnyCodableSink]
-    public var page: Int
-    public var pageSize: Int
-    public var total: Int
+    public var events: [CallEvent]
+    public var page: Int?
+    public var pageSize: Int?
+    public var start: Int?
+    public var end: Int?
+    public var firstPageUri: String?
+    public var nextPageUri: String?
+    public var previousPageUri: String?
     public var uri: String?
-}
-
-/// Placeholder for `unknown[]` arrays — we decode but don't surface the items.
-public struct AnyCodableSink: Codable, Sendable {
-    public init(from decoder: Decoder) throws {}
-    public func encode(to encoder: Encoder) throws {}
 }

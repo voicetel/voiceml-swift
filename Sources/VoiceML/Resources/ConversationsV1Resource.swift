@@ -4,6 +4,7 @@ import Foundation
 /// (conversations.twilio.com/v1) namespace. 15 resources keyed by SID;
 /// account resolves from HTTP Basic auth so no /Accounts/{Sid}/ prefix.
 public final class ConversationsV1Resource: Sendable {
+    public let pages: PageClient
     public let conversations: ConversationsV1ConversationsResource
     public let roles: ConversationsV1RolesResource
     public let users: ConversationsV1UsersResource
@@ -14,6 +15,7 @@ public final class ConversationsV1Resource: Sendable {
     public let services: ConversationsV1ServicesResource
 
     init(transport: Transport) {
+        self.pages = PageClient(transport: transport)
         self.conversations = ConversationsV1ConversationsResource(transport: transport)
         self.roles = ConversationsV1RolesResource(transport: transport)
         self.users = ConversationsV1UsersResource(transport: transport)
@@ -33,19 +35,19 @@ public final class ConversationsV1ConversationsResource: Sendable {
 
     // Conversations
     public func create(_ body: CreateConversationRequest = .init()) async throws -> ConversationsV1Conversation {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ConversationList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations"]), query: params.queryItems()))
     }
     public func fetch(conversationSid: String) async throws -> ConversationsV1Conversation {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid])))
     }
     public func update(conversationSid: String, _ body: UpdateConversationRequest) async throws -> ConversationsV1Conversation {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid]), form: body.formFields()))
     }
     public func delete(conversationSid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Conversations/\(conversationSid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Conversations", conversationSid])))
     }
 
     /// `client.conversationsV1.conversations.messages(conversationSid:)` — accessor for the
@@ -75,19 +77,19 @@ public final class ConversationsV1ConversationMessagesResource: Sendable {
     }
 
     public func create(_ body: CreateConversationMessageRequest = .init()) async throws -> ConversationsV1ConversationMessage {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)/Messages", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ConversationMessageList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Messages", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages"]), query: params.queryItems()))
     }
     public func fetch(messageSid: String) async throws -> ConversationsV1ConversationMessage {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Messages/\(messageSid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages", messageSid])))
     }
     public func update(messageSid: String, _ body: UpdateConversationMessageRequest) async throws -> ConversationsV1ConversationMessage {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)/Messages/\(messageSid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages", messageSid]), form: body.formFields()))
     }
     public func delete(messageSid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Conversations/\(conversationSid)/Messages/\(messageSid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages", messageSid])))
     }
 
     /// Per-message Receipts accessor (read-only).
@@ -111,10 +113,10 @@ public final class ConversationsV1ConversationMessageReceiptsResource: Sendable 
     }
 
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ConversationMessageReceiptList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Messages/\(messageSid)/Receipts", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages", messageSid, "Receipts"]), query: params.queryItems()))
     }
     public func fetch(sid: String) async throws -> ConversationsV1ConversationMessageReceipt {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Messages/\(messageSid)/Receipts/\(sid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Messages", messageSid, "Receipts", sid])))
     }
 }
 
@@ -128,19 +130,19 @@ public final class ConversationsV1ConversationParticipantsResource: Sendable {
     }
 
     public func create(_ body: CreateConversationParticipantRequest = .init()) async throws -> ConversationsV1ConversationParticipant {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)/Participants", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Participants"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ConversationParticipantList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Participants", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Participants"]), query: params.queryItems()))
     }
     public func fetch(participantSid: String) async throws -> ConversationsV1ConversationParticipant {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Participants/\(participantSid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Participants", participantSid])))
     }
     public func update(participantSid: String, _ body: UpdateConversationParticipantRequest) async throws -> ConversationsV1ConversationParticipant {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)/Participants/\(participantSid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Participants", participantSid]), form: body.formFields()))
     }
     public func delete(participantSid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Conversations/\(conversationSid)/Participants/\(participantSid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Participants", participantSid])))
     }
 }
 
@@ -154,19 +156,19 @@ public final class ConversationsV1ConversationScopedWebhooksResource: Sendable {
     }
 
     public func create(_ body: CreateConversationScopedWebhookRequest) async throws -> ConversationsV1ConversationScopedWebhook {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)/Webhooks", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Webhooks"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ConversationScopedWebhookList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Webhooks", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Webhooks"]), query: params.queryItems()))
     }
     public func fetch(webhookSid: String) async throws -> ConversationsV1ConversationScopedWebhook {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Conversations/\(conversationSid)/Webhooks/\(webhookSid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Webhooks", webhookSid])))
     }
     public func update(webhookSid: String, _ body: UpdateConversationScopedWebhookRequest) async throws -> ConversationsV1ConversationScopedWebhook {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Conversations/\(conversationSid)/Webhooks/\(webhookSid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Webhooks", webhookSid]), form: body.formFields()))
     }
     public func delete(webhookSid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Conversations/\(conversationSid)/Webhooks/\(webhookSid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Conversations", conversationSid, "Webhooks", webhookSid])))
     }
 }
 
@@ -177,19 +179,19 @@ public final class ConversationsV1RolesResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func create(_ body: CreateRoleRequest) async throws -> ConversationsV1Role {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Roles", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Roles"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1RoleList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Roles", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Roles"]), query: params.queryItems()))
     }
     public func fetch(sid: String) async throws -> ConversationsV1Role {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Roles/\(sid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Roles", sid])))
     }
     public func update(sid: String, _ body: UpdateRoleRequest) async throws -> ConversationsV1Role {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Roles/\(sid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Roles", sid]), form: body.formFields()))
     }
     public func delete(sid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Roles/\(sid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Roles", sid])))
     }
 }
 
@@ -200,19 +202,19 @@ public final class ConversationsV1UsersResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func create(_ body: CreateUserRequest) async throws -> ConversationsV1User {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Users", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Users"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1UserList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Users", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Users"]), query: params.queryItems()))
     }
     public func fetch(sid: String) async throws -> ConversationsV1User {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Users/\(sid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Users", sid])))
     }
     public func update(sid: String, _ body: UpdateUserRequest) async throws -> ConversationsV1User {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Users/\(sid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Users", sid]), form: body.formFields()))
     }
     public func delete(sid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Users/\(sid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Users", sid])))
     }
 
     /// Per-user Conversations accessor.
@@ -229,16 +231,16 @@ public final class ConversationsV1UserConversationsResource: Sendable {
     }
 
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1UserConversationList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Users/\(userSid)/Conversations", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Users", userSid, "Conversations"]), query: params.queryItems()))
     }
     public func fetch(conversationSid: String) async throws -> ConversationsV1UserConversation {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Users/\(userSid)/Conversations/\(conversationSid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Users", userSid, "Conversations", conversationSid])))
     }
     public func update(conversationSid: String, _ body: UpdateUserConversationRequest) async throws -> ConversationsV1UserConversation {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Users/\(userSid)/Conversations/\(conversationSid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Users", userSid, "Conversations", conversationSid]), form: body.formFields()))
     }
     public func delete(conversationSid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Users/\(userSid)/Conversations/\(conversationSid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Users", userSid, "Conversations", conversationSid])))
     }
 }
 
@@ -249,19 +251,19 @@ public final class ConversationsV1CredentialsResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func create(_ body: CreateConversationsCredentialRequest) async throws -> ConversationsV1Credential {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Credentials", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Credentials"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1CredentialList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Credentials", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Credentials"]), query: params.queryItems()))
     }
     public func fetch(sid: String) async throws -> ConversationsV1Credential {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Credentials/\(sid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Credentials", sid])))
     }
     public func update(sid: String, _ body: UpdateConversationsCredentialRequest) async throws -> ConversationsV1Credential {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Credentials/\(sid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Credentials", sid]), form: body.formFields()))
     }
     public func delete(sid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Credentials/\(sid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Credentials", sid])))
     }
 }
 
@@ -279,10 +281,10 @@ public final class ConversationsV1ConfigurationResource: Sendable {
     }
 
     public func fetch() async throws -> ConversationsV1Configuration {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Configuration"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Configuration"])))
     }
     public func update(_ body: UpdateConfigurationRequest = .init()) async throws -> ConversationsV1Configuration {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Configuration", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Configuration"]), form: body.formFields()))
     }
 }
 
@@ -291,10 +293,10 @@ public final class ConversationsV1ConfigurationWebhooksResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func fetch() async throws -> ConversationsV1ConfigurationWebhook {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Configuration/Webhooks"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Configuration", "Webhooks"])))
     }
     public func update(_ body: UpdateConfigurationWebhookRequest = .init()) async throws -> ConversationsV1ConfigurationWebhook {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Configuration/Webhooks", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Configuration", "Webhooks"]), form: body.formFields()))
     }
 }
 
@@ -303,19 +305,19 @@ public final class ConversationsV1ConfigAddressesResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func create(_ body: CreateConfigAddressRequest) async throws -> ConversationsV1ConfigAddress {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Configuration/Addresses", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Configuration", "Addresses"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ConfigAddressList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Configuration/Addresses", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Configuration", "Addresses"]), query: params.queryItems()))
     }
     public func fetch(sid: String) async throws -> ConversationsV1ConfigAddress {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Configuration/Addresses/\(sid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Configuration", "Addresses", sid])))
     }
     public func update(sid: String, _ body: UpdateConfigAddressRequest) async throws -> ConversationsV1ConfigAddress {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Configuration/Addresses/\(sid)", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Configuration", "Addresses", sid]), form: body.formFields()))
     }
     public func delete(sid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Configuration/Addresses/\(sid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Configuration", "Addresses", sid])))
     }
 }
 
@@ -326,7 +328,7 @@ public final class ConversationsV1ParticipantConversationsResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func list(_ params: ListParticipantConversationParams = .init()) async throws -> ConversationsV1ParticipantConversationList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/ParticipantConversations", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "ParticipantConversations"]), query: params.queryItems()))
     }
 }
 
@@ -337,7 +339,7 @@ public final class ConversationsV1ConversationWithParticipantsResource: Sendable
     init(transport: Transport) { self.transport = transport }
 
     public func create(_ body: CreateConversationWithParticipantsRequest = .init()) async throws -> ConversationsV1ConversationWithParticipants {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/ConversationWithParticipants", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "ConversationWithParticipants"]), form: body.formFields()))
     }
 }
 
@@ -348,16 +350,16 @@ public final class ConversationsV1ServicesResource: Sendable {
     init(transport: Transport) { self.transport = transport }
 
     public func create(_ body: CreateConversationServiceRequest) async throws -> ConversationsV1Service {
-        try await transport.request(VoiceMLRequest(method: .post, path: "/v1/Services", form: body.formFields()))
+        try await transport.request(VoiceMLRequest(method: .post, path: try transport.rootPath(["v1", "Services"]), form: body.formFields()))
     }
     public func list(_ params: ListV1PageParams = .init()) async throws -> ConversationsV1ServiceList {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Services", query: params.queryItems()))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Services"]), query: params.queryItems()))
     }
     public func fetch(chatServiceSid: String) async throws -> ConversationsV1Service {
-        try await transport.request(VoiceMLRequest(method: .get, path: "/v1/Services/\(chatServiceSid)"))
+        try await transport.request(VoiceMLRequest(method: .get, path: try transport.rootPath(["v1", "Services", chatServiceSid])))
     }
     public func delete(chatServiceSid: String) async throws {
-        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: "/v1/Services/\(chatServiceSid)"))
+        try await transport.requestVoid(VoiceMLRequest(method: .delete, path: try transport.rootPath(["v1", "Services", chatServiceSid])))
     }
 
     /// `client.conversationsV1.services.scope(chatServiceSid:)` — accessor for
