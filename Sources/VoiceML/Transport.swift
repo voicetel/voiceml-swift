@@ -441,8 +441,10 @@ public final class Transport: Sendable {
             return connectPhaseURLErrorCodes.contains(url.code)
         }
         let ns = error as NSError
+        // URLError.Code's rawValue initializer is failable on corelibs and
+        // total on Darwin; normalise to Optional so both platforms compile.
         if ns.domain == "NSURLErrorDomain",
-           let mapped = URLError.Code(rawValue: ns.code) {
+           let mapped = (URLError.Code(rawValue: ns.code) as URLError.Code?) {
             return connectPhaseURLErrorCodes.contains(mapped)
         }
         return false
