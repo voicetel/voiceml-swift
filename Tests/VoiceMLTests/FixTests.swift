@@ -970,21 +970,21 @@ final class VoiceMLFixTests: XCTestCase {
             apiKey: key,
             url: "https://example.com/voice/answer?case=1",
             params: v1Params,
-            signature: "pk/0TPPT+p98NEZykeWQLqRXyGU="
+            signature: "RweoLyWqNC7H8+MLXPb7EPz18OI="
         ))
         // Port normalisation: the same signature validates against the :443 URL…
         XCTAssertTrue(RequestValidator.validate(
             apiKey: key,
             url: "https://example.com:443/voice/answer?case=1",
             params: v1Params,
-            signature: "pk/0TPPT+p98NEZykeWQLqRXyGU="
+            signature: "RweoLyWqNC7H8+MLXPb7EPz18OI="
         ))
         // …and the signature computed over the :443 URL validates against the port-less URL.
         XCTAssertTrue(RequestValidator.validate(
             apiKey: key,
             url: "https://example.com/voice/answer?case=1",
             params: v1Params,
-            signature: "/Bw0s+u5vlGd6zLAOTz/eMg33pk="
+            signature: "xE0r2wPa6d1ktQeCFpPyINmTNYg="
         ))
 
         // V3 (repeated keys, received order preserved)
@@ -1008,14 +1008,14 @@ final class VoiceMLFixTests: XCTestCase {
             apiKey: key,
             url: "https://example.com/voice/answer?case=1",
             params: v1Params.map { $0.0 == "Digits" ? ($0.0, "9999") : $0 },
-            signature: "pk/0TPPT+p98NEZykeWQLqRXyGU="
+            signature: "RweoLyWqNC7H8+MLXPb7EPz18OI="
         ))
         // Negative: wrong key
         XCTAssertFalse(RequestValidator.validate(
             apiKey: "wrong-key-0000000000000000",
             url: "https://example.com/voice/answer?case=1",
             params: v1Params,
-            signature: "pk/0TPPT+p98NEZykeWQLqRXyGU="
+            signature: "RweoLyWqNC7H8+MLXPb7EPz18OI="
         ))
     }
 
@@ -1031,7 +1031,7 @@ final class VoiceMLFixTests: XCTestCase {
                 ("AccountSid", "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
             ]
         )
-        XCTAssertEqual(sig, "pk/0TPPT+p98NEZykeWQLqRXyGU=")
+        XCTAssertEqual(sig, "RweoLyWqNC7H8+MLXPb7EPz18OI=")
     }
 
     // MARK: - New resources (C6)
