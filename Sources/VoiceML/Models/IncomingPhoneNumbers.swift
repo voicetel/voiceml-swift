@@ -172,6 +172,12 @@ public struct CreateIncomingPhoneNumberParams: Sendable {
     public var smsFallbackMethod: HttpMethod?
     /// Bind inbound-SMS routing to an Application instead of per-number URLs.
     public var smsApplicationSid: String?
+    /// Bind voice routing to an Application instead of per-number URLs.
+    public var voiceApplicationSid: String?
+    /// Number-level lifecycle webhook for inbound calls to this DID.
+    public var statusCallback: String?
+    /// HTTP method for the status-callback webhook.
+    public var statusCallbackMethod: HttpMethod?
 
     public init(
         phoneNumber: String,
@@ -183,7 +189,10 @@ public struct CreateIncomingPhoneNumberParams: Sendable {
         smsMethod: HttpMethod? = nil,
         smsFallbackUrl: String? = nil,
         smsFallbackMethod: HttpMethod? = nil,
-        smsApplicationSid: String? = nil
+        smsApplicationSid: String? = nil,
+        voiceApplicationSid: String? = nil,
+        statusCallback: String? = nil,
+        statusCallbackMethod: HttpMethod? = nil
     ) {
         self.phoneNumber = phoneNumber
         self.voiceUrl = voiceUrl
@@ -195,6 +204,9 @@ public struct CreateIncomingPhoneNumberParams: Sendable {
         self.smsFallbackUrl = smsFallbackUrl
         self.smsFallbackMethod = smsFallbackMethod
         self.smsApplicationSid = smsApplicationSid
+        self.voiceApplicationSid = voiceApplicationSid
+        self.statusCallback = statusCallback
+        self.statusCallbackMethod = statusCallbackMethod
     }
 
     func formFields() -> [FormField] {
@@ -209,6 +221,9 @@ public struct CreateIncomingPhoneNumberParams: Sendable {
             FormField("SmsFallbackUrl", smsFallbackUrl),
             FormField("SmsFallbackMethod", smsFallbackMethod?.rawValue),
             FormField("SmsApplicationSid", smsApplicationSid),
+            FormField("VoiceApplicationSid", voiceApplicationSid),
+            FormField("StatusCallback", statusCallback),
+            FormField("StatusCallbackMethod", statusCallbackMethod?.rawValue),
         ]
     }
 }
@@ -251,6 +266,12 @@ public struct UpdateIncomingPhoneNumberParams: Sendable {
     public var smsFallbackUrl: String?
     public var smsFallbackMethod: HttpMethod?
     public var smsApplicationSid: String?
+    /// Bind voice routing to an Application instead of per-number URLs.
+    public var voiceApplicationSid: String?
+    /// Number-level lifecycle webhook for inbound calls to this DID.
+    public var statusCallback: String?
+    /// HTTP method for the status-callback webhook.
+    public var statusCallbackMethod: HttpMethod?
 
     public init(
         voiceUrl: String? = nil,
@@ -261,7 +282,10 @@ public struct UpdateIncomingPhoneNumberParams: Sendable {
         smsMethod: HttpMethod? = nil,
         smsFallbackUrl: String? = nil,
         smsFallbackMethod: HttpMethod? = nil,
-        smsApplicationSid: String? = nil
+        smsApplicationSid: String? = nil,
+        voiceApplicationSid: String? = nil,
+        statusCallback: String? = nil,
+        statusCallbackMethod: HttpMethod? = nil
     ) {
         self.voiceUrl = voiceUrl
         self.voiceMethod = voiceMethod
@@ -272,6 +296,9 @@ public struct UpdateIncomingPhoneNumberParams: Sendable {
         self.smsFallbackUrl = smsFallbackUrl
         self.smsFallbackMethod = smsFallbackMethod
         self.smsApplicationSid = smsApplicationSid
+        self.voiceApplicationSid = voiceApplicationSid
+        self.statusCallback = statusCallback
+        self.statusCallbackMethod = statusCallbackMethod
     }
 
     func formFields() -> [FormField] {
@@ -285,6 +312,9 @@ public struct UpdateIncomingPhoneNumberParams: Sendable {
             FormField("SmsFallbackUrl", smsFallbackUrl),
             FormField("SmsFallbackMethod", smsFallbackMethod?.rawValue),
             FormField("SmsApplicationSid", smsApplicationSid),
+            FormField("VoiceApplicationSid", voiceApplicationSid),
+            FormField("StatusCallback", statusCallback),
+            FormField("StatusCallbackMethod", statusCallbackMethod?.rawValue),
         ]
     }
 }

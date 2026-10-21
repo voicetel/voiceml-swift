@@ -1108,8 +1108,21 @@ final class VoiceMLFixTests: XCTestCase {
         XCTAssertEqual(MockResponses.shared.captured[0].url.path, "/2010-04-01/Accounts/\(Self.accountSid)/OutgoingCallerIds.json")
         XCTAssertTrue(MockResponses.shared.captured[0].url.absoluteString.contains("PhoneNumber=%2B14155550102"))
 
-        let validation = try await c.outgoingCallerIds.create(.init(phoneNumber: "+14155550102", friendlyName: "office"))
+        let validation = try await c.outgoingCallerIds.create(.init(
+            phoneNumber: "+14155550102",
+            friendlyName: "office",
+            callDelay: 5,
+            extension: "123",
+            statusCallback: "https://example.com/validation-status",
+            statusCallbackMethod: .post
+        ))
         XCTAssertEqual(validation.validationCode, "123456")
+
+        let createRaw = String(decoding: MockResponses.shared.captured[1].body, as: UTF8.self)
+        XCTAssertTrue(createRaw.contains("CallDelay=5"), createRaw)
+        XCTAssertTrue(createRaw.contains("Extension=123"), createRaw)
+        XCTAssertTrue(createRaw.contains("StatusCallback=https%3A%2F%2Fexample.com%2Fvalidation-status"), createRaw)
+        XCTAssertTrue(createRaw.contains("StatusCallbackMethod=POST"), createRaw)
 
         let fetched = try await c.outgoingCallerIds.fetch(sid: "PN" + String(repeating: "f", count: 32))
         XCTAssertEqual(fetched.phoneNumber, "+14155550102")

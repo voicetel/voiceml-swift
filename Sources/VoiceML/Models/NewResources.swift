@@ -401,16 +401,39 @@ public struct ListOutgoingCallerIdsParams: Sendable {
 public struct CreateOutgoingCallerIdRequest: Sendable {
     public var phoneNumber: String
     public var friendlyName: String?
+    /// Seconds to wait before placing the verification call (0–60).
+    public var callDelay: Int?
+    /// DTMF extension dialed after the verification call connects.
+    public var `extension`: String?
+    /// Fires at the end of the verification call with the verification outcome.
+    public var statusCallback: String?
+    /// HTTP method for the status-callback webhook.
+    public var statusCallbackMethod: HttpMethod?
 
-    public init(phoneNumber: String, friendlyName: String? = nil) {
+    public init(
+        phoneNumber: String,
+        friendlyName: String? = nil,
+        callDelay: Int? = nil,
+        `extension`: String? = nil,
+        statusCallback: String? = nil,
+        statusCallbackMethod: HttpMethod? = nil
+    ) {
         self.phoneNumber = phoneNumber
         self.friendlyName = friendlyName
+        self.callDelay = callDelay
+        self.`extension` = `extension`
+        self.statusCallback = statusCallback
+        self.statusCallbackMethod = statusCallbackMethod
     }
 
     func formFields() -> [FormField] {
         [
             FormField("PhoneNumber", phoneNumber),
             FormField("FriendlyName", friendlyName),
+            FormField("CallDelay", callDelay),
+            FormField("Extension", `extension`),
+            FormField("StatusCallback", statusCallback),
+            FormField("StatusCallbackMethod", statusCallbackMethod?.rawValue),
         ]
     }
 }

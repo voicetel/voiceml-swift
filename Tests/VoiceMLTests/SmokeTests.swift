@@ -623,10 +623,14 @@ final class VoiceMLSmokeTests: XCTestCase {
         enqueueJSON(ipnPayload(), status: 201)
         let c = try makeClient()
 
+        let appSid = "AP" + String(repeating: "a", count: 32)
         let result = try await c.incomingPhoneNumbers.create(.init(
             phoneNumber: "+14155550100",
             voiceUrl: "https://example.com/twiml",
-            voiceMethod: .post
+            voiceMethod: .post,
+            voiceApplicationSid: appSid,
+            statusCallback: "https://example.com/inbound-status",
+            statusCallbackMethod: .post
         ))
         XCTAssertTrue(result.sid?.hasPrefix("PN") == true)
 
@@ -637,6 +641,9 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(form["PhoneNumber"]?.first, "+14155550100")
         XCTAssertEqual(form["VoiceUrl"]?.first, "https://example.com/twiml")
         XCTAssertEqual(form["VoiceMethod"]?.first, "POST")
+        XCTAssertEqual(form["VoiceApplicationSid"]?.first, appSid)
+        XCTAssertEqual(form["StatusCallback"]?.first, "https://example.com/inbound-status")
+        XCTAssertEqual(form["StatusCallbackMethod"]?.first, "POST")
     }
 
     func testIncomingPhoneNumbersGet() async throws {
@@ -657,9 +664,13 @@ final class VoiceMLSmokeTests: XCTestCase {
         enqueueJSON(ipnPayload(sid: sid))
         let c = try makeClient()
 
+        let appSid = "AP" + String(repeating: "b", count: 32)
         _ = try await c.incomingPhoneNumbers.update(sid, .init(
             voiceUrl: "https://example.com/new-twiml",
-            voiceMethod: .get
+            voiceMethod: .get,
+            voiceApplicationSid: appSid,
+            statusCallback: "https://example.com/inbound-status-v2",
+            statusCallbackMethod: .get
         ))
 
         let r = MockResponses.shared.captured[0]
@@ -668,6 +679,9 @@ final class VoiceMLSmokeTests: XCTestCase {
         let form = parseForm(r.body)
         XCTAssertEqual(form["VoiceUrl"]?.first, "https://example.com/new-twiml")
         XCTAssertEqual(form["VoiceMethod"]?.first, "GET")
+        XCTAssertEqual(form["VoiceApplicationSid"]?.first, appSid)
+        XCTAssertEqual(form["StatusCallback"]?.first, "https://example.com/inbound-status-v2")
+        XCTAssertEqual(form["StatusCallbackMethod"]?.first, "GET")
         // PhoneNumber must NOT appear in update body (update-only fields).
         XCTAssertNil(form["PhoneNumber"])
     }
