@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.4] - 2026-10-21
+
+### Added
+- `voiceApplicationSid` / `statusCallback` / `statusCallbackMethod` on
+  IncomingPhoneNumbers create and update: bind voice routing to an
+  Application instead of per-number URLs, and register a number-level
+  lifecycle webhook for inbound calls to the DID.
+- `callDelay` / `extension` / `statusCallback` / `statusCallbackMethod`
+  on OutgoingCallerIds create: delay the verification call (0–60
+  seconds), dial a DTMF extension after it connects, and receive the
+  verification outcome via webhook.
+
 ## [0.9.3] - 2026-10-18
 
 ### Breaking changes
