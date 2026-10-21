@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.9.5] - 2026-10-21
+
+### Added
+- `timeLimit` on `calls.create`: max call duration in seconds (an explicit
+  `0` or a value above `14400` is rejected; a negative value disables the
+  limit; omitted, the 4-hour default cap applies).
+- `conferenceStatusCallback` / `conferenceStatusCallbackMethod` /
+  `conferenceStatusCallbackEvent` on conference participants create: the
+  participant's conference lifecycle webhook.
+- `pauseBehavior` on conference recordings update: with `status: .paused`,
+  `skip` leaves the paused span out of the recording while `silence` (the
+  default) keeps it as silence.
+- `smsUrl` / `smsMethod` / `smsFallbackUrl` / `smsFallbackMethod` /
+  `publicApplicationConnectEnabled` on Applications create and update:
+  inbound-SMS webhook routing and the public Application Connect switch.
+- `sendAt` / `scheduleType` on `messages.create`: schedule a message for a
+  future UTC time (`fixed` is the only supported schedule type; both
+  require `messagingServiceSid`).
+- `speechModel` / `enableAutomaticPunctuation` / `intelligenceService` on
+  `calls.startTranscription`.
+
+### Changed
+- `StartTranscriptionRequest.statusCallback` renamed to
+  `statusCallbackUrl` (wire `StatusCallback` → `StatusCallbackUrl`, the
+  documented REST name); the old key was never read by the server.
+
 ## [0.9.4] - 2026-10-21
 
 ### Added
