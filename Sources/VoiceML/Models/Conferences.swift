@@ -220,6 +220,11 @@ public struct CreateParticipantRequest: Sendable {
     public var statusCallback: String?
     public var statusCallbackMethod: String?
     public var statusCallbackEvent: String?
+    /// Participant's conference lifecycle webhook.
+    public var conferenceStatusCallback: String?
+    public var conferenceStatusCallbackMethod: HttpMethod?
+    /// Space- or comma-separated conference event filter (default `start end`).
+    public var conferenceStatusCallbackEvent: String?
 
     public init(
         from: String,
@@ -231,7 +236,10 @@ public struct CreateParticipantRequest: Sendable {
         timeout: Int? = nil,
         statusCallback: String? = nil,
         statusCallbackMethod: String? = nil,
-        statusCallbackEvent: String? = nil
+        statusCallbackEvent: String? = nil,
+        conferenceStatusCallback: String? = nil,
+        conferenceStatusCallbackMethod: HttpMethod? = nil,
+        conferenceStatusCallbackEvent: String? = nil
     ) {
         self.from = from
         self.to = to
@@ -243,6 +251,9 @@ public struct CreateParticipantRequest: Sendable {
         self.statusCallback = statusCallback
         self.statusCallbackMethod = statusCallbackMethod
         self.statusCallbackEvent = statusCallbackEvent
+        self.conferenceStatusCallback = conferenceStatusCallback
+        self.conferenceStatusCallbackMethod = conferenceStatusCallbackMethod
+        self.conferenceStatusCallbackEvent = conferenceStatusCallbackEvent
     }
 
     func formFields() -> [FormField] {
@@ -257,6 +268,9 @@ public struct CreateParticipantRequest: Sendable {
             FormField("StatusCallback", statusCallback),
             FormField("StatusCallbackMethod", statusCallbackMethod),
             FormField("StatusCallbackEvent", statusCallbackEvent),
+            FormField("ConferenceStatusCallback", conferenceStatusCallback),
+            FormField("ConferenceStatusCallbackMethod", conferenceStatusCallbackMethod?.rawValue),
+            FormField("ConferenceStatusCallbackEvent", conferenceStatusCallbackEvent),
         ]
     }
 }

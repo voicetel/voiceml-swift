@@ -82,6 +82,12 @@ public struct CreateMessageRequest: Sendable {
     public var validityPeriod: Int?
     public var statusCallback: String?
     public var statusCallbackMethod: HttpMethod?
+    /// Wire name `SendAt`. Schedule the message for a future UTC time, as an
+    /// RFC 3339 date-time string. Requires `scheduleType` and `messagingServiceSid`.
+    public var sendAt: String?
+    /// `"fixed"` is the only supported value; anything else is a 400 (error 35126).
+    /// Requires `sendAt` and `messagingServiceSid`.
+    public var scheduleType: String?
 
     public init(
         to: String,
@@ -91,7 +97,9 @@ public struct CreateMessageRequest: Sendable {
         messagingServiceSid: String? = nil,
         validityPeriod: Int? = nil,
         statusCallback: String? = nil,
-        statusCallbackMethod: HttpMethod? = nil
+        statusCallbackMethod: HttpMethod? = nil,
+        sendAt: String? = nil,
+        scheduleType: String? = nil
     ) {
         self.to = to
         self.body = body
@@ -101,6 +109,8 @@ public struct CreateMessageRequest: Sendable {
         self.validityPeriod = validityPeriod
         self.statusCallback = statusCallback
         self.statusCallbackMethod = statusCallbackMethod
+        self.sendAt = sendAt
+        self.scheduleType = scheduleType
     }
 
     func formFields() -> [FormField] {
@@ -119,6 +129,8 @@ public struct CreateMessageRequest: Sendable {
             FormField("ValidityPeriod", validityPeriod),
             FormField("StatusCallback", statusCallback),
             FormField("StatusCallbackMethod", statusCallbackMethod?.rawValue),
+            FormField("SendAt", sendAt),
+            FormField("ScheduleType", scheduleType),
         ])
         return fields
     }

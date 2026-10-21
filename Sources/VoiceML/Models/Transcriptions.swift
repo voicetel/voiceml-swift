@@ -43,7 +43,15 @@ public struct StartTranscriptionRequest: Sendable {
     public var profanityFilter: Bool?
     public var partialResults: Bool?
     public var hints: String?
-    public var statusCallback: String?
+    /// Engine-specific model hint (e.g. Deepgram's `nova-3`).
+    public var speechModel: String?
+    public var enableAutomaticPunctuation: Bool?
+    /// Accepted for compatibility; VoiceML has no Conversation Intelligence, so a
+    /// set value logs a 32655 Notification and transcription proceeds.
+    public var intelligenceService: String?
+    /// Transcription lifecycle webhook. Wire name `StatusCallbackUrl` — the
+    /// pre-0.9.4 `StatusCallback` form key was never read by the server.
+    public var statusCallbackUrl: String?
     public var statusCallbackMethod: String?
     public var statusCallbackEvents: String?
 
@@ -55,7 +63,10 @@ public struct StartTranscriptionRequest: Sendable {
         profanityFilter: Bool? = nil,
         partialResults: Bool? = nil,
         hints: String? = nil,
-        statusCallback: String? = nil,
+        speechModel: String? = nil,
+        enableAutomaticPunctuation: Bool? = nil,
+        intelligenceService: String? = nil,
+        statusCallbackUrl: String? = nil,
         statusCallbackMethod: String? = nil,
         statusCallbackEvents: String? = nil
     ) {
@@ -66,7 +77,10 @@ public struct StartTranscriptionRequest: Sendable {
         self.profanityFilter = profanityFilter
         self.partialResults = partialResults
         self.hints = hints
-        self.statusCallback = statusCallback
+        self.speechModel = speechModel
+        self.enableAutomaticPunctuation = enableAutomaticPunctuation
+        self.intelligenceService = intelligenceService
+        self.statusCallbackUrl = statusCallbackUrl
         self.statusCallbackMethod = statusCallbackMethod
         self.statusCallbackEvents = statusCallbackEvents
     }
@@ -80,7 +94,10 @@ public struct StartTranscriptionRequest: Sendable {
             FormField("ProfanityFilter", profanityFilter),
             FormField("PartialResults", partialResults),
             FormField("Hints", hints),
-            FormField("StatusCallback", statusCallback),
+            FormField("SpeechModel", speechModel),
+            FormField("EnableAutomaticPunctuation", enableAutomaticPunctuation),
+            FormField("IntelligenceService", intelligenceService),
+            FormField("StatusCallbackUrl", statusCallbackUrl),
             FormField("StatusCallbackMethod", statusCallbackMethod),
             FormField("StatusCallbackEvents", statusCallbackEvents),
         ]

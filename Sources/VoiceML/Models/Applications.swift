@@ -79,6 +79,13 @@ public struct ApplicationRequest: Sendable {
     public var messageStatusCallback: String?
     /// Legacy alias of `messageStatusCallback`.
     public var smsStatusCallback: String?
+    /// Inbound-SMS webhook URL for this Application.
+    public var smsUrl: String?
+    public var smsMethod: HttpMethod?
+    /// Called when requesting/executing the TwiML at `smsUrl` fails.
+    public var smsFallbackUrl: String?
+    public var smsFallbackMethod: HttpMethod?
+    public var publicApplicationConnectEnabled: Bool?
 
     public init(
         friendlyName: String? = nil,
@@ -91,7 +98,12 @@ public struct ApplicationRequest: Sendable {
         statusCallbackMethod: HttpMethod? = nil,
         statusCallbackEvent: String? = nil,
         messageStatusCallback: String? = nil,
-        smsStatusCallback: String? = nil
+        smsStatusCallback: String? = nil,
+        smsUrl: String? = nil,
+        smsMethod: HttpMethod? = nil,
+        smsFallbackUrl: String? = nil,
+        smsFallbackMethod: HttpMethod? = nil,
+        publicApplicationConnectEnabled: Bool? = nil
     ) {
         self.friendlyName = friendlyName
         self.voiceUrl = voiceUrl
@@ -104,6 +116,11 @@ public struct ApplicationRequest: Sendable {
         self.statusCallbackEvent = statusCallbackEvent
         self.messageStatusCallback = messageStatusCallback
         self.smsStatusCallback = smsStatusCallback
+        self.smsUrl = smsUrl
+        self.smsMethod = smsMethod
+        self.smsFallbackUrl = smsFallbackUrl
+        self.smsFallbackMethod = smsFallbackMethod
+        self.publicApplicationConnectEnabled = publicApplicationConnectEnabled
     }
 
     func formFields() -> [FormField] {
@@ -119,6 +136,11 @@ public struct ApplicationRequest: Sendable {
             FormField("StatusCallbackEvent", statusCallbackEvent),
             FormField("MessageStatusCallback", messageStatusCallback),
             FormField("SmsStatusCallback", smsStatusCallback),
+            FormField("SmsUrl", smsUrl),
+            FormField("SmsMethod", smsMethod?.rawValue),
+            FormField("SmsFallbackUrl", smsFallbackUrl),
+            FormField("SmsFallbackMethod", smsFallbackMethod?.rawValue),
+            FormField("PublicApplicationConnectEnabled", publicApplicationConnectEnabled),
         ]
     }
 }

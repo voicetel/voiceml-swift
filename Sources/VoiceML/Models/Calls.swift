@@ -142,6 +142,10 @@ public struct CreateCallRequest: Sendable {
     public var recordingTrack: RecordingTrack?
     public var trim: TrimMode?
     public var timeout: Int?
+    /// Max call duration in seconds. An explicit `0` or a value above `14400` is
+    /// rejected (error 13216); a negative value disables the limit. Omitted, the
+    /// 4-hour default cap applies.
+    public var timeLimit: Int?
     public var sendDigits: String?
     public var callerId: String?
     public var callReason: String?
@@ -178,6 +182,7 @@ public struct CreateCallRequest: Sendable {
         recordingTrack: RecordingTrack? = nil,
         trim: TrimMode? = nil,
         timeout: Int? = nil,
+        timeLimit: Int? = nil,
         sendDigits: String? = nil,
         callerId: String? = nil,
         callReason: String? = nil,
@@ -213,6 +218,7 @@ public struct CreateCallRequest: Sendable {
         self.recordingTrack = recordingTrack
         self.trim = trim
         self.timeout = timeout
+        self.timeLimit = timeLimit
         self.sendDigits = sendDigits
         self.callerId = callerId
         self.callReason = callReason
@@ -258,6 +264,7 @@ public struct CreateCallRequest: Sendable {
             FormField("RecordingTrack", recordingTrack?.rawValue),
             FormField("Trim", trim?.rawValue),
             FormField("Timeout", timeout),
+            FormField("TimeLimit", timeLimit),
             FormField("SendDigits", sendDigits),
             FormField("CallerId", callerId),
             FormField("CallReason", callReason),

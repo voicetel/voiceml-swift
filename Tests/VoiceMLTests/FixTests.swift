@@ -814,12 +814,52 @@ final class VoiceMLFixTests: XCTestCase {
         _ = try await c.applications.create(.init(
             friendlyName: "ivr",
             messageStatusCallback: "https://example.com/dlr",
-            smsStatusCallback: "https://example.com/dlr-legacy"
+            smsStatusCallback: "https://example.com/dlr-legacy",
+            smsUrl: "https://example.com/sms",
+            smsMethod: .post,
+            smsFallbackUrl: "https://example.com/sms-fb",
+            smsFallbackMethod: .get,
+            publicApplicationConnectEnabled: true
         ))
 
         let raw = String(decoding: MockResponses.shared.captured[0].body, as: UTF8.self)
         XCTAssertTrue(raw.contains("MessageStatusCallback=https%3A%2F%2Fexample.com%2Fdlr"), raw)
         XCTAssertTrue(raw.contains("SmsStatusCallback=https%3A%2F%2Fexample.com%2Fdlr-legacy"), raw)
+        XCTAssertTrue(raw.contains("SmsUrl=https%3A%2F%2Fexample.com%2Fsms"), raw)
+        XCTAssertTrue(raw.contains("SmsMethod=POST"), raw)
+        XCTAssertTrue(raw.contains("SmsFallbackUrl=https%3A%2F%2Fexample.com%2Fsms-fb"), raw)
+        XCTAssertTrue(raw.contains("SmsFallbackMethod=GET"), raw)
+        XCTAssertTrue(raw.contains("PublicApplicationConnectEnabled=true"), raw)
+    }
+
+    func testApplicationsUpdateSendsSmsAndConnectFields() async throws {
+        let sid = "AP" + String(repeating: "c", count: 32)
+        enqueueJSON([
+            "sid": sid,
+            "account_sid": Self.accountSid,
+            "friendly_name": "ivr2",
+            "api_version": "2010-04-01",
+            "uri": "/x",
+        ])
+        let c = try makeClient()
+
+        _ = try await c.applications.update(applicationSid: sid, body: .init(
+            smsUrl: "https://example.com/sms2",
+            smsMethod: .get,
+            smsFallbackUrl: "https://example.com/sms2-fb",
+            smsFallbackMethod: .post,
+            publicApplicationConnectEnabled: false
+        ))
+
+        let req = MockResponses.shared.captured[0]
+        XCTAssertEqual(req.method, "POST")
+        XCTAssertEqual(req.url.path, "/2010-04-01/Accounts/\(Self.accountSid)/Applications/\(sid).json")
+        let raw = String(decoding: req.body, as: UTF8.self)
+        XCTAssertTrue(raw.contains("SmsUrl=https%3A%2F%2Fexample.com%2Fsms2"), raw)
+        XCTAssertTrue(raw.contains("SmsMethod=GET"), raw)
+        XCTAssertTrue(raw.contains("SmsFallbackUrl=https%3A%2F%2Fexample.com%2Fsms2-fb"), raw)
+        XCTAssertTrue(raw.contains("SmsFallbackMethod=POST"), raw)
+        XCTAssertTrue(raw.contains("PublicApplicationConnectEnabled=false"), raw)
     }
 
     // MARK: - Recording request fields (C8)
@@ -860,6 +900,58 @@ final class VoiceMLFixTests: XCTestCase {
         let raw = String(decoding: MockResponses.shared.captured[0].body, as: UTF8.self)
         XCTAssertTrue(raw.contains("Status=paused"), raw)
         XCTAssertTrue(raw.contains("PauseBehavior=skip"), raw)
+    }
+
+    func testConferenceUpdateRecordingSendsPauseBehavior() async throws {
+        enqueueJSON([
+            "sid": "RE" + String(repeating: "e", count: 32),
+            "account_sid": Self.accountSid,
+            "conference_sid": "CF" + String(repeating: "e", count: 32),
+            "status": "paused",
+        ])
+        let c = try makeClient()
+
+        _ = try await c.conferences.updateRecording(
+            conferenceSid: "CF" + String(repeating: "e", count: 32),
+            recordingSid: "RE" + String(repeating: "e", count: 32),
+            body: .init(status: .paused, pauseBehavior: .skip)
+        )
+
+        let raw = String(decoding: MockResponses.shared.captured[0].body, as: UTF8.self)
+        XCTAssertTrue(raw.contains("Status=paused"), raw)
+        XCTAssertTrue(raw.contains("PauseBehavior=skip"), raw)
+    }
+
+    func testStartTranscriptionSendsStatusCallbackUrlAndNewFields() async throws {
+        enqueueJSON([
+            "sid": "GT" + String(repeating: "a", count: 32),
+            "account_sid": Self.accountSid,
+            "call_sid": "CA" + String(repeating: "a", count: 32),
+            "status": "in-progress",
+        ], status: 201)
+        let c = try makeClient()
+
+        _ = try await c.calls.startTranscription(
+            callSid: "CA" + String(repeating: "a", count: 32),
+            body: .init(
+                speechModel: "nova-3",
+                enableAutomaticPunctuation: true,
+                intelligenceService: "voice_intelligence",
+                statusCallbackUrl: "https://example.com/tr-events",
+                statusCallbackMethod: "POST",
+                statusCallbackEvents: "completed"
+            )
+        )
+
+        let raw = String(decoding: MockResponses.shared.captured[0].body, as: UTF8.self)
+        XCTAssertTrue(raw.contains("SpeechModel=nova-3"), raw)
+        XCTAssertTrue(raw.contains("EnableAutomaticPunctuation=true"), raw)
+        XCTAssertTrue(raw.contains("IntelligenceService=voice_intelligence"), raw)
+        XCTAssertTrue(raw.contains("StatusCallbackUrl=https%3A%2F%2Fexample.com%2Ftr-events"), raw)
+        XCTAssertTrue(raw.contains("StatusCallbackMethod=POST"), raw)
+        XCTAssertTrue(raw.contains("StatusCallbackEvents=completed"), raw)
+        // The pre-0.9.4 wire key must not reappear.
+        XCTAssertFalse(raw.contains("StatusCallback="), raw)
     }
 
     func testCallsListRecordingsSendsOnlyScopedFilters() async throws {

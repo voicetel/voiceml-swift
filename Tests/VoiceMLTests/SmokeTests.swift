@@ -209,7 +209,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         let call = try await c.calls.create(.init(
             to: "+14155550100",
             from: "+14155550101",
-            url: "https://example.com/twiml"
+            url: "https://example.com/twiml",
+            timeLimit: 3600
         ))
         XCTAssertTrue(call.sid?.hasPrefix("CA") == true)
 
@@ -227,6 +228,7 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(form["To"]?.first, "+14155550100")
         XCTAssertEqual(form["From"]?.first, "+14155550101")
         XCTAssertEqual(form["Url"]?.first, "https://example.com/twiml")
+        XCTAssertEqual(form["TimeLimit"]?.first, "3600")
     }
 
     func testCallsListRoundTripsStartTimeOperators() async throws {
@@ -860,7 +862,13 @@ final class VoiceMLSmokeTests: XCTestCase {
 
         _ = try await c.conferences.createParticipant(
             conferenceSid: confSid,
-            body: .init(from: "+14155550101", to: "+14155550100")
+            body: .init(
+                from: "+14155550101",
+                to: "+14155550100",
+                conferenceStatusCallback: "https://example.com/conf-events",
+                conferenceStatusCallbackMethod: .post,
+                conferenceStatusCallbackEvent: "start end"
+            )
         )
 
         let r = MockResponses.shared.captured[0]
@@ -868,6 +876,9 @@ final class VoiceMLSmokeTests: XCTestCase {
         let form = parseForm(r.body)
         XCTAssertEqual(form["From"]?.first, "+14155550101")
         XCTAssertEqual(form["To"]?.first, "+14155550100")
+        XCTAssertEqual(form["ConferenceStatusCallback"]?.first, "https://example.com/conf-events")
+        XCTAssertEqual(form["ConferenceStatusCallbackMethod"]?.first, "POST")
+        XCTAssertEqual(form["ConferenceStatusCallbackEvent"]?.first, "start end")
     }
 
     // MARK: - Pagination (iterate)
@@ -1153,7 +1164,9 @@ final class VoiceMLSmokeTests: XCTestCase {
             to: "+14155550100",
             body: "hello",
             from: "+14155550101",
-            statusCallback: "https://example.com/cb"
+            statusCallback: "https://example.com/cb",
+            sendAt: "2026-10-22T14:00:00Z",
+            scheduleType: "fixed"
         ))
         XCTAssertTrue(msg.sid?.hasPrefix("SM") == true)
         XCTAssertEqual(msg.numSegments, "1")
@@ -1173,6 +1186,8 @@ final class VoiceMLSmokeTests: XCTestCase {
         XCTAssertEqual(form["Body"]?.first, "hello")
         XCTAssertEqual(form["From"]?.first, "+14155550101")
         XCTAssertEqual(form["StatusCallback"]?.first, "https://example.com/cb")
+        XCTAssertEqual(form["SendAt"]?.first, "2026-10-22T14:00:00Z")
+        XCTAssertEqual(form["ScheduleType"]?.first, "fixed")
         // MessagingServiceSid omitted (nil) — must not appear on the wire.
         XCTAssertNil(form["MessagingServiceSid"])
     }
